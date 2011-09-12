@@ -1,9 +1,9 @@
 using System;
 using System.Reflection;
 using Sharp.Data;
-using Sharp.Data.Schema;
 using Sharp.Data.Config;
 using Sharp.Data.Filters;
+using Sharp.Data.Schema;
 
 namespace Sharp.Migrations {
 	public class VersionRepository : IVersionRepository {
@@ -25,6 +25,7 @@ namespace Sharp.Migrations {
 
 	    public VersionRepository(IDataClient dataClient) {
             _dataClient = dataClient;
+	        _migrationGroup = DEFAULT_MIGRATION_GROUP;
             CreateVersionTable();
         }
 
@@ -47,7 +48,7 @@ namespace Sharp.Migrations {
 	        _dataClient.Add
 	            .Table(VERSION_TABLE_NAME)
 	            .WithColumns(
-	                Column.String("name").WithSize(200),
+	                Column.String("name").Size(200),
 	                Column.Int64("version")
 	            );
 	    }

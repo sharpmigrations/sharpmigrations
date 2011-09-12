@@ -1,4 +1,3 @@
-using Sharp.Data.Schema;
 using Sharp.Migrations;
 
 namespace Sharp.Tests.Chinook {

@@ -10,8 +10,8 @@ namespace Northwind.Sharp.Migrations {
 
 		public override void Up() {
 			Add.Table("Territories").WithColumns(
-				Column.String("TerritoryID").WithSize(20).NotNull(),
-				Column.String("TerritoryDescription").WithSize(50).NotNull(),
+				Column.String("TerritoryID").Size(20).NotNull(),
+				Column.String("TerritoryDescription").Size(50).NotNull(),
 				Column.Int32("RegionID").NotNull()
 			);
 			Add.PrimaryKey("PK_Territories").OnColumns("TerritoryID").OfTable("Territories");

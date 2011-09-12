@@ -3,12 +3,12 @@ using Sharp.Data.Fluent;
 namespace Sharp.Migrations {
     public abstract class DataMigration : Migration {
 
-        protected FluentDelete Delete { get { return new FluentDelete(this.DataClient);}}
+        protected IFluentDelete Delete { get { return new FluentDelete(DataClient);}}
 
-        protected FluentInsert Insert { get { return new FluentInsert(this.DataClient);}}
+        protected IFluentInsert Insert { get { return new FluentInsert(DataClient);}}
             
-        protected FluentSelect Select { get { return new FluentSelect(this.DataClient);}}
+        protected IFluentSelect Select { get { return new FluentSelect(DataClient);}}
 
-        protected FluentUpdate Update { get { return new FluentUpdate(this.DataClient);}}
+        protected IFluentUpdate Update { get { return new FluentUpdate(DataClient);}}
     }
 }

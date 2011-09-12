@@ -14,7 +14,7 @@ namespace Sharp.Tests.Data.Schema {
         public void FluentCreationTests() {
             string col = "COL1";
 
-            FluentColumn f = Column.WithName(col).WithType.Binary;
+            FluentColumn f = Column.Binary(col);
             Assert.AreEqual(col, f.Object.ColumnName);
             Assert.AreEqual(DbType.Binary, f.Object.Type);
 

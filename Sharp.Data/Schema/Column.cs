@@ -39,15 +39,7 @@ namespace Sharp.Data.Schema {
             Type = type;
             IsNullable = true;
         }
-
-        public static FluentColumn WithName(string name) {
-            return new FluentColumn(name);
-        }
-
-        public static FluentColumn Name(string name) {
-            return WithName(name);
-        }
-
+        
         public static FluentColumn AutoIncrement(string name) { 
             FluentColumn fc = new FluentColumn(name, DbType.Int32);
             fc.Object.IsAutoIncrement = true;

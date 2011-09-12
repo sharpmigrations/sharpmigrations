@@ -16,13 +16,9 @@ namespace Sharp.Data.Schema {
             }
         }
 
-        public FluentColumn WithSize(int size) {
+        public FluentColumn Size(int size) {
             Object.Size = size;
             return this;
-        }
-
-        public FluentColumn Size(int size) {
-            return WithSize(size);
         }
 
         public FluentColumn NotNull() {
@@ -38,18 +34,6 @@ namespace Sharp.Data.Schema {
         public FluentColumn DefaultValue(object value) {
             Object.DefaultValue = value;
             return this;
-        }
-
-        public FluentColumnTypes WithType {
-            get {
-                return new FluentColumnTypes(this);
-            }
-        }
-
-        public FluentColumnTypes Type {
-            get {
-                return WithType;
-            }
         }
     }
 

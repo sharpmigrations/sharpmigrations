@@ -56,9 +56,8 @@ namespace Sharp.Tests.Databases {
 
 		[Test]
 		public void Can_convert_column_to_sql__with_not_null() {
-			Column column = Column.WithName("col")
-				.WithSize(255)
-				.Type.String
+			Column column = Column.String("col")
+				.Size(255)
 				.NotNull().Object;
 
 			string sql = _dialect.GetColumnToSqlWhenCreate(column);
@@ -68,9 +67,8 @@ namespace Sharp.Tests.Databases {
 
 		[Test]
 		public void Can_convert_column_to_sql__with_primary_key() {
-			Column column = Column.WithName("col")
-				.WithSize(255)
-				.Type.String
+			Column column = Column.String("col")
+				.Size(255)
 				.AsPrimaryKey()
 				.Object;
 
@@ -90,8 +88,7 @@ namespace Sharp.Tests.Databases {
 
 		[Test]
 		public virtual void Can_convert_column_to_sql__default_value() {
-			Column column = Column.WithName("col")
-				                  .Type.String
+			Column column = Column.String("col")
 								  .DefaultValue("some string").Object;
 
 			string sql = _dialect.GetColumnToSqlWhenCreate(column);
