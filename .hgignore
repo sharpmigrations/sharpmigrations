@@ -9,3 +9,4 @@ glob:obj/
 _ReSharper/
 bin/
 obj/
+_ReSharper.Sharp
