@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8C494818-90AF-4133-94E1-0D1CBD961397}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sharp.Data</RootNamespace>
+    <AssemblyName>Sharp.Data</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug x86|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug x86\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug x86|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug x86\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libs\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="mysql.data, Version=5.2.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libs\mysql.data.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libs\System.Data.SQLite.DLL</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Config\ConfigFromAppConfig.cs" />
+    <Compile Include="Config\DataConfigurationHandler.cs" />
+    <Compile Include="Config\DataSettings.cs" />
+    <Compile Include="Config\DefaultConfig.cs" />
+    <Compile Include="Database.cs" />
+    <Compile Include="Databases\DataProvider.cs" />
+    <Compile Include="Databases\DataProviderNames.cs" />
+    <Compile Include="Databases\Dialect.cs" />
+    <Compile Include="Databases\Oracle\OracleDialect.cs" />
+    <Compile Include="Databases\SelectBuilder.cs" />
+    <Compile Include="Schema\OrderBy.cs" />
+    <Compile Include="Databases\MySql\MySqlDialect.cs" />
+    <Compile Include="Databases\MySql\MySqlProvider.cs" />
+    <Compile Include="DataClient.cs" />
+    <Compile Include="DataClientFactory.cs" />
+    <Compile Include="DataReaderToResultSetMapper.cs" />
+    <Compile Include="Databases\SqLite\SqLiteDialect.cs" />
+    <Compile Include="Filters\CompareOperatorToSymbol.cs" />
+    <Compile Include="Filters\Filter.cs" />
+    <Compile Include="Filters\FilterCondition.cs" />
+    <Compile Include="Filters\FilterLogic.cs" />
+    <Compile Include="Filters\FilterParameter.cs" />
+    <Compile Include="Filters\LogicOperatorToSymbol.cs" />
+    <Compile Include="Fluent\Count.cs" />
+    <Compile Include="Fluent\FluentCount.cs" />
+    <Compile Include="Fluent\AddColumn.cs" />
+    <Compile Include="Fluent\AddForeignKey.cs" />
+    <Compile Include="Fluent\AddPrimaryKey.cs" />
+    <Compile Include="Fluent\AddTable.cs" />
+    <Compile Include="Fluent\AddUniqueKey.cs" />
+    <Compile Include="Fluent\DataClientAction.cs" />
+    <Compile Include="Fluent\Delete.cs" />
+    <Compile Include="Fluent\FluentAdd.cs" />
+    <Compile Include="Fluent\Insert.cs" />
+    <Compile Include="Fluent\RemoveColumn.cs" />
+    <Compile Include="Fluent\RemoveForeignKey.cs" />
+    <Compile Include="Fluent\RemoveItem.cs" />
+    <Compile Include="Fluent\RemoveTable.cs" />
+    <Compile Include="Fluent\RemoveUniqueKey.cs" />
+    <Compile Include="Fluent\DataClientAddColumn.cs" />
+    <Compile Include="Fluent\DataClientAddForeignKey.cs" />
+    <Compile Include="Fluent\DataClientAddPrimaryKey.cs" />
+    <Compile Include="Fluent\DataClientAddTable.cs" />
+    <Compile Include="Fluent\DateClientAddUniqueKey.cs" />
+    <Compile Include="Fluent\FluentRemove.cs" />
+    <Compile Include="Fluent\DateClientRemoveItem.cs" />
+    <Compile Include="Fluent\Select.cs" />
+    <Compile Include="Fluent\Update.cs" />
+    <Compile Include="IDataClient.cs" />
+    <Compile Include="IDataClientFactory.cs" />
+    <Compile Include="In.cs" />
+    <Compile Include="InOut.cs" />
+    <Compile Include="Out.cs" />
+    <Compile Include="Databases\Oracle\OracleOdpProvider.cs" />
+    <Compile Include="Databases\SqLite\SqLiteProvider.cs" />
+    <Compile Include="Filters\FilterParameterType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Filters\LogicOperator.cs" />
+    <Compile Include="Filters\CompareOperator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Schema\OnDelete.cs" />
+    <Compile Include="Databases\SqlServer\SqlDialect.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="Fluent\FluentDelete.cs" />
+    <Compile Include="Fluent\FluentInsert.cs" />
+    <Compile Include="Fluent\FluentScalar.cs" />
+    <Compile Include="Fluent\FluentSelect.cs" />
+    <Compile Include="Fluent\FluentUpdate.cs" />
+    <Compile Include="IDatabase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IDataProvider.cs" />
+    <Compile Include="Databases\Oracle\OracleClientProvider.cs" />
+    <Compile Include="Databases\SqlServer\SqlProvider.cs" />
+    <Compile Include="ResultSet.cs" />
+    <Compile Include="Schema\Column.cs" />
+    <Compile Include="Schema\FluentColumn.cs" />
+    <Compile Include="Schema\OrderByDirection.cs" />
+    <Compile Include="Schema\Table.cs" />
+    <Compile Include="TableRow.cs" />
+    <Compile Include="Util\IntExtensions.cs" />
+    <Compile Include="Util\ReflectionHelper.cs" />
+    <Compile Include="Util\StringHelper.cs" />
+    <Compile Include="Databases\WhereBuilder.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

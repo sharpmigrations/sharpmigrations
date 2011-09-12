@@ -1,0 +1,11 @@
+syntax: glob
+Sharp.5.1.ReSharper.user
+Sharp.sln.docstates
+Sharp.sln.docstates.suo
+Sharp.suo
+glob:bin/
+glob:obj/
+*.user
+_ReSharper/
+bin/
+obj/

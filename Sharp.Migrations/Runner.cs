@@ -1,0 +1,150 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using log4net;
+using Sharp.Data;
+using Sharp.Data.Config;
+
+namespace Sharp.Migrations {
+	public class Runner {
+		public static ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
+
+		private Assembly _targetAssembly;
+		private IDataClient _dataClient;
+		private List<Migration> _migrationsToRun = new List<Migration>();
+
+		private int _currentVersion, _initialVersion, _targetVersion, _maxVersion;
+
+		public IVersionRepository VersionRepository { private get; set; }
+
+	    public string MigrationGroup {
+	        get { return VersionRepository.MigrationGroup; }
+            set { VersionRepository.MigrationGroup = value; }
+	    }
+
+		public Runner(IDataClient dataClient, Assembly targetAssembly) {
+			_dataClient = dataClient;
+			_targetAssembly = targetAssembly ?? Assembly.GetCallingAssembly();
+			VersionRepository = new VersionRepository(_dataClient);
+		}
+
+		public void Run(int version) {
+			GetCurrentVersion();
+			RunMigrations(version);
+		}
+
+		private void GetCurrentVersion() {
+			_initialVersion = VersionRepository.GetCurrentVersion();
+		}
+
+		private void RunMigrations(int version) {
+			_targetVersion = version;
+			CreateMigrationsToRun();
+			RunCreatedMigrations();
+		}
+
+		private void CreateMigrationsToRun() {
+			List<Type> migrationTypes = GetMigrationTypes();
+
+			MigrationFactory factory = new MigrationFactory(_dataClient);
+			foreach (Type type in migrationTypes) {
+				Migration migration = factory.CreateMigration(type);
+				_migrationsToRun.Add(migration);
+			}
+		}
+
+		private List<Type> GetMigrationTypes() {
+			MigrationFinder migrationFinder = new MigrationFinder(_targetAssembly);
+
+			_maxVersion = migrationFinder.LastVersion;
+			if (_targetVersion < 0) {
+				_targetVersion = _maxVersion;
+			}
+
+			return migrationFinder.FromVersion(_initialVersion)
+				.ToVersion(_targetVersion)
+				.FindMigrations();
+		}
+
+		private void RunCreatedMigrations() {
+			if (NoWorkToDo()) {
+				LogInfo("No migrations to perform");
+				return;
+			}
+
+			Log.Info("Starting migrations");
+			Log.Info("Max version is " + _maxVersion);
+			Log.Info("Migrate from " + _initialVersion + " to " + _targetVersion);
+
+			_currentVersion = _initialVersion;
+
+			int i;
+			for (i = 0; i < _migrationsToRun.Count; i++) {
+				try {
+					RunOneMigration(i);
+				}
+				catch (NotSupportedByDialect nse) {
+					HandleNotSupportedByDialectException(i, nse);
+				}
+				catch (Exception ex) {
+					string errorMsg = String.Format("Error running migration {0}: {1}", _migrationsToRun[i], ex); 
+					Log.Error(errorMsg);
+					_dataClient.RollBack();
+					throw new MigrationException(errorMsg, ex);
+				}
+				finally {
+					VersionRepository.UpdateVersion(_currentVersion);
+				}
+			}
+			Log.Info("Done. Current version: " + _currentVersion);
+		}
+
+		private bool NoWorkToDo() {
+			return _migrationsToRun.Count == 0;
+		}
+
+		private void RunOneMigration(int i) {
+			Migration migration = _migrationsToRun[i];
+			if (IsUp()) {
+				migration.Up();
+				_currentVersion = migration.Version;
+			}
+			else {
+				migration.Down();
+				if (IsNotTheLastMigration(i)) {
+					_currentVersion = _migrationsToRun[i + 1].Version;
+				}
+				else {
+					_currentVersion = _targetVersion;
+				}
+			}
+			Log.Info(String.Format(" -> [{0}] {1} {2}()", migration.Version, migration.GetType().Name, IsUp() ? "Up" : "Down"));
+		}
+
+		private bool IsNotTheLastMigration(int i) {
+			return i < _migrationsToRun.Count - 1;
+		}
+
+		private void HandleNotSupportedByDialectException(int i, NotSupportedByDialect nse) {
+			if (DefaultConfig.IgnoreDialectNotSupportedActions) {
+				Log.Warn(
+					String.Format(
+						"Migration[{0}] NotSupportedException not thrown due user config. Dialect: {1} Function: {2} Msg: {3}",
+						_migrationsToRun[i], nse.DialectName, nse.FunctionName, nse.Message));
+				return;
+			}
+			throw nse;
+		}
+
+
+		private bool IsUp() {
+			return _initialVersion < _targetVersion;
+		}
+
+		private void LogInfo(string message) {
+			if (Log.IsInfoEnabled) {
+				Log.Info(message);
+			}
+		}
+	}
+}
