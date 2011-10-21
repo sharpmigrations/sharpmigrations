@@ -4,7 +4,6 @@ using Moq;
 using System.Linq;
 using NUnit.Framework;
 using Sharp.Data;
-using Sharp.Data.Config;
 using Sharp.Migrations;
 using System.Reflection;
 
@@ -26,8 +25,6 @@ namespace Sharp.Tests.Migrations {
             
 			_runner = new Runner(_dataClient.Object, Assembly.GetExecutingAssembly());
 			_runner.VersionRepository = _versionRepository.Object;
-
-			DefaultConfig.IgnoreDialectNotSupportedActions = false;
 		}
 
 		[Test]
@@ -134,7 +131,7 @@ namespace Sharp.Tests.Migrations {
 
 		[Test]
 		public void Should_not_throw_not_supported_by_dialect_when_config_is_set() {
-			DefaultConfig.IgnoreDialectNotSupportedActions = true;
+		    Runner.IgnoreDialectNotSupportedActions = true;
 			MigrationTestHelper.VersionForNotSupportedByDialectException = 4;
 			_runner.Run(5);
 		}
@@ -142,14 +139,14 @@ namespace Sharp.Tests.Migrations {
 		[Test]
 		[ExpectedException(typeof(NotSupportedByDialect))]
 		public void Should_throw_not_supported_by_dialect_when_config_is_set() {
-			DefaultConfig.IgnoreDialectNotSupportedActions = false;
+            Runner.IgnoreDialectNotSupportedActions = false;
 			MigrationTestHelper.VersionForNotSupportedByDialectException = 4;
 			_runner.Run(5);
 		}
 
 		[TearDown]
 		public void TearDown() {
-			DefaultConfig.IgnoreDialectNotSupportedActions = false;
+            Runner.IgnoreDialectNotSupportedActions = false;
 		}
 	}
 }

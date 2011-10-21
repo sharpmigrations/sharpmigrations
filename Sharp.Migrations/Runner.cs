@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Reflection;
 using log4net;
 using Sharp.Data;
-using Sharp.Data.Config;
 
 namespace Sharp.Migrations {
 	public class Runner {
 		public static ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
+
+	    public static bool IgnoreDialectNotSupportedActions { get; set; }
 
 		private Assembly _targetAssembly;
 		private IDataClient _dataClient;
@@ -126,7 +127,7 @@ namespace Sharp.Migrations {
 		}
 
 		private void HandleNotSupportedByDialectException(int i, NotSupportedByDialect nse) {
-			if (DefaultConfig.IgnoreDialectNotSupportedActions) {
+			if (IgnoreDialectNotSupportedActions) {
 				Log.Warn(
 					String.Format(
 						"Migration[{0}] NotSupportedException not thrown due user config. Dialect: {1} Function: {2} Msg: {3}",

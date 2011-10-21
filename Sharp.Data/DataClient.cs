@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using log4net;
-using Sharp.Data.Config;
 using Sharp.Data.Databases;
 using Sharp.Data.Filters;
 using Sharp.Data.Fluent;

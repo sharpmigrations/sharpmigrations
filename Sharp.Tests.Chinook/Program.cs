@@ -1,5 +1,4 @@
 using log4net.Config;
-using Sharp.Data.Config;
 using Sharp.Tests.Chinook;
 
 namespace Sharp.Migrations {
@@ -7,9 +6,7 @@ namespace Sharp.Migrations {
 		private static void Main(string[] args) {
 			XmlConfigurator.Configure();
 
-			DefaultConfig.IgnoreDialectNotSupportedActions = true;
-
-			ChinookMigrations migrations = new ChinookMigrations(DefaultConfig.ConnectionString, DefaultConfig.DatabaseProvider);
+			ChinookMigrations migrations = new ChinookMigrations();
 			migrations.Start();
 		}
 	}

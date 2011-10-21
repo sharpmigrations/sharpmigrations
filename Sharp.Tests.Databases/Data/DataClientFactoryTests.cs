@@ -8,17 +8,13 @@ namespace Sharp.Tests.Databases.Data {
 
         string _connectionString = "connectionString";
 
-        private DataClientFactory _factory;
-
         [SetUp]
         public void SetUp() {
-            _factory = new DataClientFactory();
         }
 
         [Test]
         public virtual void Can_create_dataclient() {
-
-            IDataClient client = _factory.GetDataClient(_connectionString, GetDatabaseType());
+            IDataClient client = SharpFactory.Default.CreateDataClient(_connectionString, GetDatabaseType());
 
             //check connection string
             Assert.AreEqual(_connectionString, client.Database.ConnectionString);

@@ -3,6 +3,7 @@ using System.Data;
 
 namespace Sharp.Data {
     public interface IDatabase : IDisposable {
+        IDataProvider Provider { get; }
         string ConnectionString { get; }
 		int Timeout { get; set; }
         object CallStoredFunction(DbType returnType, string call);

@@ -7,7 +7,7 @@ namespace Sharp.Tests.Databases {
         public static IDataClient GetDataClient(string databaseType) {
             string connectionString =
                 ConfigurationManager.ConnectionStrings[databaseType].ConnectionString;
-            return new DataClientFactory().GetDataClient(connectionString, databaseType);
+            return new SharpFactory().CreateDataClient(connectionString, databaseType);
         }
     }
 }

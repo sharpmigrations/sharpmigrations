@@ -2,7 +2,6 @@ using System.Data.SQLite;
 using System.IO;
 using NUnit.Framework;
 using Sharp.Data;
-using Sharp.Data.Config;
 using Sharp.Data.Databases;
 using Sharp.Tests.Databases.Data;
 
@@ -18,10 +17,7 @@ namespace Sharp.Tests.Databases.SQLite {
             }
 
             SQLiteConnection.CreateFile(fileName);
-
             _dataClient = DBBuilder.GetDataClient(DataProviderNames.SqLite);
-
-			DefaultConfig.IgnoreDialectNotSupportedActions = false;
         }
 
         [Test]

@@ -79,21 +79,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\ConfigFromAppConfig.cs" />
-    <Compile Include="Config\DataConfigurationHandler.cs" />
-    <Compile Include="Config\DataSettings.cs" />
-    <Compile Include="Config\DefaultConfig.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Databases\DataProvider.cs" />
     <Compile Include="Databases\DataProviderNames.cs" />
     <Compile Include="Databases\Dialect.cs" />
     <Compile Include="Databases\Oracle\OracleDialect.cs" />
     <Compile Include="Databases\SelectBuilder.cs" />
+    <Compile Include="ISharpFactory.cs" />
     <Compile Include="Schema\OrderBy.cs" />
     <Compile Include="Databases\MySql\MySqlDialect.cs" />
     <Compile Include="Databases\MySql\MySqlProvider.cs" />
     <Compile Include="DataClient.cs" />
-    <Compile Include="DataClientFactory.cs" />
     <Compile Include="DataReaderToResultSetMapper.cs" />
     <Compile Include="Databases\SqLite\SqLiteDialect.cs" />
     <Compile Include="Filters\CompareOperatorToSymbol.cs" />
@@ -128,7 +124,6 @@
     <Compile Include="Fluent\Select.cs" />
     <Compile Include="Fluent\Update.cs" />
     <Compile Include="IDataClient.cs" />
-    <Compile Include="IDataClientFactory.cs" />
     <Compile Include="In.cs" />
     <Compile Include="InOut.cs" />
     <Compile Include="Out.cs" />
@@ -159,6 +154,9 @@
     <Compile Include="Schema\FluentColumn.cs" />
     <Compile Include="Schema\OrderByDirection.cs" />
     <Compile Include="Schema\Table.cs" />
+    <Compile Include="SharpDbConfig.cs" />
+    <Compile Include="SharpDbProviderFactory.cs" />
+    <Compile Include="SharpFactory.cs" />
     <Compile Include="TableRow.cs" />
     <Compile Include="Util\IntExtensions.cs" />
     <Compile Include="Util\ReflectionHelper.cs" />

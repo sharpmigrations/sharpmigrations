@@ -37,8 +37,8 @@ namespace Sharp.Migrations.Runners {
         }
 
         protected override void TryRunMigrations() {
-            IDataClientFactory dataClientFactory = new DataClientFactory();
-            Runner runner = new Runner(dataClientFactory.GetDataClient(_connectionString, DatabaseProvider), Assembly.GetEntryAssembly());
+            IDataClient dataClient = SharpFactory.Default.CreateDataClient(_connectionString, DatabaseProvider);
+            Runner runner = new Runner(dataClient, Assembly.GetEntryAssembly());
             runner.Run(_targetVersion);
         }
     }

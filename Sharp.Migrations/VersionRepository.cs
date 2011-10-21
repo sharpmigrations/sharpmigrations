@@ -1,7 +1,5 @@
 using System;
-using System.Reflection;
 using Sharp.Data;
-using Sharp.Data.Config;
 using Sharp.Data.Filters;
 using Sharp.Data.Schema;
 
@@ -51,6 +49,7 @@ namespace Sharp.Migrations {
 	                Column.String("name").Size(200),
 	                Column.Int64("version")
 	            );
+            _dataClient.Commit();
 	    }
 
 	    public int GetCurrentVersion() {

@@ -52,9 +52,11 @@ namespace Sharp.Migrations.Runners {
 		}
 
 	    protected virtual void TryRunMigrations() {
-	        IDataClientFactory dataClientFactory = new DataClientFactory();
-            Runner runner = new Runner(dataClientFactory.GetDataClient(_connectionString, DatabaseProvider), AssemblyWithMigrations);
-	        runner.MigrationGroup = MigrationGroup;
+	        IDataClient dataClient = SharpFactory.Default.CreateDataClient(_connectionString, DatabaseProvider);
+            Runner runner = new Runner(dataClient, AssemblyWithMigrations);
+            if(MigrationGroup != null) {
+                runner.MigrationGroup = MigrationGroup;                
+            }
 	        runner.Run(_targetVersion);
 	    }
 
