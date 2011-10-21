@@ -7,12 +7,15 @@ namespace Sharp.Data {
 
     public class ResultSet : List<TableRow> {
 
+        protected List<string> _originalColumnNames;
         protected Dictionary<string, int> _cols;
 
         public ResultSet(params string[] cols) {
             _cols = new Dictionary<string, int>();
+            _originalColumnNames = new List<string>();
 
             for (int i = 0; i < cols.Length; i++) {
+                _originalColumnNames.Add(cols[i]);
                 _cols.Add(cols[i].ToUpper(),i);
             }
         }
@@ -26,13 +29,11 @@ namespace Sharp.Data {
         }
 
         public int GetColumnIndex(string colName) {
-            return _cols[colName];
+            return _cols[colName.ToUpper()];
         }
 
         public string[] GetColumnNames() {
-            var x = from p in _cols.Keys
-                    select (p.ToString());
-            return x.ToArray<string>();
+            return _originalColumnNames.ToArray();
         }
     }
 }

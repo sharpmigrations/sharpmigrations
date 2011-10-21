@@ -34,7 +34,7 @@ namespace Sharp.Data.Schema {
         public Column(string name) : this(name, DbType.String) {}
 
         public Column(string name, DbType type) {
-            ColumnName = name.ToUpper();
+            ColumnName = name;
             IsAutoIncrement = false;
             Type = type;
             IsNullable = true;

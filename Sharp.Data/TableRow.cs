@@ -5,14 +5,14 @@ namespace Sharp.Data {
 
         protected ResultSet _table;
 
-        public TableRow(ResultSet table, object[] values) {
+        public TableRow(ResultSet table, IEnumerable<object> values) {
             _table = table;
-            this.AddRange(values);
+            AddRange(values);
         }
 
         public object this[string col] {
             get {
-                return this[_table.GetColumnIndex(col.ToUpper())];
+                return this[_table.GetColumnIndex(col)];
             }
         }
 
