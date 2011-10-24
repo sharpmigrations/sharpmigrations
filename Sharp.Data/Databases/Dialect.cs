@@ -129,9 +129,9 @@ namespace Sharp.Data {
                 }
             }
             sb.Append(" from ");
-            for (int i = 0; i < columns.Length; i++) {
+            for (int i = 0; i < tables.Length; i++) {
                 sb.Append(tables[i]);
-                if (i != columns.Length - 1) {
+                if (i != tables.Length - 1) {
                     sb.Append(" ,");
                 }
             }            

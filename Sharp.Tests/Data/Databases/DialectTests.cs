@@ -213,5 +213,14 @@ namespace Sharp.Tests.Databases {
             string sql = _dialect.GetSelectSql(tables, columns);
             AssertSql.AreEqual("select t1.col1 ,t2.col2 from table1 t1 ,table2 t2", sql);
 	    }
+
+        [Test]
+        public void Can_select_with_multiple_tables_sql_2() {
+            string[] tables = new string[] { "table1 t1", "table2 t2" };
+            string[] columns = new string[] { "t1.col1", "t2.col1", "t2.col2" };
+
+            string sql = _dialect.GetSelectSql(tables, columns);
+            AssertSql.AreEqual("select t1.col1 ,t2.col1, t2.col2 from table1 t1 ,table2 t2", sql);
+        }
 	}
 }
