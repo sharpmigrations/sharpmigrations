@@ -11,7 +11,7 @@ namespace Sharp.Data.Fluent {
         }
 
 		public IFluentInsertColumns Into(string tableName) {
-			_insert.TableName = tableName;
+            _insert.SetTableNames(tableName);
 			return this;
 		}
 

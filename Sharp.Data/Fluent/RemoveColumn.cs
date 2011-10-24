@@ -6,7 +6,7 @@ namespace Sharp.Data.Fluent {
         public RemoveColumn(IDataClient dataClient) : base(dataClient) {}
 
         protected override void ExecuteInternal() {
-            DataClient.RemoveColumn(TableName, ItemName);
+            DataClient.RemoveColumn(_tableNames[0], ItemName);
         }
     }
 }

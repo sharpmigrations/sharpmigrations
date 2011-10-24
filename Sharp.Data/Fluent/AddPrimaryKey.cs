@@ -9,7 +9,7 @@ namespace Sharp.Data.Fluent {
         public AddPrimaryKey(IDataClient dataClient) : base(dataClient) { }
 
         protected override void ExecuteInternal() {
-            DataClient.AddNamedPrimaryKey(PrimaryKeyName, TableName, ColumnNames);
+            DataClient.AddNamedPrimaryKey(PrimaryKeyName, _tableNames[0], ColumnNames);
         }
     }
 }

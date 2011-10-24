@@ -7,7 +7,7 @@ namespace Sharp.Data.Fluent {
         }
 
         public void FromTable(string tableName) {
-            _action.TableName = tableName;
+            _action.SetTableNames(tableName);
             _action.Execute();
         }
     }

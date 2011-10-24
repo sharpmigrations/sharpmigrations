@@ -11,7 +11,7 @@ namespace Sharp.Data.Fluent {
         }
 
         public void ToTable(string tableName) {
-            _action.TableName = tableName;
+            _action.SetTableNames(tableName);
             _action.Execute();
         }
     }

@@ -5,7 +5,7 @@ namespace Sharp.Data.Fluent {
         public RemoveUniqueKey(IDataClient dataClient) : base(dataClient) {}
 
         protected override void ExecuteInternal() {
-            DataClient.RemoveUniqueKey(ItemName, TableName);
+            DataClient.RemoveUniqueKey(ItemName, _tableNames[0]);
         }
     }
 }

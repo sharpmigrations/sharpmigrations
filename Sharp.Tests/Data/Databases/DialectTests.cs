@@ -19,8 +19,7 @@ namespace Sharp.Tests.Databases {
 		protected abstract string GetResultFor_Can_convert_column_to_sql__autoIncrement_and_primary_key();
 		protected abstract string GetResultFor_Can_convert_column_to_sql__default_value();
 		protected abstract string[] GetResultFor_Can_convert_column_to_values();
-		protected abstract string GetResultFor_Can_generate_count_sql();
-
+        protected abstract string GetResultFor_Can_generate_count_sql();
 
 		protected virtual string GetInsertSql() {
 			return String.Format("insert into foo (id, name) values ({0}par0,{0}par1)", _dialect.ParameterPrefix);
@@ -141,13 +140,13 @@ namespace Sharp.Tests.Databases {
 
 		[Test]
 		public void Can_generate_select_all_sql() {
-			string sql = _dialect.GetSelectSql(TABLE_NAME, new[] { "*" });
+			string sql = _dialect.GetSelectSql(new[] { TABLE_NAME }, new[] { "*" });
 			AssertSql.AreEqual(GetSelectAllSql(), sql);
 		}
 
 		[Test]
 		public void Can_generate_select_sql_with_pagination() {
-			string sql = _dialect.GetSelectSql(TABLE_NAME, new[] { "*" });
+			string sql = _dialect.GetSelectSql(new[] { TABLE_NAME }, new[] { "*" });
 			string sqlWithPagination = _dialect.WrapSelectSqlWithPagination(sql, 10, 20);
 			AssertSql.AreEqual(GetResultFor_Can_generate_select_sql_with_pagination(10,20), sqlWithPagination);
 		}
@@ -205,5 +204,14 @@ namespace Sharp.Tests.Databases {
 			string sql = _dialect.GetOrderBySql(OrderBy.Ascending("col1"), OrderBy.Descending("col2"));
 			AssertSql.AreEqual("order by col1, col2 desc", sql);
 		}
+
+	    [Test]
+        public void Can_select_with_multiple_tables_sql() {
+            string[] tables = new string[] { "table1 t1", "table2 t2" };
+            string[] columns = new string[] { "t1.col1", "t2.col2" };
+            
+            string sql = _dialect.GetSelectSql(tables, columns);
+            AssertSql.AreEqual("select t1.col1 ,t2.col2 from table1 t1 ,table2 t2", sql);
+	    }
 	}
 }

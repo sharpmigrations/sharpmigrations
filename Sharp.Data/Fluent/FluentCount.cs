@@ -11,7 +11,7 @@ namespace Sharp.Data.Fluent {
 		}
 
 		public IFluentCountFilter Table(string tableName) {
-			_count.TableName = tableName;
+            _count.SetTableNames(tableName);
 			return this;
 		}
 

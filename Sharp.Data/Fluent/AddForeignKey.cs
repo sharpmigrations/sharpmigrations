@@ -15,7 +15,7 @@ namespace Sharp.Data.Fluent {
         public AddForeignKey(IDataClient dataClient) : base(dataClient) {}
 
         protected override void ExecuteInternal() {
-            DataClient.AddForeignKey(ForeignKeyName, TableName, Column, ReferencingTable, ReferencingColumn, OnDelete);
+            DataClient.AddForeignKey(ForeignKeyName, _tableNames[0], Column, ReferencingTable, ReferencingColumn, OnDelete);
         }
     }
 }

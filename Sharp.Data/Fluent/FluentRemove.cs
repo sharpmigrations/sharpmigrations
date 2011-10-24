@@ -25,7 +25,8 @@ namespace Sharp.Data.Fluent {
         }
 
         public void Table(string tableName) {
-            RemoveTable action = new RemoveTable(_dataClient) { TableName = tableName, ThrowException = ThrowException };
+            RemoveTable action = new RemoveTable(_dataClient) { ThrowException = ThrowException };
+            action.SetTableNames(tableName);
             action.Execute();
         }
     }

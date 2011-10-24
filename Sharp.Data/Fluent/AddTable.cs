@@ -10,7 +10,7 @@ namespace Sharp.Data.Fluent {
         public AddTable(IDataClient dataClient) : base(dataClient) { }
 
         protected override void ExecuteInternal() {
-            DataClient.AddTable(TableName, Columns);
+            DataClient.AddTable(_tableNames[0], Columns);
         }
     }
 }

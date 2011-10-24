@@ -9,7 +9,7 @@ namespace Sharp.Data.Fluent {
         public Column Column { get; set; }
 
         protected override void ExecuteInternal() {
-            DataClient.AddColumn(TableName, Column);
+            DataClient.AddColumn(_tableNames[0], Column);
         }
     }
 }

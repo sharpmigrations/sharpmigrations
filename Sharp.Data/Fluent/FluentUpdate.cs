@@ -11,7 +11,7 @@ namespace Sharp.Data.Fluent {
         }
 
         public IFluentUpdateColumns Table(string tableName) {
-            _update.TableName = tableName;
+            _update.SetTableNames(tableName);
             return this;
         }
 

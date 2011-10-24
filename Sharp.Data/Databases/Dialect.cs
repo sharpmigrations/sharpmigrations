@@ -119,7 +119,7 @@ namespace Sharp.Data {
             return "delete from " + table;
         }
 
-        public virtual string GetSelectSql(string table, string[] columns) {
+        public virtual string GetSelectSql(string[] tables, string[] columns) {
             StringBuilder sb = new StringBuilder();
             sb.Append("select ");
             for (int i = 0; i < columns.Length; i++) {
@@ -128,7 +128,13 @@ namespace Sharp.Data {
                     sb.Append(" ,");
                 }
             }
-            sb.Append(" from ").Append(table);
+            sb.Append(" from ");
+            for (int i = 0; i < columns.Length; i++) {
+                sb.Append(tables[i]);
+                if (i != columns.Length - 1) {
+                    sb.Append(" ,");
+                }
+            }            
             return sb.ToString();
         }
 

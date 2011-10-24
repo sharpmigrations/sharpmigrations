@@ -13,10 +13,10 @@ namespace Sharp.Data.Fluent {
         protected override void ExecuteInternal() {
             
             if(ColumnToReturn != null) {
-                ColumnToReturnValue = DataClient.InsertReturningSql(TableName, ColumnToReturn, Columns, Values);
+                ColumnToReturnValue = DataClient.InsertReturningSql(_tableNames[0], ColumnToReturn, Columns, Values);
                 return;
             }
-            DataClient.InsertSql(TableName, Columns, Values);
+            DataClient.InsertSql(_tableNames[0], Columns, Values);
         }
     }
 }

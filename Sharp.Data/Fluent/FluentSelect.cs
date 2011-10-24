@@ -18,8 +18,8 @@ namespace Sharp.Data.Fluent {
 			return Columns("*");
 		}
 
-		public IFluentSelectFilter From(string tableName) {
-			_select.TableName = tableName;
+        public IFluentSelectFilter From(params string[] tableName) {
+			_select.SetTableNames(tableName);
 			return this;
 		}
 
@@ -52,7 +52,7 @@ namespace Sharp.Data.Fluent {
 	}
 
 	public interface IFluentSelectTable {
-		IFluentSelectFilter From(string tableName);
+        IFluentSelectFilter From(params string[] tableNames);
 	}
 
 	public interface IFluentSelectFilter {

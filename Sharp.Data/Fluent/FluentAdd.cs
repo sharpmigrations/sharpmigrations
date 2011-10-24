@@ -32,7 +32,8 @@ namespace Sharp.Data.Fluent {
         }
 
         public DataClientAddTable Table(string tableName) {
-            AddTable action = new AddTable(_dataClient) { TableName = tableName};
+            AddTable action = new AddTable(_dataClient);
+            action.SetTableNames(tableName);
             return new DataClientAddTable(action);
         }
     }

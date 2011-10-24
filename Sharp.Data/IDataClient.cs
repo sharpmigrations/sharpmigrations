@@ -39,7 +39,7 @@ namespace Sharp.Data {
         void RollBack();
         void Close();
 
-        ResultSet SelectSql(string table, string[] columns, Filter filter, OrderBy[] orderBys, int skip, int take);
+        ResultSet SelectSql(string[] tables, string[] columns, Filter filter, OrderBy[] orderBys, int skip, int take);
 
         void InsertSql(string table, string[] columns, object[] values);
         object InsertReturningSql(string table, string columnToReturn, string[] columns, object[] values);

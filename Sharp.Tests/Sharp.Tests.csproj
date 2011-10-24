@@ -68,6 +68,7 @@
     <Compile Include="Data\DataParameterCollectionFake.cs" />
     <Compile Include="Data\Filters\CompareOperatorToSymbolTests.cs" />
     <Compile Include="Data\Filters\FilterTests.cs" />
+    <Compile Include="Data\MultipleTableTests.cs" />
     <Compile Include="Data\Schema\ColumnTests.cs" />
     <Compile Include="Data\Schema\FluentColumnTest.cs" />
     <Compile Include="Data\Schema\TableTests.cs" />

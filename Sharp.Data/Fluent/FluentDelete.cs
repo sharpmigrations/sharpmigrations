@@ -10,7 +10,7 @@ namespace Sharp.Data.Fluent {
         }
 
         public IFluentDeleteFilter From(string tableName) {
-            _delete.TableName = tableName;
+            _delete.SetTableNames(tableName);
         	return this;
         }
 

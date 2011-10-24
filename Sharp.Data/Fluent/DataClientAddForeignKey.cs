@@ -23,7 +23,7 @@ namespace Sharp.Data.Fluent {
         }
 
         public DataClientAddForeignKeyStep3 OfTable(string tableName) {
-            _action.TableName = tableName;
+            _action.SetTableNames(tableName);
             return new DataClientAddForeignKeyStep3(_action);
         }
     }

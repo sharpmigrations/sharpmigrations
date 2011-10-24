@@ -127,21 +127,21 @@ namespace Sharp.Data {
             Database.ExecuteSql(sql);
         }
 
-		public virtual ResultSet SelectSql(string table, string[] columns, Filter filter, OrderBy[] orderBys, int skip, int take) {
-			SelectBuilder selectBuilder = new SelectBuilder(Dialect, table, columns);
-			selectBuilder.Filter = filter;
-			selectBuilder.OrderBys = orderBys;
-			selectBuilder.Skip = skip;
-			selectBuilder.Take = take;
+        public virtual ResultSet SelectSql(string[] tables, string[] columns, Filter filter, OrderBy[] orderBys, int skip, int take) {
+            SelectBuilder selectBuilder = new SelectBuilder(Dialect, tables, columns);
+            selectBuilder.Filter = filter;
+            selectBuilder.OrderBys = orderBys;
+            selectBuilder.Skip = skip;
+            selectBuilder.Take = take;
 
-			string sql = selectBuilder.Build();
-			if(selectBuilder.HasFilter) {
-				return Database.Query(sql, selectBuilder.Parameters);
-			}
-			return Database.Query(sql);
-		}
+            string sql = selectBuilder.Build();
+            if (selectBuilder.HasFilter) {
+                return Database.Query(sql, selectBuilder.Parameters);
+            }
+            return Database.Query(sql);
+        }
 
-    	public virtual void InsertSql(string table, string[] columns, object[] values) {
+        public virtual void InsertSql(string table, string[] columns, object[] values) {
             if (values == null) {
                 values = new object[columns.Length];
             }

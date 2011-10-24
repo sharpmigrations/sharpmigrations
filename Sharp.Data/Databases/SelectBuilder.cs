@@ -5,7 +5,7 @@ using Sharp.Data.Schema;
 namespace Sharp.Data.Databases {
 	public class SelectBuilder {
 		private Dialect _dialect;
-		private string _table;
+		private string[] _tables;
 		private string[] _columns;
 
 		public Filter Filter { get; set; }
@@ -19,16 +19,16 @@ namespace Sharp.Data.Databases {
 
 		private string _select;
 
-		public SelectBuilder(Dialect dialect, string table, string[] columns) {
+		public SelectBuilder(Dialect dialect, string[] tables, string[] columns) {
 			_dialect = dialect;
-			_table = table;
+			_tables = tables;
 			_columns = columns;
 
 			Parameters = new In[0];
 		}
 
 		public string Build() {
-			_select = _dialect.GetSelectSql(_table, _columns);
+			_select = _dialect.GetSelectSql(_tables, _columns);
 			ApplyFilter();
 			ApplyOrderBy();
 			ApplySkipTakeToSql();
