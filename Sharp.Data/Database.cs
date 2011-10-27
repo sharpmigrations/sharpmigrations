@@ -83,7 +83,20 @@ namespace Sharp.Data {
 			}
 		}
 
-		private IDataReader TryCreateReader(string call, object[] parameters, CommandType commandType) {
+	    public ResultSet QueryAndDispose(string call) {
+	        return QueryAndDispose(call, null);
+	    }
+
+	    public ResultSet QueryAndDispose(string call, params object[] parameters) {
+	        try {
+	            return Query(call, parameters);
+	        }
+            finally {
+	            Dispose();
+	        }
+	    }
+
+	    private IDataReader TryCreateReader(string call, object[] parameters, CommandType commandType) {
 			IDbCommand cmd = CreateCommand(call, parameters);
 			cmd.CommandType = commandType;
 			return cmd.ExecuteReader();
