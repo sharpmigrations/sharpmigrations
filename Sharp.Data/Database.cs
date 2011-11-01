@@ -42,7 +42,16 @@ namespace Sharp.Data {
 			}
 		}
 
-		private int TryExecuteSql(string call, params object[] parameters) {
+	    public int ExecuteSqlAndDispose(string call, params object[] parameters) {
+	        try {
+	            return ExecuteSql(call, parameters);
+	        }
+            finally {
+	            Dispose();
+	        }
+	    }
+
+	    private int TryExecuteSql(string call, params object[] parameters) {
 			IDbCommand cmd = CreateCommand(call, parameters);
 			int modifiedRows = cmd.ExecuteNonQuery();
 			RetrieveOutParameters(parameters, cmd);
@@ -112,7 +121,16 @@ namespace Sharp.Data {
 			}
 		}
 
-		private object TryQueryReader(string call, object[] parameters) {
+	    public object QueryScalarAndDispose(string call, params object[] parameters) {
+	        try {
+	            return QueryScalar(call, parameters);
+	        }
+            finally {
+	            Dispose();
+	        }
+	    }
+
+	    private object TryQueryReader(string call, object[] parameters) {
 			IDbCommand cmd = CreateCommand(call, parameters);
 			object obj = cmd.ExecuteScalar();
 			return obj;
@@ -170,16 +188,11 @@ namespace Sharp.Data {
 
 		private IDbCommand CreateCommand(string call, object[] parameters) {
 			OpenConnection();
-
-			IDbCommand cmd = CreateIDbCommand(call);
-
-			SetTimeoutForCommand(cmd);
-
-			PopulateCommandParameters(cmd, parameters);
-
-			LogCommandCall(call, cmd);
-
-			return cmd;
+            IDbCommand cmd = CreateIDbCommand(call);
+            SetTimeoutForCommand(cmd);
+            PopulateCommandParameters(cmd, parameters);
+            LogCommandCall(call, cmd);
+            return cmd;
 		}
 
 		private void SetTimeoutForCommand(IDbCommand cmd) {
@@ -193,6 +206,7 @@ namespace Sharp.Data {
 			IDbCommand cmd = _connection.CreateCommand();
 			cmd.CommandText = call;
 			cmd.Transaction = _transaction;
+            Provider.ConfigCommand(cmd);
 			return cmd;
 		}
 

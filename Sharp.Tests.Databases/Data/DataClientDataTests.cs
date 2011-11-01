@@ -43,6 +43,20 @@ namespace Sharp.Tests.Databases.Data {
 			Assert.AreEqual(true, res[0][1]);
 		}
 
+        [Test]
+        public virtual void Can_insert_ints_and_strings() {
+            _dataClient.AddTable("footable",
+                                 Column.Int32("colInt"),
+                                 Column.String("colString"));
+
+            _dataClient.Insert.Into("footable").Columns("colInt", "colString").Values(1, "asdf");
+
+            ResultSet res = _dataClient.Select.Columns("colInt", "colString").From("footable").AllRows();
+
+            Assert.AreEqual(1, res[0][0]);
+            Assert.AreEqual("asdf", res[0][1]);
+        }
+
 		[Test]
 		public virtual void Can_insert_with_only_null() {
 			_dataClient.AddTable("footable",

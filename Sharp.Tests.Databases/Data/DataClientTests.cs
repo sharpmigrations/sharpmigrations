@@ -30,6 +30,7 @@ namespace Sharp.Tests.Databases.Data {
             DropTable("foobar");
             DropTable("footable");
             _dataClient.RollBack();
+            _dataClient.Dispose();
         }
 
         protected void CreateTableFoo() {

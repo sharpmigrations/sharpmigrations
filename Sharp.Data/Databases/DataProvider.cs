@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.Common;
 
 namespace Sharp.Data.Databases {
@@ -12,6 +13,8 @@ namespace Sharp.Data.Databases {
         public virtual IDbConnection GetConnection() {
             return DbProviderFactory.CreateConnection();
         }
+
+        public virtual void ConfigCommand(IDbCommand command) {}
 
         public virtual IDbDataParameter GetParameter() {
             return DbProviderFactory.CreateParameter();

@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\DatabaseTests.cs" />
     <Compile Include="Data\DataClientDataTests.cs" />
     <Compile Include="Data\DataClientFactoryTests.cs" />
     <Compile Include="Data\DataClientSchemaTests.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Mysql\MySqlSchemaTests.cs" />
     <Compile Include="Oracle\OracleClientDataClientFactoryTests.cs" />
     <Compile Include="Oracle\OracleClientSchemaTests.cs" />
+    <Compile Include="Oracle\OracleOdpDatabaseTests.cs" />
     <Compile Include="Oracle\OracleOdpDataClientFactoryTests.cs" />
     <Compile Include="Oracle\OracleOdpDataTests.cs" />
     <Compile Include="Oracle\OracleClientDataTests.cs" />
@@ -113,10 +115,6 @@
     <ProjectReference Include="..\Sharp.Migrations\Sharp.Migrations.csproj">
       <Project>{703517B1-515E-4833-A1E0-B3CD9CF7E5E2}</Project>
       <Name>Sharp.Migrations</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sharp.Tests\Sharp.Tests.csproj">
-      <Project>{0754B7C3-D4C2-4819-AE2D-D82CCF93E4B3}</Project>
-      <Name>Sharp.Tests</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
