@@ -60,8 +60,8 @@ namespace Sharp.Data {
             return String.Format("alter table {0} add {1}", table, GetColumnToSqlWhenCreate(column));
         }
 
-        public virtual string GetDropColumnSql(string table, string columnName) {
-            return String.Format("alter table {0} drop column {1}", table, columnName);
+        public virtual string[] GetDropColumnSql(string table, string columnName) {
+            return new[] {String.Format("alter table {0} drop column {1}", table, columnName)};
         }
 
         public virtual string GetInsertSql(string table, string[] columns, object[] values) {

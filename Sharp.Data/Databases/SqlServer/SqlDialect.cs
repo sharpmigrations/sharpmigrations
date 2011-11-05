@@ -67,6 +67,12 @@ namespace Sharp.Data.Dialects {
             return new string[1] { sql };
         }
 
+        public override string[] GetDropColumnSql(string table, string columnName) {
+            string sql1 = String.Format("alter table {0} drop constraint DF_{0}_{1}", table, columnName);
+            string sql2 = String.Format("alter table {0} drop column {1}", table, columnName);
+            return new[] { sql1, sql2};
+        }
+
         public override string GetPrimaryKeySql(string pkName, string table, params string[] columnNames) {
             if (columnNames.Length == 0) {
                 throw new ArgumentException("No columns specified for primary key");

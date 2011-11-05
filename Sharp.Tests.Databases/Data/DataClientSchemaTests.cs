@@ -102,6 +102,13 @@ namespace Sharp.Tests.Databases.Data {
 			_dataClient.RemoveColumn(tableFoo, "name");
 		}
 
+        [Test]
+        public virtual void Can_remove_column_from_table_with_default_value() {
+            CreateTableFoo();
+            _dataClient.AddColumn(tableFoo, Column.Int32("bar").NotNull().DefaultValue(0).Object);
+            _dataClient.RemoveColumn(tableFoo, "bar");
+        }
+
 		[Test]
 		public virtual void Can_add_foreign_key_to_table() {
 			CreateTableFoo();

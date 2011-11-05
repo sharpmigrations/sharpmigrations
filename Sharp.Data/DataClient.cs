@@ -123,8 +123,13 @@ namespace Sharp.Data {
         }
 
         public virtual void RemoveColumn(string tableName, string columnName) {
-            string sql = Dialect.GetDropColumnSql(tableName, columnName);
-            Database.ExecuteSql(sql);
+            string[] sqls = Dialect.GetDropColumnSql(tableName, columnName);
+            for (int i = 0; i < sqls.Length; i++) {
+                try {
+                    Database.ExecuteSql(sqls[i]);                        
+                }
+                catch{}
+            }
         }
 
         public virtual ResultSet SelectSql(string[] tables, string[] columns, Filter filter, OrderBy[] orderBys, int skip, int take) {

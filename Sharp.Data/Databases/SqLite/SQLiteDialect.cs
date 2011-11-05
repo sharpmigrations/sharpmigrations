@@ -98,7 +98,7 @@ namespace Sharp.Data.Dialects {
             return String.Format("alter table {0} add {1}", table, GetColumnToSqlWhenCreate(column));
         }
 
-        public override string GetDropColumnSql(string table, string columnName) {
+        public override string[] GetDropColumnSql(string table, string columnName) {
             throw new NotSupportedByDialect("Try recreating the table", "GetDropColumnSql", GetDialectName());
         }
 
