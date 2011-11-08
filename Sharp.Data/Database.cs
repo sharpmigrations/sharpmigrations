@@ -42,11 +42,12 @@ namespace Sharp.Data {
 			}
 		}
 
-	    public int ExecuteSqlAndDispose(string call, params object[] parameters) {
+	    public int ExecuteSqlCommitAndDispose(string call, params object[] parameters) {
 	        try {
 	            return ExecuteSql(call, parameters);
 	        }
             finally {
+	            Commit();
 	            Dispose();
 	        }
 	    }
