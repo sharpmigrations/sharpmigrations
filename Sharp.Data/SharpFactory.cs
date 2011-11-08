@@ -61,6 +61,7 @@ namespace Sharp.Data {
                 }
                 return _default;
             }
+            set { _default = value; }
         }
     }
 }
