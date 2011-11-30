@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
 namespace Sharp.Data {
-
-    public class ResultSet : List<TableRow> {
-
-        protected List<string> _originalColumnNames;
-        protected Dictionary<string, int> _cols;
+	public class ResultSet : List<TableRow> {
+        private List<string> _originalColumnNames;
+		private Dictionary<string, int> _cols;
 
         public ResultSet(params string[] cols) {
             _cols = new Dictionary<string, int>();

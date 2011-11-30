@@ -83,8 +83,12 @@
     <Compile Include="Databases\DataProvider.cs" />
     <Compile Include="Databases\DataProviderNames.cs" />
     <Compile Include="Databases\Dialect.cs" />
+    <Compile Include="Databases\MySql\MySqlDataClient.cs" />
+    <Compile Include="Databases\Oracle\OracleDataClient.cs" />
     <Compile Include="Databases\Oracle\OracleDialect.cs" />
     <Compile Include="Databases\SelectBuilder.cs" />
+    <Compile Include="Databases\SqLite\SqLiteDataClient.cs" />
+    <Compile Include="Databases\SqlServer\SqlServerDataClient.cs" />
     <Compile Include="ISharpFactory.cs" />
     <Compile Include="Schema\OrderBy.cs" />
     <Compile Include="Databases\MySql\MySqlDialect.cs" />
@@ -147,7 +151,6 @@
     <Compile Include="IDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IDataProvider.cs" />
-    <Compile Include="Databases\Oracle\OracleClientProvider.cs" />
     <Compile Include="Databases\SqlServer\SqlProvider.cs" />
     <Compile Include="ResultSet.cs" />
     <Compile Include="Schema\Column.cs" />

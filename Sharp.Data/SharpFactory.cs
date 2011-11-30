@@ -4,53 +4,51 @@ namespace Sharp.Data {
     public class SharpFactory : ISharpFactory {
 
         public string ConnectionString { get; set; }
-        public string DatabaseProviderName { get; set; }
+        public string DataProviderName { get; set; }
 
         public SharpFactory() {
             if (ConfigurationManager.ConnectionStrings.Count <= 0) return;
             ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings[0];
             ConnectionString = settings.ConnectionString;
-            DatabaseProviderName = settings.ProviderName;
+            DataProviderName = settings.ProviderName;
         }
 
         public SharpFactory(string connectionString, string databaseProviderName) {
             ConnectionString = connectionString;
-            DatabaseProviderName = databaseProviderName;
+            DataProviderName = databaseProviderName;
         }
 
         public IDataProvider CreateDataProvider(string databaseProviderName) {
-            return GetConfig(databaseProviderName).DataProvider;
+			return GetConfig().DataProvider;
         }
 
         public IDataProvider CreateDataProvider() {
-            return GetConfig(DatabaseProviderName).DataProvider;
+            return GetConfig().DataProvider;
         }
 
         public IDatabase CreateDatabase() {
-            return CreateDatabaseInternal(GetConfig(DatabaseProviderName), ConnectionString);
+        	return GetConfig().Database;
         }
 
         public IDatabase CreateDatabase(string connectionString, string databaseProviderName) {
-            return CreateDatabaseInternal(GetConfig(databaseProviderName), connectionString);
-        }
-
-        private IDatabase CreateDatabaseInternal(SharpDbConfig sharpDbConfig, string connectionString) {
-            return new Database(sharpDbConfig.DataProvider, connectionString);
+        	return GetConfig(databaseProviderName, connectionString).Database;
         }
 
         public IDataClient CreateDataClient(string connectionString, string databaseProviderName) {
-            SharpDbConfig config = GetConfig(databaseProviderName);
-            return new DataClient(CreateDatabaseInternal(config, connectionString), config.Dialect);
+			return GetConfig(databaseProviderName, connectionString).DataClient;            
         }
 
         public IDataClient CreateDataClient() {
-            SharpDbConfig config = GetConfig(DatabaseProviderName);
-            return new DataClient(CreateDatabaseInternal(config, ConnectionString), config.Dialect);
+			return GetConfig().DataClient;                        
         }
 
-        private SharpDbConfig GetConfig(string databaseProviderName) {
+		private SharpDbConfig GetConfig() {
+			return GetConfig(DataProviderName, ConnectionString);
+		}
+
+		private SharpDbConfig GetConfig(string databaseProviderName, string connectionString) {
             SharpDbProviderFactory factory = new SharpDbProviderFactory();
-            return factory.CreateSharpDbConfig(databaseProviderName);
+            return factory.CreateSharpDbConfig(databaseProviderName, connectionString);
         }
 
         private static ISharpFactory _default;

@@ -125,7 +125,6 @@ namespace Sharp.Tests.Databases.Data {
 			ResultSet res = _dataClient.Select
 									   .AllColumns()
 									   .From(tableFoo)
-									   .Where(null)
 									   .SkipTake(1, 1);
 			
 			Assert.AreEqual(1, res.Count);

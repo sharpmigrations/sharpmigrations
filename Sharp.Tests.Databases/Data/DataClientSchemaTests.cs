@@ -157,14 +157,14 @@ namespace Sharp.Tests.Databases.Data {
 		public void Can_add_index_with_multiple_coluns_to_table() {
 			CreateTableFoo();
 			_dataClient.AddIndex("in_foo", "foo", "id", "name");
-			_dataClient.RemoveIndex("in_foo");
+			_dataClient.RemoveIndex("in_foo", "foo");
 		}
 
 		[Test]
 		public void Can_remove_index_from_table() {
 			CreateTableFoo();
 			_dataClient.AddIndex("in_foo", "foo", "name");
-			_dataClient.RemoveIndex("in_foo");
+			_dataClient.RemoveIndex("in_foo", "foo");
 		}
 	}
 }

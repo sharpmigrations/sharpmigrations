@@ -91,12 +91,9 @@
     <Compile Include="Mysql\MySqlDataClientFactoryTests.cs" />
     <Compile Include="Mysql\MySqlDataTests.cs" />
     <Compile Include="Mysql\MySqlSchemaTests.cs" />
-    <Compile Include="Oracle\OracleClientDataClientFactoryTests.cs" />
-    <Compile Include="Oracle\OracleClientSchemaTests.cs" />
     <Compile Include="Oracle\OracleOdpDatabaseTests.cs" />
     <Compile Include="Oracle\OracleOdpDataClientFactoryTests.cs" />
     <Compile Include="Oracle\OracleOdpDataTests.cs" />
-    <Compile Include="Oracle\OracleClientDataTests.cs" />
     <Compile Include="Data\SetupFixture.cs" />
     <Compile Include="Oracle\OracleOdpSchemaTests.cs" />
     <Compile Include="SQLite\SqLiteDataClientFactoryTests.cs" />

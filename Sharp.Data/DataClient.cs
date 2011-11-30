@@ -10,19 +10,16 @@ using Sharp.Data.Schema;
 
 namespace Sharp.Data {
 
-    public class DataClient : IDataClient {
+    public abstract class DataClient : IDataClient {
 
 		private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
 
         public IDatabase Database { get; set; }
-        public Dialect Dialect { get; protected set; }
-        
+		public abstract Dialect Dialect { get; set; }
         public bool ThrowException { get; set; }
 
-        public DataClient(IDatabase database, Dialect dialect) {
+    	protected DataClient(IDatabase database) {
             Database = database;
-            Dialect = dialect;
-            
 			ThrowException = true;
         }
 
@@ -65,7 +62,7 @@ namespace Sharp.Data {
 			ExecuteSqls(sqls);
         }
 
-    	private void ExecuteSqls(string[] sqls) {
+		private void ExecuteSqls(string[] sqls) {
     		foreach (string sql in sqls) {
     			Database.ExecuteSql(sql);
     		}
@@ -112,8 +109,8 @@ namespace Sharp.Data {
     		Database.ExecuteSql(sql);
     	}
 
-    	public void RemoveIndex(string indexName) {
-    		string sql = Dialect.GetDropIndexSql(indexName);
+    	public void RemoveIndex(string indexName, string table) {
+    		string sql = Dialect.GetDropIndexSql(indexName, table);
 			Database.ExecuteSql(sql);
     	}
 
@@ -125,10 +122,7 @@ namespace Sharp.Data {
         public virtual void RemoveColumn(string tableName, string columnName) {
             string[] sqls = Dialect.GetDropColumnSql(tableName, columnName);
             for (int i = 0; i < sqls.Length; i++) {
-                try {
-                    Database.ExecuteSql(sqls[i]);                        
-                }
-                catch{}
+                Database.ExecuteSql(sqls[i]);                        
             }
         }
 
@@ -155,8 +149,7 @@ namespace Sharp.Data {
         }
 
         public virtual object InsertReturningSql(string table, string columnToReturn, string[] columns, object[] values) {
-
-            Out returningPar = new Out {Name = "returning_" + columnToReturn, Size = 4000};
+			Out returningPar = new Out {Name = "returning_" + columnToReturn, Size = 4000};
 
             string retSql = Dialect.GetInsertReturningColumnSql(table, columns, values, columnToReturn, returningPar.Name);
 

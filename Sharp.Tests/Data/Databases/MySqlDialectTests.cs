@@ -56,7 +56,7 @@ namespace Sharp.Tests.Databases.Mysql {
         }
 
     	protected override string GetResultFor_Can_generate_count_sql() {
-    		throw new NotImplementedException();
+    		return "SELECT COUNT(*) FROM myTable";
     	}
 
     	protected override string GetResultFor_Can_generate_select_sql_with_pagination(int skip, int to) {

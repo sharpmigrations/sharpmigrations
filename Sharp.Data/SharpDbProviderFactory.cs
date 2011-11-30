@@ -2,37 +2,40 @@
 using System.Data.Common;
 using Sharp.Data.Databases;
 using Sharp.Data.Databases.MySql;
-using Sharp.Data.Dialects;
+using Sharp.Data.Databases.Oracle;
+using Sharp.Data.Databases.SqLite;
+using Sharp.Data.Databases.SqlServer;
 using Sharp.Data.Providers;
 
 namespace Sharp.Data {
     public class SharpDbProviderFactory {
-        public SharpDbConfig CreateSharpDbConfig(string databaseProviderName) {
+        public SharpDbConfig CreateSharpDbConfig(string databaseProviderName, string connectionString) {
 
             DbProviderFactory dbProviderFactory = GetDbProviderFactory(databaseProviderName);
 
             IDataProvider dataProvider;
-            Dialect dialect;
+        	Database database;
+            DataClient dataClient;
 
             if (databaseProviderName == DataProviderNames.OracleOdp) {
                 dataProvider = new OracleOdpProvider(dbProviderFactory);
-                dialect = new OracleDialect();
-            }
-            else if (databaseProviderName == DataProviderNames.OracleClient) {
-                dataProvider = new OracleClientProvider(dbProviderFactory);
-                dialect = new OracleDialect();
+				database = new Database(dataProvider, connectionString);
+				dataClient = new OracleDataClient(database);
             }
             else if (databaseProviderName == DataProviderNames.SqlServer) {
                 dataProvider = new SqlProvider(dbProviderFactory);
-                dialect = new SqlDialect();
+				database = new Database(dataProvider, connectionString);
+				dataClient = new SqlServerDataClient(database);
             }
             else if (databaseProviderName == DataProviderNames.SqLite) {
                 dataProvider = new SqLiteProvider(dbProviderFactory);
-                dialect = new SqLiteDialect();
+				database = new Database(dataProvider, connectionString);
+				dataClient = new SqLiteDataClient(database);
             }
             else if (databaseProviderName == DataProviderNames.MySql) {
                 dataProvider = new MySqlProvider(dbProviderFactory);
-                dialect = new MySqlDialect();
+				database = new Database(dataProvider, connectionString);
+				dataClient = new MySqlDataClient(database);
             }
             else {
                 throw new ProviderNotFoundException("Could not find provider " + databaseProviderName);
@@ -41,13 +44,14 @@ namespace Sharp.Data {
             SharpDbConfig config = new SharpDbConfig {
                 DbProviderName = databaseProviderName,
                 DataProvider = dataProvider,
-                Dialect = dialect
+				Database = database,
+        		DataClient = dataClient
             };
 
             return config;
         }
-
-        private DbProviderFactory GetDbProviderFactory(string databaseProviderName) {
+    	
+    	private DbProviderFactory GetDbProviderFactory(string databaseProviderName) {
             try {
                 return DbProviderFactories.GetFactory(databaseProviderName);
             }

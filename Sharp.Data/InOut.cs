@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Data;
 
 namespace Sharp.Data {
+	[DebuggerDisplay("[{Name}][{Value}]")]
     public class InOut {
         public string Name { get; set; }
         public object Value { get; set; }

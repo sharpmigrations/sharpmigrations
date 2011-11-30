@@ -1,7 +1,7 @@
 using System;
 using Sharp.Data;
 using Sharp.Data.Databases;
-using Sharp.Data.Dialects;
+using Sharp.Data.Databases.SqlServer;
 using Sharp.Data.Providers;
 using Sharp.Tests.Databases.Data;
 

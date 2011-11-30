@@ -171,7 +171,7 @@ namespace Sharp.Tests.Databases {
 
 		[Test]
 		public void Can_drop_index_sql() {
-			string sql = _dialect.GetDropIndexSql("indexName");
+			string sql = _dialect.GetDropIndexSql("indexName", "foo");
 			AssertSql.AreEqual("drop index indexName", sql);
 		}
 

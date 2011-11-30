@@ -18,7 +18,6 @@ namespace Sharp.Data {
 			Timeout = -1;
 			Provider = provider;
 			ConnectionString = connectionString;
-
 			LogDatabaseProviderName(provider.ToString());
 		}
 

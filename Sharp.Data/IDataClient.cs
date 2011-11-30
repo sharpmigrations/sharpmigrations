@@ -33,7 +33,7 @@ namespace Sharp.Data {
         void RemoveForeignKey(string foreigKeyName, string tableName);
         void RemoveTable(string tableName);
         void RemoveUniqueKey(string uniqueKeyName, string tableName);
-		void RemoveIndex(string indexName);
+		void RemoveIndex(string indexName, string table);
 
         void Commit();
         void RollBack();

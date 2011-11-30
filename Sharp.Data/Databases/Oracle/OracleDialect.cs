@@ -109,7 +109,7 @@ namespace Sharp.Data {
 			                     referencingColumn,
 			                     onDeleteSql);
 		}
-		
+
 		public override string GetUniqueKeySql(string ukName, string table, params string[] columnNames) {
 			return String.Format("create unique index {0} on {1} ({2})", ukName, table, StringHelper.Implode(columnNames, ","));
 		}

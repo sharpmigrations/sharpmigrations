@@ -1,7 +1,7 @@
 ﻿namespace Sharp.Data {
     public interface ISharpFactory {
         string ConnectionString { get; set; }
-        string DatabaseProviderName { get; set; }
+        string DataProviderName { get; set; }
 
         IDataProvider CreateDataProvider(string databaseProviderName);
         IDataProvider CreateDataProvider();

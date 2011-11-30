@@ -48,7 +48,7 @@ namespace Sharp.Data {
 			return String.Format("create index {0} on {1} ({2})", indexName, table, StringHelper.Implode(columnNames, ",")); 		
     	}
 
-    	public virtual string GetDropIndexSql(string indexName) {
+    	public virtual string GetDropIndexSql(string indexName, string table) {
     		return String.Format("drop index {0}", indexName);
     	}
 

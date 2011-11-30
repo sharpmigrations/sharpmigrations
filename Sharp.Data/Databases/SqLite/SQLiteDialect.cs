@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
@@ -8,7 +7,7 @@ using Sharp.Data.Util;
 using Sharp.Data.Schema;
 using Sharp.Util;
 
-namespace Sharp.Data.Dialects {
+namespace Sharp.Data.Databases.SqLite {
 
     public class SqLiteDialect : Dialect {
 
@@ -83,7 +82,7 @@ namespace Sharp.Data.Dialects {
             throw new NotSupportedByDialect("ForeignKeys not supported", "GetDropForeignKeySql", GetDialectName());
         }
 
-        public override string GetUniqueKeySql(string ukName, string table, params string[] columnNames) {
+    	public override string GetUniqueKeySql(string ukName, string table, params string[] columnNames) {
             return String.Format("create unique index {0} on {1} ({2})",
                                  ukName,
                                  table,

@@ -1,13 +1,14 @@
-using System;
+﻿using System;	
 using System.Text;
 using System.Data;
+using System.Text.RegularExpressions;
 using Sharp.Data.Util;
 using System.Collections.Generic;
 using System.Globalization;
 using Sharp.Data.Schema;
 using Sharp.Util;
 
-namespace Sharp.Data.Dialects {
+namespace Sharp.Data.Databases.SqlServer {
     public class SqlDialect : Dialect {
 
 		public override string ParameterPrefix {
@@ -64,13 +65,25 @@ namespace Sharp.Data.Dialects {
 
         public override string[] GetDropTableSqls(string tableName) {
             string sql = String.Format("drop table {0}", tableName);
-            return new string[1] { sql };
+            return new[] { sql };
         }
 
         public override string[] GetDropColumnSql(string table, string columnName) {
-            string sql1 = String.Format("alter table {0} drop constraint DF_{0}_{1}", table, columnName);
-            string sql2 = String.Format("alter table {0} drop column {1}", table, columnName);
-            return new[] { sql1, sql2};
+        	string findDefaultConstraint = String.Format(
+				@"select d.name
+					from sys.tables t
+						join
+						sys.default_constraints d
+							on d.parent_object_id = t.object_id
+						join
+						sys.columns c
+							on c.object_id = t.object_id
+							and c.column_id = d.parent_column_id
+					where t.name = '{0}'
+					and c.name = '{1}'", table, columnName);
+			string dropDefaultConstrant = String.Format("ALTER TABLE {0} DROP CONSTRAINT [{{0}}]", table);
+        	string dropColumn = String.Format("ALTER TABLE {0} DROP COLUMN {1}", table, columnName);
+			return new[] { findDefaultConstraint, dropDefaultConstrant, dropColumn };
         }
 
         public override string GetPrimaryKeySql(string pkName, string table, params string[] columnNames) {
@@ -109,7 +122,11 @@ namespace Sharp.Data.Dialects {
                     onDeleteSql);
         }
 
-        public override string GetUniqueKeySql(string ukName, string table, params string[] columnNames) {
+    	public override string GetDropIndexSql(string indexName, string table) {
+			return String.Format("drop index {0} on {1}", indexName, table);
+		}
+
+    	public override string GetUniqueKeySql(string ukName, string table, params string[] columnNames) {
             return String.Format("alter table {0} add constraint {1} unique ({2})",
                                   table,
                                   ukName,
@@ -135,7 +152,24 @@ namespace Sharp.Data.Dialects {
         }
 
     	public override string WrapSelectSqlWithPagination(string sql, int skipRows, int numberOfRows) {
-    		throw new NotImplementedException();
+			Regex regex = new Regex("SELECT", RegexOptions.IgnoreCase);
+    		sql = regex.Replace(sql, "SELECT TOP 2147483647 ", 1);
+
+    		string innerSql =
+				@"select * into #TempTable from (
+							select * ,ROW_NUMBER() over(order by aaa) AS rownum from (
+								select 'aaa' as aaa, * from  (
+									{0}
+								)as t1
+							)as t2
+						) as t3
+					where rownum between {1} and {2}
+					alter table #TempTable drop column aaa
+					alter table #TempTable drop column rownum
+					select * from #TempTable
+					drop table #TempTable
+				";
+			return String.Format(innerSql, sql, skipRows+1, skipRows + numberOfRows);
     	}
 
     	protected override string GetDbTypeString(DbType type, int precision) {

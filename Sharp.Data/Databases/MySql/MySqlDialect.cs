@@ -62,7 +62,7 @@ namespace Sharp.Data.Databases.MySql {
             throw new NotImplementedException();
         }
 
-        public override string GetUniqueKeySql(string ukName, string table, params string[] columnNames) {
+    	public override string GetUniqueKeySql(string ukName, string table, params string[] columnNames) {
             throw new NotImplementedException();
         }
 
