@@ -224,7 +224,7 @@ namespace Sharp.Data.Databases.SqlServer {
 
         public override string GetColumnValueToSql(object value) {
             if (value is bool) {
-                return ((bool)value) ? "true" : "false";
+                return ((bool)value) ? "1" : "0";
             }
 
             if ((value is Int16) || (value is Int32) || (value is Int64) || (value is double) || (value is float) || (value is decimal)) {

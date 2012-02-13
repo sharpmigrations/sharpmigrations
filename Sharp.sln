@@ -2,11 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{54DB89DA-E94D-451E-A8CF-847E0778B425}"
-	ProjectSection(SolutionItems) = preProject
-		Libs\log4net.dll = Libs\log4net.dll
-		Libs\Moq.dll = Libs\Moq.dll
-		Libs\nunit.framework.dll = Libs\nunit.framework.dll
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Migrations", "Sharp.Migrations\Sharp.Migrations.csproj", "{703517B1-515E-4833-A1E0-B3CD9CF7E5E2}"
 EndProject
@@ -21,6 +16,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Migrations.Template", "Sharp.Migrations.Template\Sharp.Migrations.Template.csproj", "{63C72985-F45A-4297-A5D5-FA6974B066E0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Tests.Northwind", "Sharp.Tests.Northwind\Sharp.Tests.Northwind.csproj", "{10B4D903-B21C-49F4-9A94-1A505C6505F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{8FBD36BE-F74F-48F4-871A-C7B8F775B416}"
+	ProjectSection(SolutionItems) = preProject
+		SharpMigrations.0.8.nupkg = SharpMigrations.0.8.nupkg
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

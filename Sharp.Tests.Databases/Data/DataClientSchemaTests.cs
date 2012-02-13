@@ -97,6 +97,12 @@ namespace Sharp.Tests.Databases.Data {
 		}
 
 		[Test]
+		public virtual void Can_add_boolean_column_to_table_with_default_value() {
+			CreateTableFoo();
+			_dataClient.AddColumn(tableFoo, Column.Boolean("bar").NotNull().DefaultValue(true).Object);
+		}
+
+		[Test]
 		public virtual void Can_remove_column_from_table() {
 			CreateTableFoo();
 			_dataClient.RemoveColumn(tableFoo, "name");
