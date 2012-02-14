@@ -1,5 +1,3 @@
-using Sharp.Data;
-
 namespace Sharp.Data.Fluent {
     
     public class AddUniqueKey : DataClientAction {

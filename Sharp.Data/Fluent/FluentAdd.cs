@@ -31,6 +31,11 @@ namespace Sharp.Data.Fluent {
             return new DataClientAddUniqueKey(action);
         }
 
+		public DataClientAddIndexKey IndexKey(string indexKeyName) {
+			AddIndexKey action = new AddIndexKey(_dataClient) { IndexKeyName = indexKeyName };
+			return new DataClientAddIndexKey(action);
+		}
+
         public DataClientAddTable Table(string tableName) {
             AddTable action = new AddTable(_dataClient);
             action.SetTableNames(tableName);

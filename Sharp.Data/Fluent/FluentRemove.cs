@@ -24,6 +24,11 @@ namespace Sharp.Data.Fluent {
             return new DateClientRemoveItem(action);
         }
 
+		public DateClientRemoveItem IndexKey(string IndexKeyName) {
+			RemoveIndexKey action = new RemoveIndexKey(_dataClient) { ItemName = IndexKeyName, ThrowException = ThrowException };
+			return new DateClientRemoveItem(action);
+		}
+
         public void Table(string tableName) {
             RemoveTable action = new RemoveTable(_dataClient) { ThrowException = ThrowException };
             action.SetTableNames(tableName);

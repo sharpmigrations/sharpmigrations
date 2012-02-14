@@ -89,6 +89,9 @@
     <Compile Include="Databases\SelectBuilder.cs" />
     <Compile Include="Databases\SqLite\SqLiteDataClient.cs" />
     <Compile Include="Databases\SqlServer\SqlServerDataClient.cs" />
+    <Compile Include="Fluent\AddIndexKey.cs" />
+    <Compile Include="Fluent\RemoveIndexKey.cs" />
+    <Compile Include="Fluent\DataClientAddIndexKey.cs" />
     <Compile Include="ISharpFactory.cs" />
     <Compile Include="Schema\OrderBy.cs" />
     <Compile Include="Databases\MySql\MySqlDialect.cs" />
