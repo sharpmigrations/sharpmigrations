@@ -13,6 +13,10 @@ namespace Sharp.Data {
         int ExecuteSql(string call);
         int ExecuteSql(string call, params object[] parameters);
         int ExecuteSqlCommitAndDispose(string call, params object[] parameters);
+
+		void ExecuteStoredProcedure(string call, params object[] parameters);
+		void ExecuteStoredProcedureAndDispose(string call, params object[] parameters);
+
         ResultSet Query(string call);
         ResultSet Query(string call, params object[] parameters);
         ResultSet QueryAndDispose(string call);
