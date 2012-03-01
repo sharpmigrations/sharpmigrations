@@ -67,6 +67,12 @@ namespace Sharp.Data {
 				Out pout = parameter as Out;
 				if (pout != null) {
 					pout.Value = ((IDbDataParameter) cmd.Parameters[pout.Name]).Value;
+					continue;
+				}
+				InOut pinout = parameter as InOut;
+				if(pinout != null) {
+					pinout.Value = ((IDbDataParameter)cmd.Parameters[pinout.Name]).Value;
+					continue;
 				}
 			}
 		}
@@ -136,6 +142,33 @@ namespace Sharp.Data {
 			return obj;
 		}
 
+		public void ExecuteStoredProcedure(string call, params object[] parameters) {
+			try {
+				TryExecuteStoredProcedure(call, parameters);
+			}
+			catch (Exception ex) {
+				RollBack();
+				throw new DatabaseException(ex.Message, ex, call);
+			}	
+		}
+
+		public void ExecuteStoredProcedureAndDispose(string call, params object[] parameters) {
+			try {
+				ExecuteStoredProcedure(call, parameters);
+			}
+			finally {
+				Commit();
+				Dispose();
+			}
+		}
+
+		private void TryExecuteStoredProcedure(string call, params object[] parameters) {
+			IDbCommand cmd = CreateCommand(call, parameters);
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.ExecuteNonQuery();
+			RetrieveOutParameters(parameters, cmd);
+		}
+		
 		public ResultSet CallStoredProcedure(string call) {
 			return CallStoredProcedure(call, null);
 		}
