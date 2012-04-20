@@ -16,18 +16,35 @@ namespace Sharp.Migrations {
 
 		private int _currentVersion, _initialVersion, _targetVersion, _maxVersion;
 
-		public IVersionRepository VersionRepository { private get; set; }
+        private readonly MigrationFinder _migrationFinder;
+
+	    public IVersionRepository VersionRepository { private get; set; }
 
 	    public string MigrationGroup {
 	        get { return VersionRepository.MigrationGroup; }
             set { VersionRepository.MigrationGroup = value; }
 	    }
 
-		public Runner(IDataClient dataClient, Assembly targetAssembly) {
+	    public int LastVersionNumber {
+            get { return _migrationFinder.LastVersion; }
+	    }
+
+	    public int CurrentVersionNumber {
+	        get {
+	            if (_initialVersion == -1) {
+                    GetCurrentVersion();
+	            }
+	            return _initialVersion;
+	        }
+	    }
+
+	    public Runner(IDataClient dataClient, Assembly targetAssembly) {
 			_dataClient = dataClient;
 			_targetAssembly = targetAssembly ?? Assembly.GetCallingAssembly();
 			VersionRepository = new VersionRepository(_dataClient);
-		}
+            _migrationFinder = new MigrationFinder(_targetAssembly);
+	        _initialVersion = -1;
+	    }
 
 		public void Run(int version) {
 			GetCurrentVersion();
@@ -55,14 +72,12 @@ namespace Sharp.Migrations {
 		}
 
 		private List<Type> GetMigrationTypes() {
-			MigrationFinder migrationFinder = new MigrationFinder(_targetAssembly);
-
-			_maxVersion = migrationFinder.LastVersion;
+			_maxVersion = _migrationFinder.LastVersion;
 			if (_targetVersion < 0) {
 				_targetVersion = _maxVersion;
 			}
 
-			return migrationFinder.FromVersion(_initialVersion)
+			return _migrationFinder.FromVersion(_initialVersion)
 				.ToVersion(_targetVersion)
 				.FindMigrations();
 		}

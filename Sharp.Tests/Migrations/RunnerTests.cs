@@ -21,10 +21,10 @@ namespace Sharp.Tests.Migrations {
 			_dataClient = new Mock<IDataClient>();
 		    _dataClient.Setup(p => p.TableExists(VersionRepository.VERSION_TABLE_NAME)).Returns(true);
 
-            _versionRepository = new Mock<IVersionRepository>();
-            
-			_runner = new Runner(_dataClient.Object, Assembly.GetExecutingAssembly());
-			_runner.VersionRepository = _versionRepository.Object;
+		    _versionRepository = new Mock<IVersionRepository>();
+
+		    _runner = new Runner(_dataClient.Object, Assembly.GetExecutingAssembly());
+		    _runner.VersionRepository = _versionRepository.Object;
 		}
 
 		[Test]
@@ -144,6 +144,18 @@ namespace Sharp.Tests.Migrations {
 			_runner.Run(5);
 		}
 
+	    [Test]
+	    public void Should_expose_the_last_version_number() {
+            var expectedLastVersion = VersionHelper.GetVersion(MigrationTestHelper.GetMigrations().Last());
+	        Assert.AreEqual(expectedLastVersion, _runner.LastVersionNumber);
+	    }
+
+	    [Test]
+	    public void Should_expose_the_current_version_number() {
+            _versionRepository.Setup(v => v.GetCurrentVersion()).Returns(10);
+	        Assert.AreEqual(10, _runner.CurrentVersionNumber);
+	    }
+         
 		[TearDown]
 		public void TearDown() {
             Runner.IgnoreDialectNotSupportedActions = false;
