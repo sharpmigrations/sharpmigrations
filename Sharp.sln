@@ -22,6 +22,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{8FBD36BE
 		SharpMigrations.0.8.nupkg = SharpMigrations.0.8.nupkg
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Integration.Log4net", "Sharp.Integration.log4net\Sharp.Integration.Log4net.csproj", "{F1EB005B-89FF-4D72-A277-BABC677421CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Integration.NLog", "Sharp.Integration.NLog\Sharp.Integration.NLog.csproj", "{B39CE6E9-F1A4-4816-89A5-3AD3A0998BAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +60,14 @@ Global
 		{10B4D903-B21C-49F4-9A94-1A505C6505F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10B4D903-B21C-49F4-9A94-1A505C6505F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10B4D903-B21C-49F4-9A94-1A505C6505F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1EB005B-89FF-4D72-A277-BABC677421CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1EB005B-89FF-4D72-A277-BABC677421CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1EB005B-89FF-4D72-A277-BABC677421CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1EB005B-89FF-4D72-A277-BABC677421CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B39CE6E9-F1A4-4816-89A5-3AD3A0998BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B39CE6E9-F1A4-4816-89A5-3AD3A0998BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B39CE6E9-F1A4-4816-89A5-3AD3A0998BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B39CE6E9-F1A4-4816-89A5-3AD3A0998BAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

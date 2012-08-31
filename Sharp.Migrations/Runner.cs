@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using log4net;
 using Sharp.Data;
+using Sharp.Data.Log;
 
 namespace Sharp.Migrations {
 	public class Runner {
-		public static ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
+		public static ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
 
 	    public static bool IgnoreDialectNotSupportedActions { get; set; }
 
@@ -84,7 +84,7 @@ namespace Sharp.Migrations {
 
 		private void RunCreatedMigrations() {
 			if (NoWorkToDo()) {
-				LogInfo("No migrations to perform");
+				Log.Info("No migrations to perform");
 				return;
 			}
 
@@ -152,15 +152,9 @@ namespace Sharp.Migrations {
 			throw nse;
 		}
 
-
 		private bool IsUp() {
 			return _initialVersion < _targetVersion;
 		}
 
-		private void LogInfo(string message) {
-			if (Log.IsInfoEnabled) {
-				Log.Info(message);
-			}
-		}
 	}
 }

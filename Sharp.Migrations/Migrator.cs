@@ -2,12 +2,12 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
-using log4net;
+using Sharp.Data.Log;
 
 namespace Sharp.Migrations {
 	public class Migrator {
 
-		private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
+		private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
 
 		private readonly List<Migration> _migrationsToRun;
 

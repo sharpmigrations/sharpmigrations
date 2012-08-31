@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Data;
 using System.Text;
-using log4net;
+using Sharp.Data.Log;
 
 namespace Sharp.Data {
 	public class Database : IDatabase {
-		private static readonly ILog Log = LogManager.GetLogger("Sharp.Data.Database");
+		private static readonly ILogger Log = LogManager.GetLogger("Sharp.Data.Database");
 
 		protected IDbConnection _connection;
 		protected IDbTransaction _transaction;
@@ -21,10 +21,8 @@ namespace Sharp.Data {
 			LogDatabaseProviderName(provider.ToString());
 		}
 
-		private void LogDatabaseProviderName(string providerName) {
-			if (Log.IsDebugEnabled) {
-				Log.Debug("Provider: " + providerName);
-			}
+		private static void LogDatabaseProviderName(string providerName) {
+			Log.Debug("Provider: " + providerName);
 		}
 
 		public int ExecuteSql(string call) {
@@ -34,24 +32,22 @@ namespace Sharp.Data {
 		public int ExecuteSql(string call, params object[] parameters) {
 			try {
 				return TryExecuteSql(call, parameters);
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				RollBack();
 				throw new DatabaseException(ex.Message, ex, call);
 			}
 		}
 
-	    public int ExecuteSqlCommitAndDispose(string call, params object[] parameters) {
-	        try {
-	            return ExecuteSql(call, parameters);
-	        }
-            finally {
-	            Commit();
-	            Dispose();
-	        }
-	    }
+		public int ExecuteSqlCommitAndDispose(string call, params object[] parameters) {
+			try {
+				return ExecuteSql(call, parameters);
+			} finally {
+				Commit();
+				Dispose();
+			}
+		}
 
-	    private int TryExecuteSql(string call, params object[] parameters) {
+		private int TryExecuteSql(string call, params object[] parameters) {
 			IDbCommand cmd = CreateCommand(call, parameters);
 			int modifiedRows = cmd.ExecuteNonQuery();
 			RetrieveOutParameters(parameters, cmd);
@@ -66,11 +62,11 @@ namespace Sharp.Data {
 			foreach (object parameter in parameters) {
 				Out pout = parameter as Out;
 				if (pout != null) {
-					pout.Value = ((IDbDataParameter) cmd.Parameters[pout.Name]).Value;
+					pout.Value = ((IDbDataParameter)cmd.Parameters[pout.Name]).Value;
 					continue;
 				}
 				InOut pinout = parameter as InOut;
-				if(pinout != null) {
+				if (pinout != null) {
 					pinout.Value = ((IDbDataParameter)cmd.Parameters[pinout.Name]).Value;
 					continue;
 				}
@@ -86,32 +82,29 @@ namespace Sharp.Data {
 			try {
 				reader = TryCreateReader(call, parameters, CommandType.Text);
 				return DataReaderToResultSetMapper.Map(reader);
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				RollBack();
 				throw new DatabaseException(ex.Message, ex, call);
-			}
-			finally {
+			} finally {
 				if (reader != null) {
 					reader.Dispose();
 				}
 			}
 		}
 
-	    public ResultSet QueryAndDispose(string call) {
-	        return QueryAndDispose(call, null);
-	    }
+		public ResultSet QueryAndDispose(string call) {
+			return QueryAndDispose(call, null);
+		}
 
-	    public ResultSet QueryAndDispose(string call, params object[] parameters) {
-	        try {
-	            return Query(call, parameters);
-	        }
-            finally {
-	            Dispose();
-	        }
-	    }
+		public ResultSet QueryAndDispose(string call, params object[] parameters) {
+			try {
+				return Query(call, parameters);
+			} finally {
+				Dispose();
+			}
+		}
 
-	    private IDataReader TryCreateReader(string call, object[] parameters, CommandType commandType) {
+		private IDataReader TryCreateReader(string call, object[] parameters, CommandType commandType) {
 			IDbCommand cmd = CreateCommand(call, parameters);
 			cmd.CommandType = commandType;
 			return cmd.ExecuteReader();
@@ -120,23 +113,21 @@ namespace Sharp.Data {
 		public object QueryScalar(string call, params object[] parameters) {
 			try {
 				return TryQueryReader(call, parameters);
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				RollBack();
 				throw new DatabaseException(ex.Message, ex, call);
 			}
 		}
 
-	    public object QueryScalarAndDispose(string call, params object[] parameters) {
-	        try {
-	            return QueryScalar(call, parameters);
-	        }
-            finally {
-	            Dispose();
-	        }
-	    }
+		public object QueryScalarAndDispose(string call, params object[] parameters) {
+			try {
+				return QueryScalar(call, parameters);
+			} finally {
+				Dispose();
+			}
+		}
 
-	    private object TryQueryReader(string call, object[] parameters) {
+		private object TryQueryReader(string call, object[] parameters) {
 			IDbCommand cmd = CreateCommand(call, parameters);
 			object obj = cmd.ExecuteScalar();
 			return obj;
@@ -145,18 +136,16 @@ namespace Sharp.Data {
 		public void ExecuteStoredProcedure(string call, params object[] parameters) {
 			try {
 				TryExecuteStoredProcedure(call, parameters);
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				RollBack();
 				throw new DatabaseException(ex.Message, ex, call);
-			}	
+			}
 		}
 
 		public void ExecuteStoredProcedureAndDispose(string call, params object[] parameters) {
 			try {
 				ExecuteStoredProcedure(call, parameters);
-			}
-			finally {
+			} finally {
 				Commit();
 				Dispose();
 			}
@@ -168,7 +157,7 @@ namespace Sharp.Data {
 			cmd.ExecuteNonQuery();
 			RetrieveOutParameters(parameters, cmd);
 		}
-		
+
 		public ResultSet CallStoredProcedure(string call) {
 			return CallStoredProcedure(call, null);
 		}
@@ -179,12 +168,10 @@ namespace Sharp.Data {
 				reader = TryCreateReader(call, parameters, CommandType.StoredProcedure);
 				ResultSet res = DataReaderToResultSetMapper.Map(reader);
 				return res;
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				RollBack();
 				throw new DatabaseException(ex.Message, ex, call);
-			}
-			finally {
+			} finally {
 				if (reader != null) {
 					reader.Dispose();
 				}
@@ -198,8 +185,7 @@ namespace Sharp.Data {
 		public object CallStoredFunction(DbType returnType, string call, params object[] parameters) {
 			try {
 				return TryCallStoredFunction(returnType, call, parameters);
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				RollBack();
 				throw new DatabaseException(ex.Message, ex, call);
 			}
@@ -221,11 +207,11 @@ namespace Sharp.Data {
 
 		private IDbCommand CreateCommand(string call, object[] parameters) {
 			OpenConnection();
-            IDbCommand cmd = CreateIDbCommand(call);
-            SetTimeoutForCommand(cmd);
-            PopulateCommandParameters(cmd, parameters);
-            LogCommandCall(call, cmd);
-            return cmd;
+			IDbCommand cmd = CreateIDbCommand(call);
+			SetTimeoutForCommand(cmd);
+			PopulateCommandParameters(cmd, parameters);
+			LogCommandCall(call, cmd);
+			return cmd;
 		}
 
 		private void SetTimeoutForCommand(IDbCommand cmd) {
@@ -239,13 +225,13 @@ namespace Sharp.Data {
 			IDbCommand cmd = _connection.CreateCommand();
 			cmd.CommandText = call;
 			cmd.Transaction = _transaction;
-            Provider.ConfigCommand(cmd);
+			Provider.ConfigCommand(cmd);
 			return cmd;
 		}
 
-		private void LogCommandCall(string call, IDbCommand cmd) {
+		private static void LogCommandCall(string call, IDbCommand cmd) {
 			if (Log.IsDebugEnabled) {
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 				sb.Append("Call: ").AppendLine(call);
 				foreach (IDbDataParameter p in cmd.Parameters) {
 					sb.Append(p.Direction.ToString()).Append("-> ").Append(p.ParameterName);
@@ -266,16 +252,13 @@ namespace Sharp.Data {
 			foreach (object parameter in parameters) {
 				IDbDataParameter par;
 				if (parameter is Out) {
-					par = GetOutParameter((Out) parameter);
-				}
-				else if (parameter is InOut) {
-					par = GetInOutParameter((InOut) parameter);
-				}
-				else if (parameter is In) {
-					par = GetInParameter((In) parameter);
-				}
-				else {
-					par = GetInParameter(new In {Value = parameter});
+					par = GetOutParameter((Out)parameter);
+				} else if (parameter is InOut) {
+					par = GetInOutParameter((InOut)parameter);
+				} else if (parameter is In) {
+					par = GetInParameter((In)parameter);
+				} else {
+					par = GetInParameter(new In { Value = parameter });
 				}
 
 				//this is for when you have the cursor parameter, ignored by sql server
@@ -296,8 +279,7 @@ namespace Sharp.Data {
 			IDbDataParameter par;
 			if (outParameter.IsCursor) {
 				par = Provider.GetParameterCursor();
-			}
-			else {
+			} else {
 				par = Provider.GetParameter();
 			}
 			//this "if != null" is for the cursor parameter, ignored by sql server
@@ -339,9 +321,7 @@ namespace Sharp.Data {
 			_connection.Open();
 			_transaction = _connection.BeginTransaction();
 
-			if (Log.IsDebugEnabled) {
-				Log.Debug("Connection open");
-			}
+			Log.Debug("Connection open");
 		}
 
 		public void Close() {
@@ -355,8 +335,7 @@ namespace Sharp.Data {
 			}
 			try {
 				_transaction.Dispose();
-			}
-			catch {}
+			} catch { }
 			_transaction = null;
 		}
 
@@ -367,11 +346,8 @@ namespace Sharp.Data {
 			try {
 				_connection.Close();
 				_connection.Dispose();
-				if (Log.IsDebugEnabled) {
-					Log.Debug("Connection closed");
-				}
-			}
-			catch {}
+				Log.Debug("Connection closed");
+			} catch { }
 			_connection = null;
 		}
 
@@ -382,8 +358,7 @@ namespace Sharp.Data {
 
 			try {
 				CommitTransaction();
-			}
-			finally {
+			} finally {
 				Close();
 			}
 		}
@@ -393,9 +368,7 @@ namespace Sharp.Data {
 				return;
 			}
 			_transaction.Commit();
-			if (Log.IsDebugEnabled) {
-				Log.Debug("Commit");
-			}
+			Log.Debug("Commit");
 		}
 
 		public void RollBack() {
@@ -405,8 +378,7 @@ namespace Sharp.Data {
 
 			try {
 				RollBackTransaction();
-			}
-			finally {
+			} finally {
 				Close();
 			}
 		}
@@ -416,9 +388,7 @@ namespace Sharp.Data {
 				return;
 			}
 			_transaction.Rollback();
-			if (Log.IsDebugEnabled) {
-				Log.Debug("Rollback");
-			}
+			Log.Debug("Rollback");
 		}
 
 		public void Dispose() {
