@@ -1,5 +1,4 @@
 using System;
-using Sharp.Data;
 using Sharp.Data.Databases;
 using Sharp.Data.Databases.SqLite;
 using Sharp.Data.Providers;
@@ -16,7 +15,7 @@ namespace Sharp.Tests.Databases.SQLite {
         }
 
         public override Type GetDataClientType() {
-            return typeof (DataClient);
+            return typeof (SqLiteDataClient);
         }
 
         public override Type GetDialectType() {

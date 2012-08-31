@@ -1,6 +1,7 @@
 using System;
 using Sharp.Data;
 using Sharp.Data.Databases;
+using Sharp.Data.Databases.Oracle;
 using Sharp.Data.Providers;
 using Sharp.Tests.Databases.Data;
 
@@ -17,7 +18,7 @@ namespace Sharp.Tests.Databases.Oracle {
         }
 
         public override Type GetDataClientType() {
-            return typeof (DataClient);
+            return typeof (OracleDataClient);
         }
 
         public override Type GetDialectType() {

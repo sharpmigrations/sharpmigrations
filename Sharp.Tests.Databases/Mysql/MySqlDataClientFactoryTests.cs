@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using Sharp.Data;
 using Sharp.Data.Databases;
 using Sharp.Data.Databases.MySql;
 using Sharp.Data.Providers;
@@ -19,7 +18,7 @@ namespace Sharp.Tests.Databases.Mysql {
         }
 
         public override Type GetDataClientType() {
-            return typeof(DataClient);            
+            return typeof(MySqlDataClient);            
         }
 
         public override Type GetDialectType() {
