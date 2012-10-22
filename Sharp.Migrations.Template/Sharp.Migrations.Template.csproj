@@ -38,10 +38,8 @@
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
+      <HintPath>..\packages\log4net.2.0.0\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Sharp.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="Sharp.Migrations, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -69,7 +67,22 @@
   <ItemGroup>
     <Content Include="Libs\log4net.dll" />
     <Content Include="Libs\Sharp.Data.dll" />
+    <Content Include="Libs\Sharp.Integration.log4net.dll" />
     <Content Include="Libs\Sharp.Migrations.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sharp.Data\Sharp.Data.csproj">
+      <Project>{8C494818-90AF-4133-94E1-0D1CBD961397}</Project>
+      <Name>Sharp.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sharp.Integration.log4net\Sharp.Integration.Log4net.csproj">
+      <Project>{F1EB005B-89FF-4D72-A277-BABC677421CF}</Project>
+      <Name>Sharp.Integration.Log4net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sharp.Migrations\Sharp.Migrations.csproj">
+      <Project>{703517B1-515E-4833-A1E0-B3CD9CF7E5E2}</Project>
+      <Name>Sharp.Migrations</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

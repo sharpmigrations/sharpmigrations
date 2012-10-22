@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using System.Reflection;
-using log4net.Config;
-using Sharp.Data;
+using Sharp.Data.Log;
+using Sharp.Integration.Log4net;
 using Sharp.Migrations.Runners;
 
 namespace Sharp.Migrations.Template {
@@ -9,17 +9,17 @@ namespace Sharp.Migrations.Template {
 		private static string _connectionString;
 
 		private static void Main(string[] args) {
-			ConfigureLog4net();
+			ConfigureLog();
 			GetConnectionString();
 			StartRunner();
 		}
 
-		private static void ConfigureLog4net() {
-			XmlConfigurator.Configure();
+		private static void ConfigureLog() {
+			LogManager.Configure(new Log4NetLoggerFactory());
 		}
 
 		private static void StartRunner() {
-			ConsoleRunner runner = new ConsoleRunner(_connectionString, DatabaseType.SqlServer);
+			var runner = new ConsoleRunner(_connectionString, "System.Data.SqlClient");
 			runner.AssemblyWithMigrations = Assembly.GetExecutingAssembly();
 			runner.Start();
 		}

@@ -1,11 +1,8 @@
-using System.Reflection;
-using log4net;
 using Sharp.Data;
 
 namespace Sharp.Migrations {
     public abstract class Migration {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
-        private IDataClient _dataClient;
+    	private IDataClient _dataClient;
 
         public int Version { get; set; }
         public string Name { get; protected set; }

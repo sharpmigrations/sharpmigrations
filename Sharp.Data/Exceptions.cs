@@ -1,10 +1,9 @@
 using System;
 using System.Data;
-using System.Linq;
 using System.Data.Common;
 using System.Text;
-using log4net;
 using System.Reflection;
+using Sharp.Data.Log;
 
 namespace Sharp.Data {
     
@@ -14,7 +13,7 @@ namespace Sharp.Data {
 
     public class NotSupportedByDialect : Exception {
 
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
 
         public string FunctionName { get; set; }
         public string DialectName { get; set; }
@@ -56,7 +55,7 @@ namespace Sharp.Data {
 
     public class DatabaseException : Exception {
 
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
 
         public string SQL { get; set; }
 

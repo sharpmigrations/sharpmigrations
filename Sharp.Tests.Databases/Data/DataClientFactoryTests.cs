@@ -5,19 +5,18 @@ using Sharp.Data;
 namespace Sharp.Tests.Databases.Data {
     [Explicit]
     public abstract class DataClientFactoryTests {
+	    private const string ConnectionString = "connectionString";
 
-        string _connectionString = "connectionString";
-
-        [SetUp]
+	    [SetUp]
         public void SetUp() {
         }
 
         [Test]
         public virtual void Can_create_dataclient() {
-            IDataClient client = SharpFactory.Default.CreateDataClient(_connectionString, GetDatabaseType());
+            IDataClient client = SharpFactory.Default.CreateDataClient(ConnectionString, GetDatabaseType());
 
             //check connection string
-            Assert.AreEqual(_connectionString, client.Database.ConnectionString);
+            Assert.AreEqual(ConnectionString, client.Database.ConnectionString);
             
             //check DataClient type
             Assert.That(client.GetType() == GetDataClientType());

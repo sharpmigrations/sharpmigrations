@@ -1,5 +1,4 @@
 using System;
-using Sharp.Data;
 using Sharp.Data.Databases;
 using Sharp.Data.Databases.SqlServer;
 using Sharp.Data.Providers;
@@ -16,7 +15,7 @@ namespace Sharp.Tests.Databases.SqlServer {
         }
 
         public override Type GetDataClientType() {
-            return typeof (DataClient);
+            return typeof (SqlServerDataClient);
         }
 
         public override Type GetDialectType() {

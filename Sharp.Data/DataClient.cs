@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using log4net;
 using Sharp.Data.Databases;
 using Sharp.Data.Filters;
 using Sharp.Data.Fluent;
@@ -11,10 +9,7 @@ using Sharp.Data.Schema;
 namespace Sharp.Data {
 
     public abstract class DataClient : IDataClient {
-
-		private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
-
-        public IDatabase Database { get; set; }
+    	public IDatabase Database { get; set; }
 		public abstract Dialect Dialect { get; set; }
         public bool ThrowException { get; set; }
 
