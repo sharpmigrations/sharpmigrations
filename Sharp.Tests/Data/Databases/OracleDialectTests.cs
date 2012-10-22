@@ -16,7 +16,7 @@ namespace Sharp.Tests.Databases.Oracle {
 
 		protected override string[] GetResultFor_Can_create_table_sql() {
 			return new [] {
-				"create table myTable (id number(10) not null, name varchar2(255) not null)",
+				"create table myTable (id number(10) not null, name nvarchar2(255) not null)",
 				"create sequence seq_mytable minvalue 1 maxvalue 999999999999999999999999999 start with 1 increment by 1 cache 20",
 				"create or replace trigger \"tr_inc_mytable\" before insert on mytable for each row when (new.id is null) begin select seq_mytable.nextval into :new.id from dual; end tr_inc_mytable;",
 				"alter table mytable add constraint pk_mytable primary key (id)"
@@ -29,11 +29,11 @@ namespace Sharp.Tests.Databases.Oracle {
 		}
 
 		protected override string GetResultFor_Can_convert_column_to_sql__with_not_null() {
-			return "col varchar2(255) not null";
+			return "col nvarchar2(255) not null";
 		}
 
 		protected override string GetResultFor_Can_convert_column_to_sql__with_primary_key() {
-			return "col varchar2(255) not null";
+			return "col nvarchar2(255) not null";
 		}
 
 		protected override string GetResultFor_Can_convert_column_to_sql__autoIncrement() {
@@ -45,7 +45,7 @@ namespace Sharp.Tests.Databases.Oracle {
 		}
 
 		protected override string GetResultFor_Can_convert_column_to_sql__default_value() {
-			return "col varchar2(255) default 'some string' null";
+			return "col nvarchar2(255) default 'some string' null";
 		}
 
 		protected override string[] GetResultFor_Can_convert_column_to_values() {

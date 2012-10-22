@@ -49,7 +49,7 @@ namespace Sharp.Data {
     	}
 
     	public virtual string GetDropIndexSql(string indexName, string table) {
-    		return String.Format("drop index {0}", indexName);
+            return String.Format("drop index {0} on {1}", indexName, table);
     	}
 
     	public abstract string GetUniqueKeySql(string ukName, string table, params string[] columnNames);

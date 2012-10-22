@@ -166,7 +166,9 @@ namespace Sharp.Data {
 		protected override string GetDbTypeString(DbType type, int precision) {
 			switch (type) {
 				case DbType.AnsiString:
-					return "CHAR(255)";
+                    if(precision == 0) return "VARCHAR2(255)";
+                    if(precision <= 4000) return "VARCHAR2(" + precision + ")";
+                    return "CLOB";
 				case DbType.Binary:
 					return "BLOB";
 				case DbType.Boolean:
@@ -194,7 +196,9 @@ namespace Sharp.Data {
 				case DbType.Single:
 					return "FLOAT(24)";
 				case DbType.String:
-					return precision > 0 ? "VARCHAR2(" + precision + ")" : "VARCHAR2(255)";
+                    if(precision == 0) return "NVARCHAR2(255)";
+                    if(precision <= 4000) return "NVARCHAR2(" + precision + ")";
+                    return "NCLOB";
 				case DbType.Time:
 					return "DATE";
 			}

@@ -152,9 +152,8 @@ namespace Sharp.Data.Databases.SqlServer {
         }
 
     	public override string WrapSelectSqlWithPagination(string sql, int skipRows, int numberOfRows) {
-			Regex regex = new Regex("SELECT", RegexOptions.IgnoreCase);
+            var regex = new Regex("SELECT", RegexOptions.IgnoreCase);
     		sql = regex.Replace(sql, "SELECT TOP 2147483647 ", 1);
-
     		string innerSql =
 				@"select * into #TempTable from (
 							select * ,ROW_NUMBER() over(order by aaa) AS rownum from (

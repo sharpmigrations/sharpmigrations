@@ -52,18 +52,31 @@ namespace Sharp.Tests.Databases.SqlServer {
 			return new[] {
                      "'foo'",
                      "1",
-                     "true",
+                     "1",
                      "24.33",
                      "'2009-01-20T12:30:00'"
                 };
 		}
 
 		protected override string GetResultFor_Can_generate_count_sql() {
-			throw new NotImplementedException();
+            return "select count(*) from mytable";
 		}
 
 		protected override string GetResultFor_Can_generate_select_sql_with_pagination(int skip, int to) {
-			throw new NotImplementedException();
+            string sql = @"select * into #TempTable from (
+							select * ,ROW_NUMBER() over(order by aaa) AS rownum from (
+								select 'aaa' as aaa, * from  (
+									SELECT TOP 2147483647  * from myTable
+								)as t1
+							)as t2
+						) as t3
+					where rownum between {0} and {1}
+					alter table #TempTable drop column aaa
+					alter table #TempTable drop column rownum
+					select * from #TempTable
+					drop table #TempTable
+				";
+		    return String.Format(sql, skip + 1, skip + to);
 		}
 	}
 }
