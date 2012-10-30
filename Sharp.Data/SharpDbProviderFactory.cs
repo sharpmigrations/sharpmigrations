@@ -27,6 +27,11 @@ namespace Sharp.Data {
 				database = new Database(dataProvider, connectionString);
 				dataClient = new SqlServerDataClient(database);
             }
+            else if (databaseProviderName == DataProviderNames.OleDb) {
+                dataProvider = new SqlProvider(dbProviderFactory);
+                database = new Database(dataProvider, connectionString);
+                dataClient = new SqlServerDataClient(database);
+            }
             else if (databaseProviderName == DataProviderNames.SqLite) {
                 dataProvider = new SqLiteProvider(dbProviderFactory);
 				database = new Database(dataProvider, connectionString);
@@ -40,14 +45,12 @@ namespace Sharp.Data {
             else {
                 throw new ProviderNotFoundException("Could not find provider " + databaseProviderName);
             }
-
-            SharpDbConfig config = new SharpDbConfig {
+            var config = new SharpDbConfig {
                 DbProviderName = databaseProviderName,
                 DataProvider = dataProvider,
 				Database = database,
         		DataClient = dataClient
             };
-
             return config;
         }
     	

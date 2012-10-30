@@ -6,12 +6,14 @@ namespace Sharp.Data.Databases {
         public static string MySql = "MySql.Data.MySqlClient";
         public static string SqlServer = "System.Data.SqlClient";
         public static string SqLite = "System.Data.SQLite";
+        public static string OleDb = "System.Data.OleDb";
 
-        public static List<string> All = new List<string>() {
+        public static List<string> All = new List<string> {
             OracleOdp,
             MySql,
             SqlServer,
-            SqLite
+            SqLite,
+            OleDb
         };
     }
 }
