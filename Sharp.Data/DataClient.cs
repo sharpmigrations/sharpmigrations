@@ -135,12 +135,12 @@ namespace Sharp.Data {
             return Database.Query(sql);
         }
 
-        public virtual void InsertSql(string table, string[] columns, object[] values) {
+        public virtual int InsertSql(string table, string[] columns, object[] values) {
             if (values == null) {
                 values = new object[columns.Length];
             }
             string sql = Dialect.GetInsertSql(table, columns, values);
-            Database.ExecuteSql(sql, Dialect.ConvertToNamedParameters(values));
+            return Database.ExecuteSql(sql, Dialect.ConvertToNamedParameters(values));
         }
 
         public virtual object InsertReturningSql(string table, string columnToReturn, string[] columns, object[] values) {

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sharp.Tests.Chinook</RootNamespace>
     <AssemblyName>Sharp.Tests.Chinook</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>Sharp.Migrations.Program</StartupObject>
     <IsWebBootstrapper>false</IsWebBootstrapper>

@@ -14,8 +14,8 @@ namespace Sharp.Migrations.Runners {
 
         protected override void GetInfoFromUser() {
             GetDatabaseType();
-            GetTargetVersion();
             GetConnectionString();
+            GetTargetVersion();
         }
 
         private void GetDatabaseType() {

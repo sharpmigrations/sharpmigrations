@@ -17,10 +17,15 @@ namespace Sharp.Data {
         	Database database;
             DataClient dataClient;
 
-            if (databaseProviderName == DataProviderNames.OracleOdp) {
-                dataProvider = new OracleOdpProvider(dbProviderFactory);
+            if (databaseProviderName == DataProviderNames.OracleManaged) {
+                dataProvider = new OracleManagedProvider(dbProviderFactory);
 				database = new Database(dataProvider, connectionString);
 				dataClient = new OracleDataClient(database);
+            }
+            else if (databaseProviderName == DataProviderNames.OracleOdp) {
+                dataProvider = new OracleOdpProvider(dbProviderFactory);
+                database = new Database(dataProvider, connectionString);
+                dataClient = new OracleDataClient(database);
             }
             else if (databaseProviderName == DataProviderNames.SqlServer) {
                 dataProvider = new SqlProvider(dbProviderFactory);

@@ -13,6 +13,10 @@ namespace Sharp.Data.Providers {
         private static Type _oracleDbCommandType;
         private static PropertyInfo _propBindByName;
 
+        protected virtual string RefCursorFullName {
+            get { return "Oracle.DataAccess.Client.OracleDbType.RefCursor"; }
+        }
+
         public OracleOdpProvider(DbProviderFactory dbProviderFactory) : base(dbProviderFactory) {
         }
 
@@ -40,7 +44,7 @@ namespace Sharp.Data.Providers {
             Type parameterType = parameter.GetType();
             Assembly assembly = parameterType.Assembly;
             
-            _oracleRefCursorType = assembly.GetType("Oracle.DataAccess.Client.OracleDbType.RefCursor");
+            _oracleRefCursorType = assembly.GetType(RefCursorFullName);
             _propOracleDbType = parameterType.GetProperty("OracleDbType", ReflectionHelper.NoRestrictions);
         }
     }

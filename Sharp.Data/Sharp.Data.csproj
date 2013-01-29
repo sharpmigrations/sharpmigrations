@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sharp.Data</RootNamespace>
     <AssemblyName>Sharp.Data</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -82,6 +82,7 @@
     <Compile Include="Databases\MySql\MySqlDataClient.cs" />
     <Compile Include="Databases\Oracle\OracleDataClient.cs" />
     <Compile Include="Databases\Oracle\OracleDialect.cs" />
+    <Compile Include="Databases\Oracle\OracleManagedProvider.cs" />
     <Compile Include="Databases\SelectBuilder.cs" />
     <Compile Include="Databases\SqLite\SqLiteDataClient.cs" />
     <Compile Include="Databases\SqlServer\SqlServerDataClient.cs" />
