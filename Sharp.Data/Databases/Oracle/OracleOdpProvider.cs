@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Reflection;
 using Sharp.Data.Databases;
+using Sharp.Data.Exceptions;
 using Sharp.Data.Util;
 
 namespace Sharp.Data.Providers {
@@ -18,6 +19,7 @@ namespace Sharp.Data.Providers {
         }
 
         public OracleOdpProvider(DbProviderFactory dbProviderFactory) : base(dbProviderFactory) {
+            
         }
 
         public override void ConfigCommand(IDbCommand command) {
@@ -46,6 +48,13 @@ namespace Sharp.Data.Providers {
             
             _oracleRefCursorType = assembly.GetType(RefCursorFullName);
             _propOracleDbType = parameterType.GetProperty("OracleDbType", ReflectionHelper.NoRestrictions);
+        }
+
+        public override DatabaseException ThrowSpecificException(Exception exception, string sql) {
+            if (exception.Message.Contains("ORA-00942")) {
+                return new TableNotFoundException(exception.Message, exception, sql);
+            }
+            return base.ThrowSpecificException(exception, sql);
         }
     }
 }

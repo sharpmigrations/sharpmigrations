@@ -118,6 +118,10 @@ namespace Sharp.Data {
 			return "drop index " + uniqueKeyName;
 		}
 
+        public override string GetDropIndexSql(string indexName, string table) {
+            return String.Format("drop index {0}", indexName);
+        }
+
 		public override string GetInsertReturningColumnSql(string table, string[] columns, object[] values,
 		                                                   string returningColumnName, string returningParameterName) {
 			return String.Format("{0} returning {1} into {2}{3}",
@@ -166,7 +170,7 @@ namespace Sharp.Data {
 		protected override string GetDbTypeString(DbType type, int precision) {
 			switch (type) {
 				case DbType.AnsiString:
-                    if(precision == 0) return "VARCHAR2(255)";
+                    if(precision == 0) return "CHAR(255)";
                     if(precision <= 4000) return "VARCHAR2(" + precision + ")";
                     return "CLOB";
 				case DbType.Binary:
@@ -196,8 +200,8 @@ namespace Sharp.Data {
 				case DbType.Single:
 					return "FLOAT(24)";
 				case DbType.String:
-                    if(precision == 0) return "NVARCHAR2(255)";
-                    if(precision <= 4000) return "NVARCHAR2(" + precision + ")";
+                    if(precision == 0) return "VARCHAR2(255)";
+                    if(precision <= 4000) return "VARCHAR2(" + precision + ")";
                     return "NCLOB";
 				case DbType.Time:
 					return "DATE";

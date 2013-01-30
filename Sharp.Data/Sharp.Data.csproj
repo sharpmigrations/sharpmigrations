@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database.cs" />
+    <Compile Include="Exceptions\DatabaseException.cs" />
     <Compile Include="Databases\DataProvider.cs" />
     <Compile Include="Databases\DataProviderNames.cs" />
     <Compile Include="Databases\Dialect.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Databases\SelectBuilder.cs" />
     <Compile Include="Databases\SqLite\SqLiteDataClient.cs" />
     <Compile Include="Databases\SqlServer\SqlServerDataClient.cs" />
+    <Compile Include="Exceptions\TableNotFoundException.cs" />
     <Compile Include="Fluent\AddIndexKey.cs" />
     <Compile Include="Fluent\RemoveIndexKey.cs" />
     <Compile Include="Fluent\DataClientAddIndexKey.cs" />
@@ -191,6 +193,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

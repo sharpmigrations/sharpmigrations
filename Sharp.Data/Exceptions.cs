@@ -52,22 +52,4 @@ namespace Sharp.Data {
             : base("Could not find the DbProviderFactory named [" + factoryName + "]. Available factories are: " + _allFactories + ". Check your machine.config for " + (IsX64 ? "64" : "32") + "bits", innerException) {
         }
     }
-
-    public class DatabaseException : Exception {
-
-        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
-
-        public string SQL { get; set; }
-
-        public DatabaseException(string message, Exception innerException, string sql)
-            : base(message, innerException) {
-            SQL = sql;
-            Log.Error(ToString());
-        }
-
-        public override string ToString() {
-            return String.Format("Error running SQL: {0}\r\n{1}", SQL, base.ToString());
-        }
-    }
-
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 
 namespace Sharp.Data {
@@ -6,5 +7,6 @@ namespace Sharp.Data {
         void ConfigCommand(IDbCommand command);
         IDbDataParameter GetParameter();
         IDbDataParameter GetParameterCursor();
+        DatabaseException ThrowSpecificException(Exception exception, string sql);
     }
 }

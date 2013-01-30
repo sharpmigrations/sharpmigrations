@@ -23,5 +23,9 @@ namespace Sharp.Data.Databases {
         public virtual IDbDataParameter GetParameterCursor() {
             return DbProviderFactory.CreateParameter();
         }
+
+        public virtual DatabaseException ThrowSpecificException(Exception exception, string sql) {
+            return new DatabaseException(exception.Message, exception, sql);
+        }
     }
 }

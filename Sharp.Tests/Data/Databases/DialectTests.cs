@@ -20,7 +20,7 @@ namespace Sharp.Tests.Databases {
 		protected abstract string GetResultFor_Can_convert_column_to_sql__default_value();
 		protected abstract string[] GetResultFor_Can_convert_column_to_values();
         protected abstract string GetResultFor_Can_generate_count_sql();
-
+	    
 		protected virtual string GetInsertSql() {
 			return String.Format("insert into foo (id, name) values ({0}par0,{0}par1)", _dialect.ParameterPrefix);
 		}
@@ -28,6 +28,10 @@ namespace Sharp.Tests.Databases {
 		protected virtual string GetSelectAllSql() {
 			return String.Format("select * from " + TABLE_NAME);			
 		}
+
+        protected virtual string GetResutFor_Can_drop_index_sql() {
+            return "drop index indexName on foo";
+        }
 
 		protected abstract string GetResultFor_Can_generate_select_sql_with_pagination(int skip, int to);
 
@@ -172,7 +176,7 @@ namespace Sharp.Tests.Databases {
 		[Test]
 		public void Can_drop_index_sql() {
 			string sql = _dialect.GetDropIndexSql("indexName", "foo");
-			AssertSql.AreEqual("drop index indexName on foo", sql);
+            AssertSql.AreEqual(GetResutFor_Can_drop_index_sql(), sql);
 		}
 
 		[Test]

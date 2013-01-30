@@ -89,6 +89,7 @@
     <Compile Include="Data\DataClientFactoryTests.cs" />
     <Compile Include="Data\DataClientSchemaTests.cs" />
     <Compile Include="Data\DataClientTests.cs" />
+    <Compile Include="Data\SpecificExceptionsTests.cs" />
     <Compile Include="DBBuilder.cs" />
     <Compile Include="Mysql\MySqlDataClientFactoryTests.cs" />
     <Compile Include="Mysql\MySqlDataTests.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Oracle\OracleOdpDataTests.cs" />
     <Compile Include="Data\SetupFixture.cs" />
     <Compile Include="Oracle\OracleOdpSchemaTests.cs" />
+    <Compile Include="Oracle\OracleSpecificExceptionsTests.cs" />
     <Compile Include="SQLite\SqLiteDataClientFactoryTests.cs" />
     <Compile Include="SQLite\SqLiteDataTests.cs" />
     <Compile Include="SQLite\SqLiteSchemaTests.cs" />
@@ -105,6 +107,7 @@
     <Compile Include="SqlServer\SqlServerSchemaTests.cs" />
     <Compile Include="SqlServer\SqlServerDataTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlServer\SqlServerSpecifcExceptionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sharp.Data\Sharp.Data.csproj">
