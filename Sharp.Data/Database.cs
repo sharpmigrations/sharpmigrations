@@ -24,16 +24,11 @@ namespace Sharp.Data {
 		private static void LogDatabaseProviderName(string providerName) {
 			Log.Debug("Provider: " + providerName);
 		}
-
-		public int ExecuteSql(string call) {
-			return ExecuteSql(call, null);
-		}
-
-		public int ExecuteSql(string call, params object[] parameters) {
+		
+        public int ExecuteSql(string call, params object[] parameters) {
 			try {
 				return TryExecuteSql(call, parameters);
 			} catch (Exception ex) {
-				RollBack();
 				throw Provider.ThrowSpecificException(ex, call);
 			}
 		}
@@ -73,27 +68,18 @@ namespace Sharp.Data {
 			}
 		}
 
-		public ResultSet Query(string call) {
-			return Query(call, null);
-		}
-
 		public ResultSet Query(string call, params object[] parameters) {
 			IDataReader reader = null;
 			try {
 				reader = TryCreateReader(call, parameters, CommandType.Text);
 				return DataReaderToResultSetMapper.Map(reader);
 			} catch (Exception ex) {
-				RollBack();
 				throw Provider.ThrowSpecificException(ex, call);
 			} finally {
 				if (reader != null) {
 					reader.Dispose();
 				}
 			}
-		}
-
-		public ResultSet QueryAndDispose(string call) {
-			return QueryAndDispose(call, null);
 		}
 
 		public ResultSet QueryAndDispose(string call, params object[] parameters) {
@@ -114,7 +100,6 @@ namespace Sharp.Data {
 			try {
 				return TryQueryReader(call, parameters);
 			} catch (Exception ex) {
-				RollBack();
                 throw Provider.ThrowSpecificException(ex, call);
 			}
 		}
@@ -137,7 +122,6 @@ namespace Sharp.Data {
 			try {
 				TryExecuteStoredProcedure(call, parameters);
 			} catch (Exception ex) {
-				RollBack();
                 throw Provider.ThrowSpecificException(ex, call);
 			}
 		}
@@ -158,10 +142,6 @@ namespace Sharp.Data {
 			RetrieveOutParameters(parameters, cmd);
 		}
 
-		public ResultSet CallStoredProcedure(string call) {
-			return CallStoredProcedure(call, null);
-		}
-
 		public ResultSet CallStoredProcedure(string call, params object[] parameters) {
 			IDataReader reader = null;
 			try {
@@ -169,7 +149,6 @@ namespace Sharp.Data {
 				ResultSet res = DataReaderToResultSetMapper.Map(reader);
 				return res;
 			} catch (Exception ex) {
-				RollBack();
                 throw Provider.ThrowSpecificException(ex, call);
 			} finally {
 				if (reader != null) {
@@ -178,15 +157,10 @@ namespace Sharp.Data {
 			}
 		}
 
-		public object CallStoredFunction(DbType returnType, string call) {
-			return CallStoredFunction(returnType, call, null);
-		}
-
 		public object CallStoredFunction(DbType returnType, string call, params object[] parameters) {
 			try {
 				return TryCallStoredFunction(returnType, call, parameters);
 			} catch (Exception ex) {
-				RollBack();
                 throw Provider.ThrowSpecificException(ex, call);
 			}
 		}

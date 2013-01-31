@@ -6,20 +6,15 @@ namespace Sharp.Data {
         IDataProvider Provider { get; }
         string ConnectionString { get; }
 		int Timeout { get; set; }
-        object CallStoredFunction(DbType returnType, string call);
         object CallStoredFunction(DbType returnType, string call, params object[] parameters);
-		ResultSet CallStoredProcedure(string call);        
 		ResultSet CallStoredProcedure(string call, params object[] parameters);
-        int ExecuteSql(string call);
         int ExecuteSql(string call, params object[] parameters);
         int ExecuteSqlCommitAndDispose(string call, params object[] parameters);
 
 		void ExecuteStoredProcedure(string call, params object[] parameters);
 		void ExecuteStoredProcedureAndDispose(string call, params object[] parameters);
 
-        ResultSet Query(string call);
         ResultSet Query(string call, params object[] parameters);
-        ResultSet QueryAndDispose(string call);
         ResultSet QueryAndDispose(string call, params object[] parameters);
         object QueryScalar(string call, params object[] parameters);
         object QueryScalarAndDispose(string call, params object[] parameters);

@@ -18,9 +18,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Tests.Northwind", "Sharp.Tests.Northwind\Sharp.Tests.Northwind.csproj", "{10B4D903-B21C-49F4-9A94-1A505C6505F7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{8FBD36BE-F74F-48F4-871A-C7B8F775B416}"
-	ProjectSection(SolutionItems) = preProject
-		SharpMigrations.0.8.nupkg = SharpMigrations.0.8.nupkg
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Integration.Log4net", "Sharp.Integration.log4net\Sharp.Integration.Log4net.csproj", "{F1EB005B-89FF-4D72-A277-BABC677421CF}"
 EndProject

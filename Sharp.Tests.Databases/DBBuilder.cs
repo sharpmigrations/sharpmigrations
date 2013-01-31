@@ -1,5 +1,6 @@
 using System.Configuration;
 using Sharp.Data;
+using Sharp.Data.Schema;
 
 namespace Sharp.Tests.Databases {
     public static class DBBuilder {
