@@ -7,6 +7,6 @@ namespace Sharp.Data {
         void ConfigCommand(IDbCommand command);
         IDbDataParameter GetParameter();
         IDbDataParameter GetParameterCursor();
-        DatabaseException ThrowSpecificException(Exception exception, string sql);
+        DatabaseException CreateSpecificException(Exception exception, string sql);
     }
 }

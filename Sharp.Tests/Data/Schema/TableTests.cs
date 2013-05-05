@@ -10,7 +10,7 @@ namespace Sharp.Tests.Data.Schema {
        
         [Test]
         public void ConstructorTest() {
-            Table table = new Table("name");
+            var table = new Table("name");
             Assert.AreEqual("name", table.Name);
             Assert.IsNotNull(table.Columns);
             Assert.AreEqual(0, table.Columns.Count);

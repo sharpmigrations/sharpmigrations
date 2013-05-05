@@ -11,28 +11,28 @@ namespace Sharp.Tests.Data.Schema {
        
         [Test]
         public void Constructor_with_no_type_test() {
-            Column c = new Column("COL1");
+            var c = new Column("COL1");
             Assert.AreEqual(DbType.String, c.Type);
             TestDefaults(c);
         }
 
         [Test]
         public void Constructor_with_type_test() {
-            Column c = new Column("COL1", DbType.UInt32);
+            var c = new Column("COL1", DbType.UInt32);
             Assert.AreEqual(DbType.UInt32, c.Type);
             TestDefaults(c);
         }
 
         [Test]
         public void When_column_is_autoIncrement_it_is_also_not_null() {
-            Column c = new Column("COL1", DbType.UInt32);
+            var c = new Column("COL1", DbType.UInt32);
             c.IsAutoIncrement = true;
             Assert.IsFalse(c.IsNullable);
         }
 
         [Test]
         public void When_column_is_primary_key_it_is_also_not_null() {
-            Column c = new Column("COL1", DbType.UInt32);
+            var c = new Column("COL1", DbType.UInt32);
             c.IsPrimaryKey = true;
             Assert.IsFalse(c.IsNullable);
         }

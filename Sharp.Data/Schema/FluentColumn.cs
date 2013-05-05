@@ -35,6 +35,11 @@ namespace Sharp.Data.Schema {
             Object.DefaultValue = value;
             return this;
         }
+
+        public FluentColumn Comment(string comment) {
+            Object.Comment = comment;
+            return this;
+        }
     }
 
     public class FluentColumnTypes {

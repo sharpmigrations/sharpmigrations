@@ -82,6 +82,13 @@ namespace Sharp.Tests.Data.Schema {
         }
 
         [Test]
+        public void Fluent_can_set_comment() {
+            string comment = "This is a comment";
+            Column c = Column.String("COL").Comment(comment).Object;
+            Assert.AreEqual(comment, c.Comment);
+        }
+
+        [Test]
         public void ComplexExample() {
             Column c = Column.String("COL").DefaultValue("foo").NotNull().AsPrimaryKey().Object;
             Assert.AreEqual("COL", c.ColumnName);

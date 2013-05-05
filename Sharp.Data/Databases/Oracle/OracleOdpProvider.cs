@@ -50,14 +50,14 @@ namespace Sharp.Data.Providers {
             _propOracleDbType = parameterType.GetProperty("OracleDbType", ReflectionHelper.NoRestrictions);
         }
 
-        public override DatabaseException ThrowSpecificException(Exception exception, string sql) {
+        public override DatabaseException CreateSpecificException(Exception exception, string sql) {
             if (exception.Message.Contains("ORA-00942")) {
                 return new TableNotFoundException(exception.Message, exception, sql);
             }
             if (exception.Message.Contains("ORA-00001")) {
                 return new UniqueConstraintException(exception.Message, exception, sql);
             }
-            return base.ThrowSpecificException(exception, sql);
+            return base.CreateSpecificException(exception, sql);
         }
     }
 }

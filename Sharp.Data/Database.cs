@@ -29,7 +29,7 @@ namespace Sharp.Data {
 			try {
 				return TryExecuteSql(call, parameters);
 			} catch (Exception ex) {
-				throw Provider.ThrowSpecificException(ex, call);
+                throw Provider.CreateSpecificException(ex, call);
 			}
 		}
 
@@ -74,7 +74,7 @@ namespace Sharp.Data {
 				reader = TryCreateReader(call, parameters, CommandType.Text);
 				return DataReaderToResultSetMapper.Map(reader);
 			} catch (Exception ex) {
-				throw Provider.ThrowSpecificException(ex, call);
+				throw Provider.CreateSpecificException(ex, call);
 			} finally {
 				if (reader != null) {
 					reader.Dispose();
@@ -100,7 +100,7 @@ namespace Sharp.Data {
 			try {
 				return TryQueryReader(call, parameters);
 			} catch (Exception ex) {
-                throw Provider.ThrowSpecificException(ex, call);
+                throw Provider.CreateSpecificException(ex, call);
 			}
 		}
 
@@ -122,7 +122,7 @@ namespace Sharp.Data {
 			try {
 				TryExecuteStoredProcedure(call, parameters);
 			} catch (Exception ex) {
-                throw Provider.ThrowSpecificException(ex, call);
+                throw Provider.CreateSpecificException(ex, call);
 			}
 		}
 
@@ -149,7 +149,7 @@ namespace Sharp.Data {
 				ResultSet res = DataReaderToResultSetMapper.Map(reader);
 				return res;
 			} catch (Exception ex) {
-                throw Provider.ThrowSpecificException(ex, call);
+                throw Provider.CreateSpecificException(ex, call);
 			} finally {
 				if (reader != null) {
 					reader.Dispose();
@@ -161,7 +161,7 @@ namespace Sharp.Data {
 			try {
 				return TryCallStoredFunction(returnType, call, parameters);
 			} catch (Exception ex) {
-                throw Provider.ThrowSpecificException(ex, call);
+                throw Provider.CreateSpecificException(ex, call);
 			}
 		}
 

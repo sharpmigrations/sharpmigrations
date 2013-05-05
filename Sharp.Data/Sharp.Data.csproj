@@ -92,7 +92,10 @@
     <Compile Include="Databases\SqlServer\SqlServerDataClient.cs" />
     <Compile Include="Exceptions\TableNotFoundException.cs" />
     <Compile Include="Exceptions\UniqueConstraintException.cs" />
+    <Compile Include="Fluent\AddComment.cs" />
     <Compile Include="Fluent\AddIndexKey.cs" />
+    <Compile Include="Fluent\DataClientAddComment.cs" />
+    <Compile Include="Fluent\RemoveComment.cs" />
     <Compile Include="Fluent\RemoveIndexKey.cs" />
     <Compile Include="Fluent\DataClientAddIndexKey.cs" />
     <Compile Include="ISharpFactory.cs" />

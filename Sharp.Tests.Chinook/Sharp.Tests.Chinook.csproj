@@ -85,6 +85,7 @@
     <Compile Include="012_Create_Foreign_Keys.cs" />
     <Compile Include="013_Populate_genres.cs" />
     <Compile Include="014_Populate_media_types.cs" />
+    <Compile Include="015_Add_Comment_To_Table_Customer.cs" />
     <Compile Include="ChinookMigrations.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -93,6 +94,10 @@
     <ProjectReference Include="..\Sharp.Data\Sharp.Data.csproj">
       <Project>{8C494818-90AF-4133-94E1-0D1CBD961397}</Project>
       <Name>Sharp.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sharp.Integration.log4net\Sharp.Integration.Log4net.csproj">
+      <Project>{f1eb005b-89ff-4d72-a277-babc677421cf}</Project>
+      <Name>Sharp.Integration.Log4net</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sharp.Migrations\Sharp.Migrations.csproj">
       <Project>{703517B1-515E-4833-A1E0-B3CD9CF7E5E2}</Project>

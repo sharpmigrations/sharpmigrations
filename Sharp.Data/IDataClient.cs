@@ -28,12 +28,16 @@ namespace Sharp.Data {
         void AddPrimaryKey(string tableName, params string[] columnNames);
         void AddUniqueKey(string uniqueKeyName, string tableName, params string[] columnNames);
     	void AddIndex(string indexName, string tableName, params string[] columnNames);
-        
+        void AddColumnComment(string tableName, string columnName, string comment);
+        void AddTableComment(string tableName, string comment);
+
         void RemoveColumn(string tableName, string columnName);
         void RemoveForeignKey(string foreigKeyName, string tableName);
         void RemoveTable(string tableName);
         void RemoveUniqueKey(string uniqueKeyName, string tableName);
 		void RemoveIndex(string indexName, string table);
+        void RemoveTableComment(string tableName);
+        void RemoveColumnComment(string tableName, string columnName);
 
         void Commit();
         void RollBack();

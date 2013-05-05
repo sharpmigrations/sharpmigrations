@@ -24,7 +24,7 @@ namespace Sharp.Data.Databases {
             return DbProviderFactory.CreateParameter();
         }
 
-        public virtual DatabaseException ThrowSpecificException(Exception exception, string sql) {
+        public virtual DatabaseException CreateSpecificException(Exception exception, string sql) {
             return new DatabaseException(exception.Message, exception, sql);
         }
     }

@@ -211,5 +211,13 @@ namespace Sharp.Data {
 		public virtual string GetOrderByWord(OrderByDirection orderByDirection) {
 			return orderByDirection == OrderByDirection.Descending ? "DESC" : "";
 		}
+
+        public string GetAddCommentToColumnSql(string tableName, string columnName, string comment) {
+            return String.Format("COMMENT ON COLUMN {0}.{1} IS '{2}'", tableName, columnName, comment);
+        }
+
+        public string GetAddCommentToTableSql(string tableName, string comment) {
+            return String.Format("COMMENT ON TABLE {0} IS '{1}'", tableName, comment);
+        }
     }
 }

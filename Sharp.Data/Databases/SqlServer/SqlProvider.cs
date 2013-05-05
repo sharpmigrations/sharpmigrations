@@ -8,9 +8,9 @@ namespace Sharp.Data.Providers {
         public SqlProvider(DbProviderFactory dbProviderFactory) : base(dbProviderFactory) {
         }
 
-        public override DatabaseException ThrowSpecificException(System.Exception exception, string sql) {
+        public override DatabaseException CreateSpecificException(System.Exception exception, string sql) {
             var sqlexception = exception as SqlException;
-            if (sqlexception == null) return base.ThrowSpecificException(exception, sql);
+            if (sqlexception == null) return base.CreateSpecificException(exception, sql);
                 
             if(sqlexception.Number == 208) {
                 return new TableNotFoundException(exception.Message, exception, sql);
@@ -18,7 +18,7 @@ namespace Sharp.Data.Providers {
             if (sqlexception.Number == 2627) {
                 return new UniqueConstraintException(exception.Message, exception, sql);
             }
-            return base.ThrowSpecificException(exception, sql);
+            return base.CreateSpecificException(exception, sql);
         }
     }
 }

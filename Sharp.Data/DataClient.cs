@@ -47,7 +47,7 @@ namespace Sharp.Data {
     	}
 
     	public virtual void AddTable(string tableName, params FluentColumn[] columns) {
-            Table table = new Table(tableName);
+            var table = new Table(tableName);
             foreach (FluentColumn fcol in columns) {
                 table.Columns.Add(fcol.Object);
             }
@@ -99,17 +99,17 @@ namespace Sharp.Data {
             Database.ExecuteSql(sql);
         }
 
-    	public void AddIndex(string indexName, string tableName, params string[] columnNames) {
+        public virtual void AddIndex(string indexName, string tableName, params string[] columnNames) {
     		string sql = Dialect.GetCreateIndexSql(indexName, tableName, columnNames);
     		Database.ExecuteSql(sql);
     	}
 
-    	public void RemoveIndex(string indexName, string table) {
+        public virtual void RemoveIndex(string indexName, string table) {
     		string sql = Dialect.GetDropIndexSql(indexName, table);
 			Database.ExecuteSql(sql);
     	}
 
-    	public virtual void AddColumn(string tableName, Column column) {
+        public virtual void AddColumn(string tableName, Column column) {
             string sql = Dialect.GetAddColumnSql(tableName, column);
             Database.ExecuteSql(sql);
         }
@@ -121,8 +121,28 @@ namespace Sharp.Data {
             }
         }
 
+        public void AddTableComment(string tableName, string comment) {
+            string sql = Dialect.GetAddCommentToTableSql(tableName, comment);
+            Database.ExecuteSql(sql);
+        }
+
+        public void AddColumnComment(string tableName, string columnName, string comment) {
+            string sql = Dialect.GetAddCommentToColumnSql(tableName, columnName, comment);
+            Database.ExecuteSql(sql);
+        }
+
+        public virtual void RemoveTableComment(string tableName) {
+            string sql = Dialect.GetAddCommentToTableSql(tableName, "");
+            Database.ExecuteSql(sql);
+        }
+
+        public virtual void RemoveColumnComment(string tableName, string columnName) {
+            string sql = Dialect.GetAddCommentToColumnSql(tableName, columnName, "");
+            Database.ExecuteSql(sql);
+        }
+
         public virtual ResultSet SelectSql(string[] tables, string[] columns, Filter filter, OrderBy[] orderBys, int skip, int take) {
-            SelectBuilder selectBuilder = new SelectBuilder(Dialect, tables, columns);
+            var selectBuilder = new SelectBuilder(Dialect, tables, columns);
             selectBuilder.Filter = filter;
             selectBuilder.OrderBys = orderBys;
             selectBuilder.Skip = skip;

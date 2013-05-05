@@ -11,35 +11,40 @@ namespace Sharp.Data.Fluent {
         }
 
         public DataClientAddColumn Column(FluentColumn column) {
-            AddColumn action = new AddColumn(_dataClient) { Column = column.Object };
+            var action = new AddColumn(_dataClient) { Column = column.Object };
             return new DataClientAddColumn(action);
         }
 
         public DataClientAddPrimaryKey PrimaryKey(string primaryKeyName) {
-            AddPrimaryKey action = new AddPrimaryKey(_dataClient)
+            var action = new AddPrimaryKey(_dataClient)
                                    {PrimaryKeyName = primaryKeyName};
             return new DataClientAddPrimaryKey(action);
         }
 
         public DataClientAddForeignKey ForeignKey(string foreignKeyName) {
-            AddForeignKey action = new AddForeignKey(_dataClient) { ForeignKeyName = foreignKeyName};
+            var action = new AddForeignKey(_dataClient) { ForeignKeyName = foreignKeyName};
             return new DataClientAddForeignKey(action);
         }
 
         public DataClientAddUniqueKey UniqueKey(string uniqueKeyName) {
-            AddUniqueKey action = new AddUniqueKey(_dataClient) { UniqueKeyName = uniqueKeyName};
+            var action = new AddUniqueKey(_dataClient) { UniqueKeyName = uniqueKeyName};
             return new DataClientAddUniqueKey(action);
         }
 
 		public DataClientAddIndexKey IndexKey(string indexKeyName) {
-			AddIndexKey action = new AddIndexKey(_dataClient) { IndexKeyName = indexKeyName };
+			var action = new AddIndexKey(_dataClient) { IndexKeyName = indexKeyName };
 			return new DataClientAddIndexKey(action);
 		}
 
         public DataClientAddTable Table(string tableName) {
-            AddTable action = new AddTable(_dataClient);
+            var action = new AddTable(_dataClient);
             action.SetTableNames(tableName);
             return new DataClientAddTable(action);
+        }
+
+        public IAddCommentColumnOrTable Comment(string comment) {
+            var action = new AddComment(_dataClient, comment);
+            return action;
         }
     }
 }

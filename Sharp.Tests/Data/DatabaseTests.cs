@@ -82,20 +82,22 @@ namespace Sharp.Tests.Data {
         }
 
         [Test]
-        public void Roolback_when_exception() {
+        public void Do_not_roolback_when_exception() {
             _cmd.Setup(p => p.ExecuteNonQuery()).Throws(new Exception("foo"));
 
             try {
                 _db.ExecuteSql(_sql);
             }
             catch { }
-            _transaction.Verify(p => p.Rollback());
+            _transaction.Verify(p => p.Rollback(), Times.Never());
         }
 
         [Test]
-        [ExpectedException(typeof (DatabaseException))]
+        [ExpectedException(typeof(DatabaseException))]
         public void Throws_DatabaseException_when_some_exception_is_thrown() {
-            _cmd.Setup(p => p.ExecuteNonQuery()).Throws(new Exception("foo"));
+            var ex = new Exception("moo");
+            _cmd.Setup(p => p.ExecuteNonQuery()).Throws(ex);
+            _provider.Setup(x => x.CreateSpecificException(ex, _sql)).Returns(new DatabaseException("moo", ex, _sql));
             _db.ExecuteSql(_sql);
         }
 

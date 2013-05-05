@@ -172,5 +172,19 @@ namespace Sharp.Tests.Databases.Data {
 			_dataClient.AddIndex("in_foo", "foo", "name");
 			_dataClient.RemoveIndex("in_foo", "foo");
 		}
+
+        [Test]
+        public virtual void Can_add_comment_to_table() {
+            CreateTableFoo();
+            _dataClient.Add.Comment("foo").ToColumn("name").OfTable("foo");
+            _dataClient.Remove.Comment.FromTable("foo");
+        }
+
+        [Test]
+        public virtual void Can_add_comment_to_column() {
+            CreateTableFoo();
+            _dataClient.Add.Comment("foo").ToColumn("name").OfTable("foo");
+            _dataClient.Remove.Comment.FromColumn("name").OfTable("foo");
+        }
 	}
 }

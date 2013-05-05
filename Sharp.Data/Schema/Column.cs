@@ -8,6 +8,7 @@ namespace Sharp.Data.Schema {
         public int Size { get; set; }
         public bool IsNullable { get; set; }
         public object DefaultValue { get; set; }
+        public string Comment { get; set; }
         
         private bool _isPrimaryKey;
         public bool IsPrimaryKey {

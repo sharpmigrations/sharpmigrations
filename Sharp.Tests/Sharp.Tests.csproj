@@ -65,11 +65,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssertSql.cs" />
-    <Compile Include="Data\Databases\DialectTests.cs" />
-    <Compile Include="Data\Databases\MySqlDialectTests.cs" />
-    <Compile Include="Data\Databases\OracleDialectTests.cs" />
-    <Compile Include="Data\Databases\SqLiteDialectTests.cs" />
-    <Compile Include="Data\Databases\SqlServerDialectTests.cs" />
+    <Compile Include="Data\Dialects\Ddl\DialectDdlTests.cs" />
+    <Compile Include="Data\Dialects\Ddl\MySqlDialectTests.cs" />
+    <Compile Include="Data\Dialects\Ddl\OracleDialectTests.cs" />
+    <Compile Include="Data\Dialects\Ddl\SqLiteDialectTests.cs" />
+    <Compile Include="Data\Dialects\Ddl\SqlServerDialectTests.cs" />
+    <Compile Include="Data\Dialects\Dml\DialectDmlTests.cs" />
+    <Compile Include="Data\Dialects\DialectTests.cs" />
+    <Compile Include="Data\Dialects\Dml\MySqlDialectTests.cs" />
+    <Compile Include="Data\Dialects\Dml\OracleDialectTests.cs" />
+    <Compile Include="Data\Dialects\Dml\SqLiteDialectTests.cs" />
+    <Compile Include="Data\Dialects\Dml\SqlServerDialectTests.cs" />
     <Compile Include="Data\DatabaseTests.cs" />
     <Compile Include="Data\DataParameterCollectionFake.cs" />
     <Compile Include="Data\Filters\CompareOperatorToSymbolTests.cs" />
@@ -102,6 +108,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

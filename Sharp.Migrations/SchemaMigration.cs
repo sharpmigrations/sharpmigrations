@@ -12,22 +12,16 @@ namespace Sharp.Migrations {
         }
 
         public FluentAdd Add {
-            get {
-                if (_schemaMigrationAdd == null) _schemaMigrationAdd = new FluentAdd(DataClient);
-                return _schemaMigrationAdd;
-            }
+            get { return _schemaMigrationAdd ?? (_schemaMigrationAdd = new FluentAdd(DataClient)); }
         }
 
         public FluentRemove Remove {
-            get {
-                if (_schemaMigrationRemove == null) _schemaMigrationRemove = new FluentRemove(DataClient);
-                return _schemaMigrationRemove;
-            }
+            get { return _schemaMigrationRemove ?? (_schemaMigrationRemove = new FluentRemove(DataClient)); }
         }
 
         protected class Column {
             public static FluentColumn AutoIncrement(string name) {
-                FluentColumn fc = new FluentColumn(name, DbType.Int32);
+                var fc = new FluentColumn(name, DbType.Int32);
                 fc.Object.IsAutoIncrement = true;
                 return fc;
             }
