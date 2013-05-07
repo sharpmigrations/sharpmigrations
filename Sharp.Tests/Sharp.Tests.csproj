@@ -91,6 +91,7 @@
     <Compile Include="Migrations\MigrationTestHelper.cs" />
     <Compile Include="Migrations\MigratorTests.cs" />
     <Compile Include="Migrations\RunnerTests.cs" />
+    <Compile Include="Migrations\SqlToFileDatabaseTests.cs" />
     <Compile Include="Migrations\VersionRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

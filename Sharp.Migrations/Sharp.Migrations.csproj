@@ -67,6 +67,7 @@
     <Compile Include="Migrator.cs" />
     <Compile Include="Runner.cs" />
     <Compile Include="SchemaMigration.cs" />
+    <Compile Include="SqlToFileDatabase.cs" />
     <Compile Include="VersionHelper.cs" />
     <Compile Include="VersionRepository.cs" />
   </ItemGroup>

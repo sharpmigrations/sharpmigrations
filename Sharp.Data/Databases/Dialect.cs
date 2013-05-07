@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Sharp.Data.Databases;
 using Sharp.Data.Filters;
-using Sharp.Data.Fluent;
 using Sharp.Data.Query;
 using Sharp.Data.Schema;
 using Sharp.Util;
@@ -73,7 +72,7 @@ namespace Sharp.Data {
                 throw new ArgumentException("Columns and values length must ge the same!");
             }
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("insert into ").Append(table).AppendLine(" (");
             for (int i = 0; i < columns.Length; i++) {
                 sb.Append(columns[i]);
@@ -102,7 +101,7 @@ namespace Sharp.Data {
                 throw new ArgumentException("Columns and values length must be the same!");
             }
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("update ").Append(table).Append(" set ");
 
             for (int i = 0; i < columns.Length; i++) {
@@ -141,7 +140,7 @@ namespace Sharp.Data {
     	public abstract string WrapSelectSqlWithPagination(string sql, int skipRows, int numberOfRows);
 
         public virtual string GetWhereSql(Filter filter, int parameterStartIndex) {
-            WhereBuilder whereBuilder = new WhereBuilder(this, parameterStartIndex);
+            var whereBuilder = new WhereBuilder(this, parameterStartIndex);
             return whereBuilder.Build(filter);
         }
 
@@ -154,14 +153,12 @@ namespace Sharp.Data {
         }
 
         public In[] ConvertToNamedParameters(int indexToStart, object[] values) {
-            In[] pars = new In[values.Length];
-
+            var pars = new In[values.Length];
             for (int i = 0; i < values.Length; i++) {
                 pars[i] = new In {Name = GetParameterName(i + indexToStart), Value = values[i]};
             }
             return pars;
         }
-
 
         protected abstract string GetDbTypeString(DbType type, int precision);
 
