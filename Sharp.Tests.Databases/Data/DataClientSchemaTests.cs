@@ -176,7 +176,7 @@ namespace Sharp.Tests.Databases.Data {
         [Test]
         public virtual void Can_add_comment_to_table() {
             CreateTableFoo();
-            _dataClient.Add.Comment("foo").ToColumn("name").OfTable("foo");
+            _dataClient.Add.Comment("foo").ToTable("foo");
             _dataClient.Remove.Comment.FromTable("foo");
         }
 

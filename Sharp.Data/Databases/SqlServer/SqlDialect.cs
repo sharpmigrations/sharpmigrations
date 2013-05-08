@@ -11,6 +11,8 @@ using Sharp.Util;
 namespace Sharp.Data.Databases.SqlServer {
     public class SqlDialect : Dialect {
 
+        public static string ExtendedPropertyNameForComments = "MS_Description";
+
 		public override string ParameterPrefix {
             get {
                 return "@";
@@ -27,7 +29,7 @@ namespace Sharp.Data.Databases.SqlServer {
             var primaryKeyColumns = new List<string>();
             
             //create table
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("create table ").Append(table.Name).AppendLine(" ( ");
 
             int size = table.Columns.Count;
@@ -241,5 +243,37 @@ namespace Sharp.Data.Databases.SqlServer {
 		public override string GetTableExistsSql(string tableName) {
 			return String.Format("SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{0}'", tableName);
 		}
+
+        public override string GetAddCommentToColumnSql(string tableName, string columnName, string comment) {
+            return String.Format(@"
+                declare @CurrentUser sysname; 
+                select @CurrentUser = user_name(); 
+                execute sp_addextendedproperty '{0}', '{1}', 'user', @CurrentUser, 'table', '{2}', 'column', '{3}'", 
+                ExtendedPropertyNameForComments, comment, tableName, columnName);
+        }
+
+        public override string GetAddCommentToTableSql(string tableName, string comment) {
+            return String.Format(@"
+                declare @CurrentUser sysname; 
+                select @CurrentUser = user_name(); 
+                execute sp_addextendedproperty '{0}', '{1}', 'user', @CurrentUser, 'table', '{2}'", 
+                ExtendedPropertyNameForComments, comment, tableName);
+        }
+
+        public override string GetRemoveCommentFromColumnSql(string tableName, string columnName) {
+            return String.Format(@"
+                declare @CurrentUser sysname; 
+                select @CurrentUser = user_name(); 
+                execute sp_dropextendedproperty '{0}', 'user', @CurrentUser, 'table', '{1}', 'column', '{2}' ", 
+                ExtendedPropertyNameForComments, tableName, columnName);
+        }
+
+        public override string GetRemoveCommentFromTableSql(string tableName) {
+            return String.Format(@"
+                declare @CurrentUser sysname; 
+                select @CurrentUser = user_name(); 
+                execute sp_dropextendedproperty '{0}', 'user', @CurrentUser, 'table', '{1}'", 
+                ExtendedPropertyNameForComments, tableName);
+        }
     }
 }

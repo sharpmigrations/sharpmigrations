@@ -209,12 +209,20 @@ namespace Sharp.Data {
 			return orderByDirection == OrderByDirection.Descending ? "DESC" : "";
 		}
 
-        public string GetAddCommentToColumnSql(string tableName, string columnName, string comment) {
+        public virtual string GetAddCommentToColumnSql(string tableName, string columnName, string comment) {
             return String.Format("COMMENT ON COLUMN {0}.{1} IS '{2}'", tableName, columnName, comment);
         }
 
-        public string GetAddCommentToTableSql(string tableName, string comment) {
+        public virtual string GetAddCommentToTableSql(string tableName, string comment) {
             return String.Format("COMMENT ON TABLE {0} IS '{1}'", tableName, comment);
+        }
+
+        public virtual string GetRemoveCommentFromColumnSql(string tableName, string columnName) {
+            return String.Format("COMMENT ON COLUMN {0}.{1} IS ''", tableName, columnName);
+        }
+
+        public virtual string GetRemoveCommentFromTableSql(string tableName) {
+            return String.Format("COMMENT ON TABLE {0} IS ''", tableName);
         }
     }
 }

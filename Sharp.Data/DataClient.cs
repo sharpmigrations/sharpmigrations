@@ -133,12 +133,12 @@ namespace Sharp.Data {
         }
 
         public virtual void RemoveTableComment(string tableName) {
-            string sql = Dialect.GetAddCommentToTableSql(tableName, "");
+            string sql = Dialect.GetRemoveCommentFromTableSql(tableName);
             Database.ExecuteSql(sql);
         }
 
         public virtual void RemoveColumnComment(string tableName, string columnName) {
-            string sql = Dialect.GetAddCommentToColumnSql(tableName, columnName, "");
+            string sql = Dialect.GetRemoveCommentFromColumnSql(tableName, columnName);
             Database.ExecuteSql(sql);
         }
 
