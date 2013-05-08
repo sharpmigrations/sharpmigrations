@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -31,11 +32,15 @@ namespace Sharp.Data {
         public abstract DbType GetDbType(string sqlType, int dataPrecision);
 
         public abstract string[] GetCreateTableSqls(Table table);
-
         public abstract string[] GetDropTableSqls(string tableName);
 
-        public abstract string GetPrimaryKeySql(string pkName, string table, params string[] columnNames);
+        protected IEnumerable<string> GetColumnCommentsSql(Table table) {
+            foreach (var column in table.Columns) {
+                yield return GetAddCommentToColumnSql(table.Name, column.ColumnName, column.Comment);
+            }
+        }
 
+        public abstract string GetPrimaryKeySql(string pkName, string table, params string[] columnNames);
         public abstract string GetForeignKeySql(string fkName, string table, string column, string referencingTable,
                                                 string referencingColumn, OnDelete onDelete);
 
@@ -119,7 +124,7 @@ namespace Sharp.Data {
         }
 
         public virtual string GetSelectSql(string[] tables, string[] columns) {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("select ");
             for (int i = 0; i < columns.Length; i++) {
                 sb.Append(columns[i]);
@@ -209,20 +214,12 @@ namespace Sharp.Data {
 			return orderByDirection == OrderByDirection.Descending ? "DESC" : "";
 		}
 
-        public virtual string GetAddCommentToColumnSql(string tableName, string columnName, string comment) {
-            return String.Format("COMMENT ON COLUMN {0}.{1} IS '{2}'", tableName, columnName, comment);
-        }
-
-        public virtual string GetAddCommentToTableSql(string tableName, string comment) {
-            return String.Format("COMMENT ON TABLE {0} IS '{1}'", tableName, comment);
-        }
-
-        public virtual string GetRemoveCommentFromColumnSql(string tableName, string columnName) {
-            return String.Format("COMMENT ON COLUMN {0}.{1} IS ''", tableName, columnName);
-        }
-
-        public virtual string GetRemoveCommentFromTableSql(string tableName) {
-            return String.Format("COMMENT ON TABLE {0} IS ''", tableName);
-        }
+        public abstract string GetAddCommentToColumnSql(string tableName, string columnName, string comment);
+        public abstract string GetAddCommentToTableSql(string tableName, string comment);
+        public abstract string GetRemoveCommentFromColumnSql(string tableName, string columnName);
+        public abstract string GetRemoveCommentFromTableSql(string tableName);
+        public abstract string GetRenameTableSql(string tableName, string newTableName);
+        public abstract string GetRenameColumnSql(string tableName, string columnName, string newColumnName);
+            
     }
 }

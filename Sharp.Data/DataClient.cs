@@ -27,7 +27,11 @@ namespace Sharp.Data {
 			get { return new FluentRemove(this); }
 		}
 
-		public IFluentInsert Insert {
+        public FluentRename Rename {
+            get { return new FluentRename(this);}
+        }
+
+        public IFluentInsert Insert {
 			get { return new FluentInsert(this); }
 		}
 
@@ -52,10 +56,8 @@ namespace Sharp.Data {
             foreach (FluentColumn fcol in columns) {
                 table.Columns.Add(fcol.Object);
             }
-
             string[] sqls = Dialect.GetCreateTableSqls(table);
-            
-			ExecuteSqls(sqls);
+            ExecuteSqls(sqls);
         }
 
 		private void ExecuteSqls(string[] sqls) {
@@ -142,6 +144,16 @@ namespace Sharp.Data {
             Database.ExecuteSql(sql);
         }
 
+        public void RenameTable(string tableName, string newTableName) {
+            string sql = Dialect.GetRenameTableSql(tableName, newTableName);
+            Database.ExecuteSql(sql);
+        }
+
+        public void RenameColumn(string tableName, string columnName, string newColumnName) {
+            string sql = Dialect.GetRenameColumnSql(tableName, columnName, newColumnName);
+            Database.ExecuteSql(sql);
+        }
+
         public virtual ResultSet SelectSql(string[] tables, string[] columns, Filter filter, OrderBy[] orderBys, int skip, int take) {
             var selectBuilder = new SelectBuilder(Dialect, tables, columns);
             selectBuilder.Filter = filter;
@@ -165,16 +177,12 @@ namespace Sharp.Data {
         }
 
         public virtual object InsertReturningSql(string table, string columnToReturn, string[] columns, object[] values) {
-			Out returningPar = new Out {Name = "returning_" + columnToReturn, Size = 4000};
-
+			var returningPar = new Out {Name = "returning_" + columnToReturn, Size = 4000};
             string retSql = Dialect.GetInsertReturningColumnSql(table, columns, values, columnToReturn, returningPar.Name);
-
             object[] pars = Dialect.ConvertToNamedParameters(values);
             List<object> listPars = pars.ToList();
             listPars.Add(returningPar);
-
             Database.ExecuteSql(retSql, listPars.ToArray());
-
             return returningPar.Value;
         }
 
@@ -182,16 +190,11 @@ namespace Sharp.Data {
             string sql = Dialect.GetUpdateSql(table, columns, values);
 
             In[] parameters = Dialect.ConvertToNamedParameters(values);
-
             if (filter != null) {
                 string whereSql = Dialect.GetWhereSql(filter, parameters.Count());
-
             	object[] pars = filter.GetAllValueParameters();
-
                 In[] filterParameters = Dialect.ConvertToNamedParameters(parameters.Count(), pars);
-
                 parameters = parameters.Concat(filterParameters).ToArray();
-
                 sql = sql + " " + whereSql;
             }
 
@@ -216,7 +219,7 @@ namespace Sharp.Data {
 
 		public virtual int CountSql(string table, Filter filter) {
 			string sql = Dialect.GetCountSql(table);
-			object obj = null;
+			object obj;
 
 			if (filter != null) {
 				string whereSql = Dialect.GetWhereSql(filter, 0);

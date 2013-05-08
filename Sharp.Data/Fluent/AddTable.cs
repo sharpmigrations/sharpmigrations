@@ -2,15 +2,26 @@ using Sharp.Data;
 using Sharp.Data.Schema;
 
 namespace Sharp.Data.Fluent {
+    
+    public class AddTable : DataClientAction, IAddTableWithColumns {
 
-    public class AddTable : DataClientAction {
+        private FluentColumn[] _columns;
         
-        public FluentColumn[] Columns { get; set; }
-
-        public AddTable(IDataClient dataClient) : base(dataClient) { }
-
-        protected override void ExecuteInternal() {
-            DataClient.AddTable(_tableNames[0], Columns);
+        public AddTable(IDataClient dataClient, string tableName) : base(dataClient) {
+            SetTableNames(tableName);
         }
+        
+        public void WithColumns(params FluentColumn[] columns) {
+            _columns = columns;
+            Execute();
+        }
+        
+        protected override void ExecuteInternal() {
+            DataClient.AddTable(_tableNames[0], _columns);
+        }
+    }
+    
+    public interface IAddTableWithColumns {
+        void WithColumns(params FluentColumn[] columns);
     }
 }

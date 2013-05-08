@@ -13,12 +13,12 @@ namespace Sharp.Data {
 		}
 
 		public override string[] GetCreateTableSqls(Table table) {
-			List<string> sqls = new List<string>();
-			List<string> primaryKeyColumns = new List<string>();
+			var sqls = new List<string>();
+			var primaryKeyColumns = new List<string>();
 			Column autoIncrement = null;
 
 			//create table
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.Append("create table ").Append(table.Name).AppendLine(" (");
 
 			int size = table.Columns.Count;
@@ -35,7 +35,6 @@ namespace Sharp.Data {
 				}
 			}
 			sb.AppendLine(")");
-
 			sqls.Add(sb.ToString());
 
 			//create sequence and trigger for the autoincrement
@@ -54,17 +53,17 @@ namespace Sharp.Data {
 				                autoIncrement.ColumnName);
 				sqls.Add(sb.ToString());
 			}
-
 			//primary key
 			if (primaryKeyColumns.Count > 0) {
 				sqls.Add(GetPrimaryKeySql(String.Format("pk_{0}", table.Name), table.Name, primaryKeyColumns.ToArray()));
 			}
-
+            //comments
+            sqls.AddRange(GetColumnCommentsSql(table));
 			return sqls.ToArray();
 		}
 
 		public override string[] GetDropTableSqls(string tableName) {
-			string[] sqls = new string[2];
+			var sqls = new string[2];
 			sqls[0] = String.Format("drop table {0} cascade constraints", tableName);
 			sqls[1] = String.Format("begin execute immediate 'drop sequence SEQ_{0}'; exception when others then null; end;",
 			                        tableName);
@@ -76,7 +75,7 @@ namespace Sharp.Data {
 				throw new ArgumentException("No columns specified for primary key");
 			}
 
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.AppendFormat("alter table {0} add constraint {1} primary key (", table, pkName);
 			foreach (string col in columnNames) {
 				sb.Append(col).AppendLine(",");
@@ -160,7 +159,7 @@ namespace Sharp.Data {
 			}
 
 			if (value is DateTime) {
-				DateTime dt = (DateTime) value;
+				var dt = (DateTime) value;
 				return String.Format("to_date('{0}','dd/mm/yyyy hh24:mi:ss')", dt.ToString("d/M/yyyy H:m:s"));
 			}
 
@@ -241,6 +240,30 @@ namespace Sharp.Data {
 		public override string GetTableExistsSql(string tableName) {
 			return String.Format("select count(table_name) from user_tables where upper(table_name) = upper('{0}')", tableName);
 		}
+
+        public override string GetAddCommentToColumnSql(string tableName, string columnName, string comment) {
+            return String.Format("COMMENT ON COLUMN {0}.{1} IS '{2}'", tableName, columnName, comment);
+        }
+
+        public override string GetAddCommentToTableSql(string tableName, string comment) {
+            return String.Format("COMMENT ON TABLE {0} IS '{1}'", tableName, comment);
+        }
+
+        public override string GetRemoveCommentFromColumnSql(string tableName, string columnName) {
+            return String.Format("COMMENT ON COLUMN {0}.{1} IS ''", tableName, columnName);
+        }
+
+        public override string GetRemoveCommentFromTableSql(string tableName) {
+            return String.Format("COMMENT ON TABLE {0} IS ''", tableName);
+        }
+
+        public override string GetRenameTableSql(string tableName, string newTableName) {
+            return String.Format("ALTER TABLE {0} RENAME TO {1}", tableName, newTableName);
+        }
+
+        public override string GetRenameColumnSql(string tableName, string columnName, string newColumnName) {
+            return String.Format("ALTER TABLE {0} RENAME COLUMN {1} TO {2}", tableName, columnName, newColumnName);
+        }
 
 
 		//public OracleDialect() : base() { }

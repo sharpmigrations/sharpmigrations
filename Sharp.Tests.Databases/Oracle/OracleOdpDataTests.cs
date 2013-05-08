@@ -14,10 +14,10 @@ namespace Sharp.Tests.Databases.Oracle {
         }
 
 		public override void Can_insert_dates_and_booleans() {
-			_dataClient.AddTable("footable",
-								 Column.AutoIncrement("id"),
-								 Column.Date("colDate"),
-								 Column.Boolean("colBool"));
+            _dataClient.AddTable("footable", null,
+		                         Column.AutoIncrement("id"),
+		                         Column.Date("colDate"),
+		                         Column.Boolean("colBool"));
 
 
 			DateTime now = DateTime.Now;

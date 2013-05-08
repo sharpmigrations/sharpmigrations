@@ -42,7 +42,7 @@ namespace Sharp.Tests.Databases.Data {
 
 		[Test]
 		public virtual void Can_create_table_with_multiple_columns_as_primary_key() {
-			_dataClient.AddTable(tableFoo,
+            _dataClient.AddTable(tableFoo,
 								 Column.Int32("id").AsPrimaryKey(),
 								 Column.Int32("id2").AsPrimaryKey(),
 								 Column.String("name")
@@ -51,7 +51,7 @@ namespace Sharp.Tests.Databases.Data {
 
 		[Test]
 		public virtual void Can_create_table_with_column_options() {
-			_dataClient.AddTable(tableFoo,
+            _dataClient.AddTable(tableFoo,
 								 Column.Int32("id").NotNull().DefaultValue(1),
 								 Column.Int32("id2").AsPrimaryKey(),
 								 Column.String("name").NotNull().DefaultValue("foo")
@@ -60,21 +60,21 @@ namespace Sharp.Tests.Databases.Data {
 
 		[Test]
 		public virtual void Can_create_table_with_autoIncrement() {
-			_dataClient.AddTable(tableFoo,
+            _dataClient.AddTable(tableFoo,
 								 Column.AutoIncrement("id"),
 								 Column.String("name"));
 		}
 
 		[Test]
 		public virtual void Can_create_table_with_autoIncrement_as_primary_key() {
-			_dataClient.AddTable(tableFoo,
+            _dataClient.AddTable(tableFoo,
 								 Column.AutoIncrement("id").AsPrimaryKey(),
 								 Column.String("name"));
 		}
 
 		[Test]
 		public virtual void Can_add_primary_key_to_table() {
-			_dataClient.AddTable(tableFoo,
+            _dataClient.AddTable(tableFoo,
 								 Column.Int32("id").NotNull(),
 								 Column.String("name")
 				);
@@ -83,7 +83,7 @@ namespace Sharp.Tests.Databases.Data {
 
 		[Test]
 		public virtual void Can_add_named_primary_key_to_table() {
-			_dataClient.AddTable(tableFoo,
+            _dataClient.AddTable(tableFoo,
 								 Column.Int32("id").NotNull(),
 								 Column.String("name")
 				);
@@ -185,6 +185,20 @@ namespace Sharp.Tests.Databases.Data {
             CreateTableFoo();
             _dataClient.Add.Comment("foo").ToColumn("name").OfTable("foo");
             _dataClient.Remove.Comment.FromColumn("name").OfTable("foo");
+        }
+
+        [Test]
+        public virtual void Can_rename_table() {
+            CreateTableFoo();
+            _dataClient.Rename.Table("foo").To("foo2");
+            _dataClient.TableExists("foo2");
+            _dataClient.Remove.Table("foo2");
+        }
+
+        [Test]
+        public virtual void Can_rename_column() {
+            CreateTableFoo();
+            _dataClient.Rename.Column("name").OfTable("foo").To("name2");
         }
 	}
 }

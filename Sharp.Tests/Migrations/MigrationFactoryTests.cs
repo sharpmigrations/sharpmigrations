@@ -20,13 +20,13 @@ namespace Sharp.Tests.Migrations {
 		public void Should_create_migration() {
 			Type migrationType = typeof (Migration1);
 			Migration migration = _factory.CreateMigration(migrationType);
-			Assert.IsInstanceOfType(migrationType, migration);
+			Assert.IsInstanceOf<Migration1>(migration);;
 		}
 
 		[Test]
 		public void Created_migration_should_have_a_dataClient() {
 			Type migrationType = typeof (Migration1);
-			Migration1 migration = (Migration1) _factory.CreateMigration(migrationType);
+			var migration = (Migration1) _factory.CreateMigration(migrationType);
 			Assert.AreEqual(_dataClient, migration.DataClient);
 		}
 	}

@@ -7,6 +7,7 @@ namespace Sharp.Migrations {
 
         private FluentAdd _schemaMigrationAdd;
         private FluentRemove _schemaMigrationRemove;
+        private FluentRename _schemaMigrationRename;
         internal bool ThrowException {
             set { DataClient.ThrowException = value; }
         }
@@ -17,6 +18,10 @@ namespace Sharp.Migrations {
 
         public FluentRemove Remove {
             get { return _schemaMigrationRemove ?? (_schemaMigrationRemove = new FluentRemove(DataClient)); }
+        }
+
+        public FluentRename Rename {
+            get { return _schemaMigrationRename ?? (_schemaMigrationRename = new FluentRename(DataClient)); }
         }
 
         protected class Column {

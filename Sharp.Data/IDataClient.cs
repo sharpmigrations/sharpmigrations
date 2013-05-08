@@ -14,12 +14,13 @@ namespace Sharp.Data {
 
 		FluentAdd Add { get; }
 		FluentRemove Remove { get; }
+        FluentRename Rename { get; }
 
 		IFluentInsert Insert { get; }
 		IFluentSelect Select { get; }
 		IFluentUpdate Update { get; }
 		IFluentDelete Delete { get; }
-    	IFluentCount Count { get; }
+        IFluentCount Count { get; }
 
     	void AddTable(string tableName, params FluentColumn[] columns);
         void AddColumn(string tableName, Column column);
@@ -39,6 +40,9 @@ namespace Sharp.Data {
         void RemoveTableComment(string tableName);
         void RemoveColumnComment(string tableName, string columnName);
 
+        void RenameTable(string tableName, string newTableName);
+        void RenameColumn(string tableName, string columnName, string newColumnName);
+
         void Commit();
         void RollBack();
         void Close();
@@ -52,5 +56,6 @@ namespace Sharp.Data {
     	int CountSql(string table, Filter filter);
 
     	bool TableExists(string table);
+        
     }
 }

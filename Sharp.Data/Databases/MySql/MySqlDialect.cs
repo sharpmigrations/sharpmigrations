@@ -18,13 +18,13 @@ namespace Sharp.Data.Databases.MySql {
         }
 
         public override string[] GetCreateTableSqls(Table table) {
-			List<string> sqls = new List<string>();
-			List<string> primaryKeyColumns = new List<string>();
+			var sqls = new List<string>();
+			var primaryKeyColumns = new List<string>();
 
 			//create table myTable (id int not null auto_increment, name VARCHAR(255) not null, primary key(id))
 
 			//create table
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.Append("create table ").Append(table.Name).AppendLine(" ( ");
 
 			int size = table.Columns.Count;
@@ -128,5 +128,29 @@ namespace Sharp.Data.Databases.MySql {
     	public override string GetTableExistsSql(string tableName) {
     		return "select count(TABLE_NAME) from INFORMATION_SCHEMA where TABLE_NAME = '"+tableName+"'";
     	}
+
+        public override string GetAddCommentToColumnSql(string tableName, string columnName, string comment) {
+            throw new NotImplementedException();
+        }
+
+        public override string GetAddCommentToTableSql(string tableName, string comment) {
+            throw new NotImplementedException();
+        }
+
+        public override string GetRemoveCommentFromColumnSql(string tableName, string columnName) {
+            throw new NotImplementedException();
+        }
+
+        public override string GetRemoveCommentFromTableSql(string tableName) {
+            throw new NotImplementedException();
+        }
+
+        public override string GetRenameTableSql(string tableName, string newTableName) {
+            throw new NotImplementedException();
+        }
+
+        public override string GetRenameColumnSql(string tableName, string columnName, string newColumnName) {
+            throw new NotImplementedException();
+        }
     }
 }

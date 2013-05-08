@@ -96,9 +96,12 @@
     <Compile Include="Fluent\AddComment.cs" />
     <Compile Include="Fluent\AddIndexKey.cs" />
     <Compile Include="Fluent\DataClientAddComment.cs" />
+    <Compile Include="Fluent\FluentRename.cs" />
     <Compile Include="Fluent\RemoveComment.cs" />
     <Compile Include="Fluent\RemoveIndexKey.cs" />
     <Compile Include="Fluent\DataClientAddIndexKey.cs" />
+    <Compile Include="Fluent\RenameColumn.cs" />
+    <Compile Include="Fluent\RenameTable.cs" />
     <Compile Include="ISharpFactory.cs" />
     <Compile Include="Log\EmptyLogger.cs" />
     <Compile Include="Log\EmptyLoggerFactory.cs" />
@@ -136,7 +139,6 @@
     <Compile Include="Fluent\DataClientAddColumn.cs" />
     <Compile Include="Fluent\DataClientAddForeignKey.cs" />
     <Compile Include="Fluent\DataClientAddPrimaryKey.cs" />
-    <Compile Include="Fluent\DataClientAddTable.cs" />
     <Compile Include="Fluent\DateClientAddUniqueKey.cs" />
     <Compile Include="Fluent\FluentRemove.cs" />
     <Compile Include="Fluent\DateClientRemoveItem.cs" />

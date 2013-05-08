@@ -4,7 +4,7 @@ namespace Sharp.Data.Fluent {
  
     public class FluentAdd {
     
-        internal IDataClient _dataClient;
+        private IDataClient _dataClient;
 
         public FluentAdd(IDataClient dataClient) {
             _dataClient = dataClient;
@@ -36,10 +36,9 @@ namespace Sharp.Data.Fluent {
 			return new DataClientAddIndexKey(action);
 		}
 
-        public DataClientAddTable Table(string tableName) {
-            var action = new AddTable(_dataClient);
-            action.SetTableNames(tableName);
-            return new DataClientAddTable(action);
+        public IAddTableWithColumns Table(string tableName) {
+            var action = new AddTable(_dataClient, tableName);
+            return action;
         }
 
         public IAddCommentColumnOrTable Comment(string comment) {

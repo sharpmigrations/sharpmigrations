@@ -140,12 +140,6 @@ namespace Sharp.Data.Databases.SqlServer {
         }
 
         public override string GetInsertReturningColumnSql(string table, string[] columns, object[] values, string returningColumnName, string returningParameterName) {
-            //declare @var int;
-            //declare @tempTable TABLE (id varchar)
-            //INSERT INTO Animal(Description)
-            //OUTPUT       inserted.id into @tempTable
-            //VALUES        ('asdf')
-            //select @var = id from @tempTable
             string sql = GetInsertSql(table, columns, values);
             sql = sql.Replace(") values (", ") output Inserted." + returningColumnName + " into @tempTable values (");
 
@@ -219,10 +213,6 @@ namespace Sharp.Data.Databases.SqlServer {
             throw new DataTypeNotAvailableException(String.Format("The type {0} is no available for sqlserver", type.ToString()));
         }
 
-        //protected override string GetDefaultValueString(object defaultValue) {
-        //    return defaultValue.ToString();
-        //}
-
         public override string GetColumnValueToSql(object value) {
             if (value is bool) {
                 return ((bool)value) ? "1" : "0";
@@ -233,7 +223,7 @@ namespace Sharp.Data.Databases.SqlServer {
             }
 
             if (value is DateTime) {
-                DateTime dt = (DateTime)value;
+                var dt = (DateTime)value;
                 return String.Format("'{0}'", dt.ToString("s"));
             }
 
@@ -274,6 +264,14 @@ namespace Sharp.Data.Databases.SqlServer {
                 select @CurrentUser = user_name(); 
                 execute sp_dropextendedproperty '{0}', 'user', @CurrentUser, 'table', '{1}'", 
                 ExtendedPropertyNameForComments, tableName);
+        }
+
+        public override string GetRenameTableSql(string tableName, string newTableName) {
+            return String.Format("execute sp_rename '{0}', '{1}'", tableName, newTableName);
+        }
+
+        public override string GetRenameColumnSql(string tableName, string columnName, string newColumnName) {
+            return String.Format("execute sp_rename '{0}.{1}', '{2}', 'column'", tableName, columnName, newColumnName);
         }
     }
 }

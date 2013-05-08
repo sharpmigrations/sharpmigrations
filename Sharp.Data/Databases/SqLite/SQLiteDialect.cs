@@ -220,7 +220,7 @@ namespace Sharp.Data.Databases.SqLite {
             }
 
             if (value is DateTime) {
-                DateTime dt = (DateTime) value;
+                var dt = (DateTime) value;
                 return dt.ToString("s");
             }
 
@@ -230,5 +230,29 @@ namespace Sharp.Data.Databases.SqLite {
     	public override string GetTableExistsSql(string tableName) {
     		return "SELECT count(name) FROM sqlite_master WHERE upper(name)=upper('" + tableName + "')";
     	}
+
+        public override string GetAddCommentToColumnSql(string tableName, string columnName, string comment) {
+            throw new NotImplementedException();
+        }
+
+        public override string GetAddCommentToTableSql(string tableName, string comment) {
+            throw new NotImplementedException();
+        }
+
+        public override string GetRemoveCommentFromColumnSql(string tableName, string columnName) {
+            throw new NotImplementedException();
+        }
+
+        public override string GetRemoveCommentFromTableSql(string tableName) {
+            throw new NotImplementedException();
+        }
+
+        public override string GetRenameTableSql(string tableName, string newTableName) {
+            throw new NotImplementedException();
+        }
+
+        public override string GetRenameColumnSql(string tableName, string columnName, string newColumnName) {
+            throw new NotImplementedException();
+        }
     }
 }
