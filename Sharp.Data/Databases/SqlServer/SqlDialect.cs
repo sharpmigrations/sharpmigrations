@@ -23,8 +23,8 @@ namespace Sharp.Data.Databases.SqlServer {
 
         public override string[] GetCreateTableSqls(Table table) {
 
-            List<string> sqls = new List<string>();
-            List<string> primaryKeyColumns = new List<string>();
+            var sqls = new List<string>();
+            var primaryKeyColumns = new List<string>();
             
             //create table
             StringBuilder sb = new StringBuilder();
@@ -91,7 +91,7 @@ namespace Sharp.Data.Databases.SqlServer {
                 throw new ArgumentException("No columns specified for primary key");
             }
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendFormat("alter table {0} add constraint {1} primary key (", table, pkName);
             int size = columnNames.Length;
             for (int i = 0; i < size; i++) {    

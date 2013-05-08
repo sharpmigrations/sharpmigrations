@@ -1,24 +1,26 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using Sharp.Data;
+using Sharp.Data.Databases;
 using Sharp.Data.Log;
+using Sharp.Migrations.Attributes;
 
 namespace Sharp.Migrations {
 	public class Runner {
 		public static ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
-
-	    public static bool IgnoreDialectNotSupportedActions { get; set; }
+        public static bool IgnoreDialectNotSupportedActions { get; set; }
 
 		private Assembly _targetAssembly;
 		private IDataClient _dataClient;
+	    private DatabaseKind _databaseKind;
 		private List<Migration> _migrationsToRun = new List<Migration>();
 
 		private int _currentVersion, _initialVersion, _targetVersion, _maxVersion;
-
-        private readonly MigrationFinder _migrationFinder;
-
-	    public IVersionRepository VersionRepository { private get; set; }
+        private MigrationFinder _migrationFinder;
+	    
+        public IVersionRepository VersionRepository { private get; set; }
 
 	    public string MigrationGroup {
 	        get { return VersionRepository.MigrationGroup; }
@@ -40,6 +42,7 @@ namespace Sharp.Migrations {
 
 	    public Runner(IDataClient dataClient, Assembly targetAssembly) {
 			_dataClient = dataClient;
+	        _databaseKind = _dataClient.Database.Provider.DatabaseKind;
 			_targetAssembly = targetAssembly ?? Assembly.GetCallingAssembly();
 			VersionRepository = new VersionRepository(_dataClient);
             _migrationFinder = new MigrationFinder(_targetAssembly);
@@ -64,7 +67,7 @@ namespace Sharp.Migrations {
 		private void CreateMigrationsToRun() {
 			List<Type> migrationTypes = GetMigrationTypes();
 
-			MigrationFactory factory = new MigrationFactory(_dataClient);
+			var factory = new MigrationFactory(_dataClient);
 			foreach (Type type in migrationTypes) {
 				Migration migration = factory.CreateMigration(type);
 				_migrationsToRun.Add(migration);
@@ -121,21 +124,38 @@ namespace Sharp.Migrations {
 
 		private void RunOneMigration(int i) {
 			Migration migration = _migrationsToRun[i];
-			if (IsUp()) {
-				migration.Up();
-				_currentVersion = migration.Version;
+		    if (!ShouldMigrateForThisDatabase(migration)) {
+                Log.Info(String.Format(" -> [{0}] {1} {2}() NOT PERFORMED for database {3}", migration.Version, migration.GetType().Name, IsUp() ? "Up" : "Down", _databaseKind));
+		        UpdateVersion(i);
+                return;
+		    }
+            if (IsUp()) {
+                migration.Up();
 			}
 			else {
-				migration.Down();
-				if (IsNotTheLastMigration(i)) {
-					_currentVersion = _migrationsToRun[i + 1].Version;
-				}
-				else {
-					_currentVersion = _targetVersion;
-				}
-			}
-			Log.Info(String.Format(" -> [{0}] {1} {2}()", migration.Version, migration.GetType().Name, IsUp() ? "Up" : "Down"));
+                migration.Down();
+            }
+		    Log.Info(String.Format(" -> [{0}] {1} {2}()", migration.Version, migration.GetType().Name, IsUp() ? "Up" : "Down"));
+		    UpdateVersion(i);
 		}
+
+	    private void UpdateVersion(int i) {
+            if (IsUp()) {
+                _currentVersion = _migrationsToRun[i].Version;
+                return;
+            }
+	        if (IsNotTheLastMigration(i)) {
+	            _currentVersion = _migrationsToRun[i + 1].Version;
+	        }
+            _currentVersion = _targetVersion;
+	    }
+
+	    private bool ShouldMigrateForThisDatabase(Migration migration) {
+            Attribute[] attrs = Attribute.GetCustomAttributes(migration.GetType());
+            if (attrs.Length == 0) return true;
+            var onlyFor = (OnlyForAttribute) attrs[0];
+            return onlyFor.DatabaseKinds.Contains(_databaseKind);
+        }
 
 		private bool IsNotTheLastMigration(int i) {
 			return i < _migrationsToRun.Count - 1;
@@ -155,6 +175,5 @@ namespace Sharp.Migrations {
 		private bool IsUp() {
 			return _initialVersion < _targetVersion;
 		}
-
 	}
 }

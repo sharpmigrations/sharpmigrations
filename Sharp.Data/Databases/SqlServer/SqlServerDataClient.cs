@@ -3,12 +3,7 @@
 namespace Sharp.Data.Databases.SqlServer {
 	public class SqlServerDataClient : DataClient {
 		private Dialect _dialect;
-		public SqlServerDataClient(IDatabase database) : base(database) {}
-
-		public override Dialect Dialect {
-			get { return _dialect ?? (_dialect = new SqlDialect()); }
-		    set { _dialect = value; }
-		}
+        public SqlServerDataClient(IDatabase database) : base(database, new SqlDialect()) { }
 
 		public override void RemoveColumn(string tableName, string columnName) {
 			string[] sqls = Dialect.GetDropColumnSql(tableName, columnName);

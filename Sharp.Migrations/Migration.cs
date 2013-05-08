@@ -7,7 +7,7 @@ namespace Sharp.Migrations {
         public int Version { get; set; }
         public string Name { get; protected set; }
 
-        protected IDataClient DataClient {
+        public IDataClient DataClient {
             get { return _dataClient; }
         }
 

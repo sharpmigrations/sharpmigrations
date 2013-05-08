@@ -61,10 +61,10 @@
     <Compile Include="MigrationException.cs" />
     <Compile Include="MigrationFactory.cs" />
     <Compile Include="MigrationFinder.cs" />
+    <Compile Include="Attributes\OnlyForAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runners\ChooseDbConsoleRunner.cs" />
     <Compile Include="Runners\ConsoleRunner.cs" />
-    <Compile Include="Migrator.cs" />
     <Compile Include="Runner.cs" />
     <Compile Include="SchemaMigration.cs" />
     <Compile Include="SqlToFileDatabase.cs" />

@@ -8,6 +8,10 @@ namespace Sharp.Data.Providers {
         public SqlProvider(DbProviderFactory dbProviderFactory) : base(dbProviderFactory) {
         }
 
+        public override DatabaseKind DatabaseKind {
+            get { return DatabaseKind.SqlServer; }
+        }
+
         public override DatabaseException CreateSpecificException(System.Exception exception, string sql) {
             var sqlexception = exception as SqlException;
             if (sqlexception == null) return base.CreateSpecificException(exception, sql);

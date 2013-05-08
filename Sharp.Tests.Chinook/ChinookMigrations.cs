@@ -10,9 +10,8 @@ namespace Sharp.Tests.Chinook {
         }
 
         protected override void TryRunMigrations() {
-            
-            var database = new SqlToFileDatabase();
-            
+
+            var database = new SqlToFileDatabase(null);
 
             IDataClient dataClient = SharpFactory.Default.CreateDataClient(_connectionString, DatabaseProvider);
             Runner runner = new Runner(dataClient, Assembly.GetEntryAssembly());

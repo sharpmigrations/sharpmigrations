@@ -8,15 +8,16 @@ using Sharp.Data.Schema;
 
 namespace Sharp.Data {
 
-    public abstract class DataClient : IDataClient {
+    public class DataClient : IDataClient {
     	public IDatabase Database { get; set; }
-		public abstract Dialect Dialect { get; set; }
+		public Dialect Dialect { get; set; }
         public bool ThrowException { get; set; }
 
-    	protected DataClient(IDatabase database) {
+    	protected DataClient(IDatabase database, Dialect dialect) {
             Database = database;
-			ThrowException = true;
-        }
+			Dialect = dialect;
+            ThrowException = true;
+    	}
 
 		public FluentAdd Add {
 			get { return new FluentAdd(this); }

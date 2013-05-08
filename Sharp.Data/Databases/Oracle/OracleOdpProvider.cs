@@ -14,6 +14,10 @@ namespace Sharp.Data.Providers {
         private static Type _oracleDbCommandType;
         private static PropertyInfo _propBindByName;
 
+        public override DatabaseKind DatabaseKind {
+            get { return DatabaseKind.Oracle; }
+        }
+
         protected virtual string RefCursorFullName {
             get { return "Oracle.DataAccess.Client.OracleDbType.RefCursor"; }
         }
