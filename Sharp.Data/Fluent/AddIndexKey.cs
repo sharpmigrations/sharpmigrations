@@ -8,7 +8,7 @@ namespace Sharp.Data.Fluent {
 		public AddIndexKey(IDataClient dataClient) : base(dataClient) { }
 
         protected override void ExecuteInternal() {
-            DataClient.AddIndex(IndexKeyName, _tableNames[0], ColumnNames);
+            DataClient.AddIndex(IndexKeyName, TableNames[0], ColumnNames);
         }
     }
 }

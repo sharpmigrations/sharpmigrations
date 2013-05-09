@@ -11,7 +11,7 @@ namespace Sharp.Data.Fluent {
         public Update(IDataClient dataClient) : base(dataClient) { }
 
         protected override void ExecuteInternal() {
-            AfectedRows = DataClient.UpdateSql(_tableNames[0], Columns, Values, Filter);
+            AfectedRows = DataClient.UpdateSql(TableNames[0], Columns, Values, Filter);
         }
     }
 }

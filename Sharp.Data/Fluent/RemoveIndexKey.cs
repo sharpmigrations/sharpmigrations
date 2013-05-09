@@ -5,7 +5,7 @@ namespace Sharp.Data.Fluent {
         public RemoveIndexKey(IDataClient dataClient) : base(dataClient) {}
 
         protected override void ExecuteInternal() {
-            DataClient.RemoveIndex(ItemName, _tableNames[0]);
+            DataClient.RemoveIndex(ItemName, TableNames[0]);
         }
     }
 }

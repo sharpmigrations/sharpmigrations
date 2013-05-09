@@ -48,7 +48,7 @@ namespace Sharp.Data.Databases.SqlServer {
             
             //primary key
             if (primaryKeyColumns.Count > 0) {
-                sqls.Add(GetPrimaryKeySql(String.Format("pk_{0}", table.Name), table.Name, primaryKeyColumns.ToArray()));
+                sqls.Add(GetPrimaryKeySql(table.Name, String.Format("pk_{0}", table.Name), primaryKeyColumns.ToArray()));
             }
             return sqls.ToArray();
         }
@@ -86,24 +86,6 @@ namespace Sharp.Data.Databases.SqlServer {
 			string dropDefaultConstrant = String.Format("ALTER TABLE {0} DROP CONSTRAINT [{{0}}]", table);
         	string dropColumn = String.Format("ALTER TABLE {0} DROP COLUMN {1}", table, columnName);
 			return new[] { findDefaultConstraint, dropDefaultConstrant, dropColumn };
-        }
-
-        public override string GetPrimaryKeySql(string pkName, string table, params string[] columnNames) {
-            if (columnNames.Length == 0) {
-                throw new ArgumentException("No columns specified for primary key");
-            }
-
-            var sb = new StringBuilder();
-            sb.AppendFormat("alter table {0} add constraint {1} primary key (", table, pkName);
-            int size = columnNames.Length;
-            for (int i = 0; i < size; i++) {    
-                sb.Append(columnNames[i]);
-                if (i != size - 1) {
-                    sb.AppendLine(",");
-                }
-            }
-            sb.Append(")");
-            return sb.ToString();
         }
 
         public override string GetForeignKeySql(string fkName, string table, string column, string referencingTable, string referencingColumn, OnDelete onDelete) {

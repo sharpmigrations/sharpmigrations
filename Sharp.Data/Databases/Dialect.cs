@@ -40,7 +40,14 @@ namespace Sharp.Data {
             }
         }
 
-        public abstract string GetPrimaryKeySql(string pkName, string table, params string[] columnNames);
+        public virtual string GetPrimaryKeySql(string table, string pkName, params string[] columnNames) {
+            return String.Format("alter table {0} add constraint {1} primary key ({2})", table, pkName, String.Join(",", columnNames));
+        }
+
+        public virtual string GetDropPrimaryKeySql(object tableName, string primaryKeyName) {
+            return String.Format("alter table {0} drop constraint {1}", tableName, primaryKeyName);
+        }
+         
         public abstract string GetForeignKeySql(string fkName, string table, string column, string referencingTable,
                                                 string referencingColumn, OnDelete onDelete);
 
@@ -220,6 +227,5 @@ namespace Sharp.Data {
         public abstract string GetRemoveCommentFromTableSql(string tableName);
         public abstract string GetRenameTableSql(string tableName, string newTableName);
         public abstract string GetRenameColumnSql(string tableName, string columnName, string newColumnName);
-            
     }
 }

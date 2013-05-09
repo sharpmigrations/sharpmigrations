@@ -8,7 +8,7 @@ namespace Sharp.Data.Fluent {
         public AddUniqueKey(IDataClient dataClient) : base(dataClient) { }
 
         protected override void ExecuteInternal() {
-            DataClient.AddUniqueKey(UniqueKeyName, _tableNames[0], ColumnNames);
+            DataClient.AddUniqueKey(UniqueKeyName, TableNames[0], ColumnNames);
         }
     }
 }

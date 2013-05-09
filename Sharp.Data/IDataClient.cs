@@ -25,7 +25,7 @@ namespace Sharp.Data {
     	void AddTable(string tableName, params FluentColumn[] columns);
         void AddColumn(string tableName, Column column);
         void AddForeignKey(string fkName, string table, string column, string referencingTable, string referencingColumn, OnDelete onDelete);
-        void AddNamedPrimaryKey(string pkName, string tableName, params string[] columnNames);
+        void AddNamedPrimaryKey(string tableName, string pkName, params string[] columnNames);
         void AddPrimaryKey(string tableName, params string[] columnNames);
         void AddUniqueKey(string uniqueKeyName, string tableName, params string[] columnNames);
     	void AddIndex(string indexName, string tableName, params string[] columnNames);
@@ -33,6 +33,7 @@ namespace Sharp.Data {
         void AddTableComment(string tableName, string comment);
 
         void RemoveColumn(string tableName, string columnName);
+        void RemovePrimaryKey(string tableName, string primaryKeyName);
         void RemoveForeignKey(string foreigKeyName, string tableName);
         void RemoveTable(string tableName);
         void RemoveUniqueKey(string uniqueKeyName, string tableName);
@@ -56,6 +57,7 @@ namespace Sharp.Data {
     	int CountSql(string table, Filter filter);
 
     	bool TableExists(string table);
+
         
     }
 }

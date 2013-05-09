@@ -3,33 +3,32 @@ using System;
 namespace Sharp.Data.Fluent {
     public abstract class DataClientAction {
 
-        protected string[] _tableNames;
-        public bool ThrowException { get; set; }
+        public string[] TableNames { get; protected set; }
         public IDataClient DataClient { get; set; }
 
         protected DataClientAction(IDataClient dataClient) {
             DataClient = dataClient;
-            ThrowException = true;
         }
 
         public void SetTableNames(params string[] tableNames) {
             if(tableNames == null || tableNames.Length == 0) {
                 throw new ArgumentException("You have to set a table name");
             }
-            _tableNames = tableNames;
+            TableNames = tableNames;
+        }
+
+        public string FirstTableName {
+            get { return TableNames[0]; }
+            set {SetTableNames(value);}
         }
 
         public void Execute() {
-            try {
-                ExecuteInternal();
-            }
-            catch (Exception) {
-                if (ThrowException) {
-                    throw;
-                }
-            }
+            ExecuteInternal();
         }
 
         protected abstract void ExecuteInternal();
+        public virtual DataClientAction ReverseAction() {
+            throw new NotSupportedException("Can't reverse " + GetType());
+        }
     }
 }

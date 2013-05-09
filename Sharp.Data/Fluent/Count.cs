@@ -10,7 +10,7 @@ namespace Sharp.Data.Fluent {
 		public Count(IDataClient dataClient) : base(dataClient) { }
 
 		protected override void ExecuteInternal() {
-            CountedRows = DataClient.CountSql(_tableNames[0], Filter);
+            CountedRows = DataClient.CountSql(TableNames[0], Filter);
 		}
 	}
 }

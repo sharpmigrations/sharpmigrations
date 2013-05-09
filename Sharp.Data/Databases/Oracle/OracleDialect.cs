@@ -55,7 +55,7 @@ namespace Sharp.Data {
 			}
 			//primary key
 			if (primaryKeyColumns.Count > 0) {
-				sqls.Add(GetPrimaryKeySql(String.Format("pk_{0}", table.Name), table.Name, primaryKeyColumns.ToArray()));
+				sqls.Add(GetPrimaryKeySql(table.Name, String.Format("pk_{0}", table.Name), primaryKeyColumns.ToArray()));
 			}
             //comments
             sqls.AddRange(GetColumnCommentsSql(table));
@@ -70,22 +70,7 @@ namespace Sharp.Data {
 			return sqls;
 		}
 
-		public override string GetPrimaryKeySql(string pkName, string table, params string[] columnNames) {
-			if (columnNames.Length == 0) {
-				throw new ArgumentException("No columns specified for primary key");
-			}
-
-			var sb = new StringBuilder();
-			sb.AppendFormat("alter table {0} add constraint {1} primary key (", table, pkName);
-			foreach (string col in columnNames) {
-				sb.Append(col).AppendLine(",");
-			}
-			sb.Remove(sb.Length - 3, 1);
-			sb.Append(")");
-			return sb.ToString();
-		}
-
-		public override string GetForeignKeySql(string fkName, string table, string column, string referencingTable,
+	    public override string GetForeignKeySql(string fkName, string table, string column, string referencingTable,
 		                                        string referencingColumn, OnDelete onDelete) {
 			string onDeleteSql;
 			switch (onDelete) {

@@ -1,24 +1,25 @@
+using System.Collections.Generic;
 using Sharp.Data.Schema;
 
 namespace Sharp.Data.Fluent {
- 
-    public class FluentAdd {
+    public class FluentAdd : ReversableFluentActions, IFluentAdd {
     
         private IDataClient _dataClient;
-
+        
         public FluentAdd(IDataClient dataClient) {
             _dataClient = dataClient;
         }
 
-        public DataClientAddColumn Column(FluentColumn column) {
-            var action = new AddColumn(_dataClient) { Column = column.Object };
-            return new DataClientAddColumn(action);
+        public IAddColumnToTable Column(FluentColumn column) {
+            var action = new AddColumn(_dataClient, column.Object);
+            FireOnAction(action);
+            return action;
         }
 
-        public DataClientAddPrimaryKey PrimaryKey(string primaryKeyName) {
-            var action = new AddPrimaryKey(_dataClient)
-                                   {PrimaryKeyName = primaryKeyName};
-            return new DataClientAddPrimaryKey(action);
+        public IAddPrimaryKeyOnColumns PrimaryKey(string primaryKeyName) {
+            var action = new AddPrimaryKey(_dataClient, primaryKeyName);
+            FireOnAction(action);
+            return action;
         }
 
         public DataClientAddForeignKey ForeignKey(string foreignKeyName) {

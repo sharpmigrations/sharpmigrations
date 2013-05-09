@@ -12,7 +12,7 @@
         }
 
         protected override void ExecuteInternal() {
-            DataClient.RenameTable(_tableNames[0], _newName);
+            DataClient.RenameTable(TableNames[0], _newName);
         }
     }
 

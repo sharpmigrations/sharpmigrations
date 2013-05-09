@@ -15,9 +15,9 @@ namespace Sharp.Data.Fluent {
             _columns = columns;
             Execute();
         }
-        
+
         protected override void ExecuteInternal() {
-            DataClient.AddTable(_tableNames[0], _columns);
+            DataClient.AddTable(TableNames[0], _columns);
         }
     }
     

@@ -18,7 +18,7 @@
         }
 
         protected override void ExecuteInternal() {
-            DataClient.RenameColumn(_tableNames[0], _columnName, _newName);
+            DataClient.RenameColumn(TableNames[0], _columnName, _newName);
         }
     }
 

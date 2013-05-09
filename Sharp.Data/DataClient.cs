@@ -72,18 +72,23 @@ namespace Sharp.Data {
         }
 
         public virtual void AddPrimaryKey(string tableName, params string[] columnNames) {
-            string sql = Dialect.GetPrimaryKeySql("pk_" + tableName, tableName, columnNames);
+            string sql = Dialect.GetPrimaryKeySql(tableName, "pk_" + tableName, columnNames);
             Database.ExecuteSql(sql);
         }
 
-        public virtual void AddNamedPrimaryKey(string pkName, string tableName, params string[] columnNames) {
-            string sql = Dialect.GetPrimaryKeySql(pkName, tableName, columnNames);
+        public virtual void AddNamedPrimaryKey(string tableName, string pkName, params string[] columnNames) {
+            string sql = Dialect.GetPrimaryKeySql(tableName, pkName, columnNames);
             Database.ExecuteSql(sql);
         }
 
         public virtual void AddForeignKey(string fkName, string table, string column, string referencingTable,
                                   string referencingColumn, OnDelete onDelete) {
             string sql = Dialect.GetForeignKeySql(fkName, table, column, referencingTable, referencingColumn, onDelete);
+            Database.ExecuteSql(sql);
+        }
+
+        public void RemovePrimaryKey(string tableName, string primaryKeyName) {
+            string sql = Dialect.GetDropPrimaryKeySql(tableName, primaryKeyName);
             Database.ExecuteSql(sql);
         }
 

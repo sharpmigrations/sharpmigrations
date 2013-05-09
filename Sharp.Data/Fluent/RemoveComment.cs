@@ -22,10 +22,10 @@ namespace Sharp.Data.Fluent {
 
         protected override void ExecuteInternal() {
             if (ColumnName == null) {
-                DataClient.RemoveTableComment(_tableNames[0]);
+                DataClient.RemoveTableComment(TableNames[0]);
                 return;
             }
-            DataClient.RemoveColumnComment(_tableNames[0], ColumnName);
+            DataClient.RemoveColumnComment(TableNames[0], ColumnName);
         }
     }
 

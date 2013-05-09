@@ -81,13 +81,23 @@ namespace Sharp.Tests.Databases.Data {
 			_dataClient.AddPrimaryKey(tableFoo, "id");
 		}
 
+        [Test]
+        public virtual void Can_remove_primary_key_from_table() {
+            _dataClient.AddTable(tableFoo,
+                                 Column.Int32("id").NotNull(),
+                                 Column.String("name")
+                );
+            _dataClient.AddNamedPrimaryKey(tableFoo, "pk1", "id");
+            _dataClient.RemovePrimaryKey(tableFoo, "pk1");
+        }
+
 		[Test]
 		public virtual void Can_add_named_primary_key_to_table() {
             _dataClient.AddTable(tableFoo,
 								 Column.Int32("id").NotNull(),
 								 Column.String("name")
 				);
-			_dataClient.AddNamedPrimaryKey("pk_" + tableFoo, tableFoo, "id");
+			_dataClient.AddNamedPrimaryKey(tableFoo, "pk_" + tableFoo, "id");
 		}
 
 		[Test]

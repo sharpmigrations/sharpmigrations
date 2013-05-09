@@ -88,8 +88,10 @@
     <Compile Include="015_Add_Comment_To_Table_Customer.cs" />
     <Compile Include="ChinookMigrations.cs" />
     <Compile Include="016_Create_table_foo_with_comments.cs" />
-    <Compile Include="017_Rename_table_foo.cs" />
-    <Compile Include="018_Rename_column_of_table_foo.cs" />
+    <Compile Include="017_Rename_table_superfoo.cs" />
+    <Compile Include="018_Rename_column_of_table_superfoo2.cs" />
+    <Compile Include="019_Add_column_to_table_superfoo2_reversable.cs" />
+    <Compile Include="020_Add_primaryKey_to_table_superfoo2_reversable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

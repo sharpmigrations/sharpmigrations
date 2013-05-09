@@ -5,7 +5,7 @@ namespace Sharp.Data.Fluent {
         public RemoveTable(IDataClient dataClient) : base(dataClient) {}
 
         protected override void ExecuteInternal() {
-            DataClient.RemoveTable(_tableNames[0]);
+            DataClient.RemoveTable(TableNames[0]);
         }
     }
 }

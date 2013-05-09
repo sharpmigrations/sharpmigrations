@@ -1,23 +1,22 @@
+using System.Linq;
+using System.Collections.Generic;
 using System.Data;
+using Sharp.Data;
 using Sharp.Data.Fluent;
 using Sharp.Data.Schema;
 
 namespace Sharp.Migrations {
-    public abstract class SchemaMigration : Migration {
+    public abstract class ReversableSchemaMigration : Migration {
 
+        private List<DataClientAction> _reversableActions;
         private FluentAdd _schemaMigrationAdd;
-        private FluentRemove _schemaMigrationRemove;
         private FluentRename _schemaMigrationRename;
-
+        
         public IFluentAdd Add {
             get { return _schemaMigrationAdd ?? (_schemaMigrationAdd = new FluentAdd(DataClient)); }
         }
 
-        public FluentRemove Remove {
-            get { return _schemaMigrationRemove ?? (_schemaMigrationRemove = new FluentRemove(DataClient)); }
-        }
-
-        public FluentRename Rename {
+        public IFluentRename Rename {
             get { return _schemaMigrationRename ?? (_schemaMigrationRename = new FluentRename(DataClient)); }
         }
 
@@ -39,6 +38,25 @@ namespace Sharp.Migrations {
             public static FluentColumn Single(string name) { return new FluentColumn(name, DbType.Single); }
             public static FluentColumn Double(string name) { return new FluentColumn(name, DbType.Double); }
             public static FluentColumn Guid(string name) { return new FluentColumn(name, DbType.Guid); }
+        }
+
+        public sealed override void Down() {
+            _reversableActions = new List<DataClientAction>();
+            _schemaMigrationAdd = new FluentAdd(new FakeDataClient());
+            _schemaMigrationRename = new FluentRename(new FakeDataClient());
+
+            _schemaMigrationAdd.OnAction += a => _reversableActions.Add(a);
+            _schemaMigrationRename.OnAction += a => _reversableActions.Add(a);
+
+            Up();
+
+            IEnumerable<DataClientAction> downActions = _reversableActions.Select(x => {
+                x.DataClient = DataClient;
+                return x.ReverseAction();
+            }).Reverse();
+            foreach (var action in downActions) {
+                action.Execute();
+            }
         }
     }
 }

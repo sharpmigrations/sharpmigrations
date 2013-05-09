@@ -10,7 +10,7 @@ namespace Sharp.Data.Fluent {
         public Delete(IDataClient dataClient) : base(dataClient) { }
 
         protected override void ExecuteInternal() {
-            AfectedRows = DataClient.DeleteSql(_tableNames[0], Filter);
+            AfectedRows = DataClient.DeleteSql(TableNames[0], Filter);
         }
     }
 }

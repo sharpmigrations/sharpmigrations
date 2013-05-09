@@ -44,18 +44,16 @@ namespace Sharp.Data.Databases.MySql {
 			}
 
 			sb.AppendLine(")");
-
 			sqls.Add(sb.ToString());
-			
 			return sqls.ToArray();
         }
 
         public override string[] GetDropTableSqls(string tableName) {
         	return new[] {String.Format("drop table {0}",tableName)};
         }
-
-        public override string GetPrimaryKeySql(string pkName, string table, params string[] columnNames) {
-			throw new NotImplementedException();
+       
+        public override string GetDropPrimaryKeySql(object tableName, string primaryKeyName) {
+            return String.Format("alter table {0} drop primary key", tableName);
         }
 
         public override string GetForeignKeySql(string fkName, string table, string column, string referencingTable, string referencingColumn, OnDelete onDelete) {

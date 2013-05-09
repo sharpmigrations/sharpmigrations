@@ -16,7 +16,7 @@ namespace Sharp.Data.Fluent {
     	public Select(IDataClient dataClient) : base(dataClient) { }
 
         protected override void ExecuteInternal() {
-            ResultSet = DataClient.SelectSql(_tableNames, Columns, Filter, OrderBy, Skip, Take);
+            ResultSet = DataClient.SelectSql(TableNames, Columns, Filter, OrderBy, Skip, Take);
         }
     }
 }

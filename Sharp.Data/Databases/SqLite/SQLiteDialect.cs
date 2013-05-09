@@ -68,10 +68,7 @@ namespace Sharp.Data.Databases.SqLite {
             string sql = String.Format("drop table {0}", tableName);
             return new string[1] {sql};
         }
-
-        public override string GetPrimaryKeySql(string pkName, string table, params string[] columnNames) {
-            throw new NotSupportedByDialect("Primary keys not supported by SqlLite", "GetPrimaryKeySql", GetDialectName());
-        }
+        
 
         public override string GetForeignKeySql(string fkName, string table, string column, string referencingTable,
                                                 string referencingColumn, OnDelete onDelete) {
