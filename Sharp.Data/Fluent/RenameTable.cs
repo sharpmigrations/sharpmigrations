@@ -14,6 +14,12 @@
         protected override void ExecuteInternal() {
             DataClient.RenameTable(TableNames[0], _newName);
         }
+
+        public override DataClientAction ReverseAction() {
+            return new RenameTable(DataClient, _newName) {
+                _newName = FirstTableName
+            };
+        }
     }
 
     public interface IRenameTableTo {

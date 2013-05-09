@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{126DA668-B940-4E3D-AFCB-0BD64C65FE41}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sharp.Tests.ReversableMigrations</RootNamespace>
+    <AssemblyName>Sharp.Tests.ReversableMigrations</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="002_Create_table_rev.cs" />
+    <Compile Include="_015_Add_Comment_To_Table_Customer.cs" />
+    <Compile Include="001_Create_table_revfoo_with_comments.cs" />
+    <Compile Include="003_Rename_table_rev_to_revbar.cs" />
+    <Compile Include="004_Rename_column_of_table_revbar.cs" />
+    <Compile Include="005_Add_column_to_table_revbar.cs" />
+    <Compile Include="006_Add_primaryKey_to_table_revfoo.cs" />
+    <Compile Include="007_Add_foreignkey_to_table_revbar_ref_revfoo.cs" />
+    <Compile Include="LocalRunner.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Sharp.Tests.Databases\App.config">
+      <Link>App.config</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sharp.Data\Sharp.Data.csproj">
+      <Project>{8c494818-90af-4133-94e1-0d1cbd961397}</Project>
+      <Name>Sharp.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sharp.Integration.log4net\Sharp.Integration.Log4net.csproj">
+      <Project>{F1EB005B-89FF-4D72-A277-BABC677421CF}</Project>
+      <Name>Sharp.Integration.Log4net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sharp.Migrations\Sharp.Migrations.csproj">
+      <Project>{703517b1-515e-4833-a1e0-b3cd9cf7e5e2}</Project>
+      <Name>Sharp.Migrations</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

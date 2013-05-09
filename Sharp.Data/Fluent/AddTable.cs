@@ -1,4 +1,3 @@
-using Sharp.Data;
 using Sharp.Data.Schema;
 
 namespace Sharp.Data.Fluent {
@@ -18,6 +17,12 @@ namespace Sharp.Data.Fluent {
 
         protected override void ExecuteInternal() {
             DataClient.AddTable(TableNames[0], _columns);
+        }
+
+        public override DataClientAction ReverseAction() {
+            return new RemoveTable(DataClient) {
+                FirstTableName = FirstTableName
+            };
         }
     }
     

@@ -96,10 +96,10 @@
     <Compile Include="FakeDataClient.cs" />
     <Compile Include="Fluent\AddComment.cs" />
     <Compile Include="Fluent\AddIndexKey.cs" />
-    <Compile Include="Fluent\DataClientAddComment.cs" />
     <Compile Include="Fluent\FluentRename.cs" />
     <Compile Include="Fluent\IFluentAdd.cs" />
     <Compile Include="Fluent\IFluentRename.cs" />
+    <Compile Include="Fluent\IRemoveFromTable.cs" />
     <Compile Include="Fluent\RemoveComment.cs" />
     <Compile Include="Fluent\RemoveIndexKey.cs" />
     <Compile Include="Fluent\DataClientAddIndexKey.cs" />
@@ -141,10 +141,7 @@
     <Compile Include="Fluent\RemoveItem.cs" />
     <Compile Include="Fluent\RemoveTable.cs" />
     <Compile Include="Fluent\RemoveUniqueKey.cs" />
-    <Compile Include="Fluent\DataClientAddForeignKey.cs" />
-    <Compile Include="Fluent\DateClientAddUniqueKey.cs" />
     <Compile Include="Fluent\FluentRemove.cs" />
-    <Compile Include="Fluent\DateClientRemoveItem.cs" />
     <Compile Include="Fluent\Select.cs" />
     <Compile Include="Fluent\Update.cs" />
     <Compile Include="IDataClient.cs" />

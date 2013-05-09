@@ -9,32 +9,28 @@ namespace Sharp.Data.Fluent {
             _dataClient = dataClient;
         }
 
-        public DateClientRemoveItem Column(string columnName) {
-            var action = new RemoveColumn(_dataClient) { ItemName = columnName };
-            return new DateClientRemoveItem(action);
+        public IRemoveFromTable Column(string columnName) {
+            return new RemoveColumn(_dataClient) { ItemName = columnName };
         }
 
         public IRemoveCommentFromColumnOrTable Comment {
             get { return new RemoveComment(_dataClient); }
         }
 
-        public IRemovePrimaryKeyOfTable PrimaryKey(string primaryKeyName) {
+        public IRemoveFromTable PrimaryKey(string primaryKeyName) {
             return new RemovePrimaryKey(_dataClient, primaryKeyName);
         }
 
-        public DateClientRemoveItem ForeignKey(string foreignKeyName) {
-            var action = new RemoveForeignKey(_dataClient) { ItemName = foreignKeyName};
-            return new DateClientRemoveItem(action);
+        public IRemoveFromTable ForeignKey(string foreignKeyName) {
+            return new RemoveForeignKey(_dataClient, foreignKeyName);
         }
 
-        public DateClientRemoveItem UniqueKey(string uniqueKeyName) {
-            var action = new RemoveUniqueKey(_dataClient) { ItemName = uniqueKeyName };
-            return new DateClientRemoveItem(action);
+        public IRemoveFromTable UniqueKey(string uniqueKeyName) {
+            return new RemoveUniqueKey(_dataClient, uniqueKeyName) { ItemName = uniqueKeyName };
         }
 
-        public DateClientRemoveItem IndexKey(string indexKeyName) {
-            var action = new RemoveIndexKey(_dataClient) { ItemName = indexKeyName };
-			return new DateClientRemoveItem(action);
+        public IRemoveFromTable IndexKey(string indexKeyName) {
+            return new RemoveIndexKey(_dataClient, indexKeyName) { ItemName = indexKeyName };
 		}
 
         public void Table(string tableName) {

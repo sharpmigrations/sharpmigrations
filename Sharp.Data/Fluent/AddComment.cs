@@ -29,6 +29,13 @@ namespace Sharp.Data.Fluent {
             }
             DataClient.AddColumnComment(TableNames[0], ColumnName, Comment);
         }
+
+        public override DataClientAction ReverseAction() {
+            return new RemoveComment(DataClient) {
+                FirstTableName = FirstTableName,
+                ColumnName = ColumnName
+            };
+        }
     }
 
     public interface IAddCommentColumnOrTable {

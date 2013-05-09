@@ -10,5 +10,11 @@ namespace Sharp.Data.Fluent {
         protected override void ExecuteInternal() {
             DataClient.AddIndex(IndexKeyName, TableNames[0], ColumnNames);
         }
+
+        public override DataClientAction ReverseAction() {
+            return new RemoveForeignKey(DataClient, IndexKeyName) {
+                FirstTableName = FirstTableName
+            };
+        }
     }
 }

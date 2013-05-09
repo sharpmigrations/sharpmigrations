@@ -1,9 +1,11 @@
-using Sharp.Data;
-
 namespace Sharp.Data.Fluent {
-    public abstract class RemoveItem : DataClientAction {
+    public abstract class RemoveItemFromTable : DataClientAction, IRemoveFromTable {
         public string ItemName { get; set; }
+        protected RemoveItemFromTable(IDataClient dataClient) : base(dataClient) {}
 
-        protected RemoveItem(IDataClient dataClient) : base(dataClient) {}
+        public void FromTable(string tableName) {
+            SetTableNames(tableName);
+            Execute();
+        }
     }
 }

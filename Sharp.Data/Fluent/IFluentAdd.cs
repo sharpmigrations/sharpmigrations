@@ -4,8 +4,8 @@ namespace Sharp.Data.Fluent {
     public interface IFluentAdd {
         IAddColumnToTable Column(FluentColumn column);
         IAddPrimaryKeyOnColumns PrimaryKey(string primaryKeyName);
-        DataClientAddForeignKey ForeignKey(string foreignKeyName);
-        DataClientAddUniqueKey UniqueKey(string uniqueKeyName);
+        IAddForeignKeyOnColumn ForeignKey(string foreignKeyName);
+        IAddUniqueKeyOnColumns UniqueKey(string uniqueKeyName);
         DataClientAddIndexKey IndexKey(string indexKeyName);
         IAddTableWithColumns Table(string tableName);
         IAddCommentColumnOrTable Comment(string comment);

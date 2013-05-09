@@ -1,7 +1,7 @@
 using Sharp.Data;
 
 namespace Sharp.Data.Fluent {
-    public class RemoveColumn : RemoveItem {
+    public class RemoveColumn : RemoveItemFromTable {
 
         public RemoveColumn(IDataClient dataClient) : base(dataClient) {}
 

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Sharp.Data.Schema;
 
 namespace Sharp.Data.Fluent {
@@ -22,14 +21,16 @@ namespace Sharp.Data.Fluent {
             return action;
         }
 
-        public DataClientAddForeignKey ForeignKey(string foreignKeyName) {
-            var action = new AddForeignKey(_dataClient) { ForeignKeyName = foreignKeyName};
-            return new DataClientAddForeignKey(action);
+        public IAddForeignKeyOnColumn ForeignKey(string foreignKeyName) {
+            var action = new AddForeignKey(_dataClient, foreignKeyName);
+            FireOnAction(action);
+            return action;
         }
 
-        public DataClientAddUniqueKey UniqueKey(string uniqueKeyName) {
-            var action = new AddUniqueKey(_dataClient) { UniqueKeyName = uniqueKeyName};
-            return new DataClientAddUniqueKey(action);
+        public IAddUniqueKeyOnColumns UniqueKey(string uniqueKeyName) {
+            var action = new AddUniqueKey(_dataClient, uniqueKeyName);
+            FireOnAction(action);
+            return action;
         }
 
 		public DataClientAddIndexKey IndexKey(string indexKeyName) {
@@ -39,11 +40,13 @@ namespace Sharp.Data.Fluent {
 
         public IAddTableWithColumns Table(string tableName) {
             var action = new AddTable(_dataClient, tableName);
+            FireOnAction(action);
             return action;
         }
 
         public IAddCommentColumnOrTable Comment(string comment) {
             var action = new AddComment(_dataClient, comment);
+            FireOnAction(action);
             return action;
         }
     }

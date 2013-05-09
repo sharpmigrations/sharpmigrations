@@ -20,6 +20,13 @@
         protected override void ExecuteInternal() {
             DataClient.RenameColumn(TableNames[0], _columnName, _newName);
         }
+
+        public override DataClientAction ReverseAction() {
+            return new RenameColumn(DataClient, _newName) {
+                _newName = _columnName,
+                FirstTableName = FirstTableName
+            };
+        }
     }
 
     public interface IRenameColumnOfTable {
