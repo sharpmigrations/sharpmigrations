@@ -28,7 +28,7 @@ namespace Sharp.Migrations.Runners {
         }
 
         private string GetMenu() {
-            StringBuilder menu = new StringBuilder();
+            var menu = new StringBuilder();
             menu.AppendLine(ASK_FOR_DATABASE);
             for (int i = 0; i < DataProviderNames.All.Count; i++) {
                 menu.Append(i).Append(" - ").AppendLine(DataProviderNames.All[i]);
@@ -38,7 +38,7 @@ namespace Sharp.Migrations.Runners {
 
         protected override void TryRunMigrations() {
             IDataClient dataClient = SharpFactory.Default.CreateDataClient(_connectionString, DatabaseProvider);
-            Runner runner = new Runner(dataClient, Assembly.GetEntryAssembly());
+            var runner = new Runner(dataClient, Assembly.GetEntryAssembly());
             runner.Run(_targetVersion);
         }
     }
