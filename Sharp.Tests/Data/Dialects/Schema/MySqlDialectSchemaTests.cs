@@ -4,7 +4,7 @@ using Sharp.Data.Databases.MySql;
 
 namespace Sharp.Tests.Databases.Mysql {
     [TestFixture]
-    public class MySqlDialectDdlTests : DialectDdlTests {
+    public class MySqlDialectSchemaTests : DialectSchemaTests {
     	
 		[SetUp]
     	public void SetUp() {
@@ -49,6 +49,10 @@ namespace Sharp.Tests.Databases.Mysql {
                      "24.33",
                      "'2009-01-20 12:30:00'"
                 };
+        }
+
+        protected override string GetResultFor_Can_add_comment_to_column() {
+            throw new NotImplementedException();
         }
     }
 }

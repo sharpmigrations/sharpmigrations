@@ -5,7 +5,7 @@ using Sharp.Tests.Data.Databases;
 
 namespace Sharp.Tests.Databases {
     [Explicit]
-    public abstract class DialectDdlTests : DialectTests {
+    public abstract class DialectSchemaTests : DialectTests {
 
         protected abstract string[] GetResultFor_Can_create_table_sql();
         protected abstract string[] GetResultFor_Can_drop_table();
@@ -15,6 +15,7 @@ namespace Sharp.Tests.Databases {
         protected abstract string GetResultFor_Can_convert_column_to_sql__autoIncrement_and_primary_key();
         protected abstract string GetResultFor_Can_convert_column_to_sql__default_value();
         protected abstract string[] GetResultFor_Can_convert_column_to_values();
+        protected abstract string GetResultFor_Can_add_comment_to_column();
 
         protected virtual string GetResutFor_Can_drop_index_sql() {
             return "drop index indexName on foo";

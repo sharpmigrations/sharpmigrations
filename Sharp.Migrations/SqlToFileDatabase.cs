@@ -19,6 +19,10 @@ namespace Sharp.Migrations {
             Dialect = dialect;
         }
 
+        private void AddSql(string sql) {
+            Sqls.Add(sql + Dialect.ScriptSeparator);
+        }
+
         public object CallStoredFunction(DbType returnType, string call, params object[] parameters) {
             throw new NotImplementedException();
         }
@@ -32,7 +36,7 @@ namespace Sharp.Migrations {
             foreach (var par in pars) {
                 call = call.Replace(par.Name, Dialect.GetColumnValueToSql(par.Value));
             }
-            Sqls.Add(call);
+            AddSql(call);
             return 1;
         }
 

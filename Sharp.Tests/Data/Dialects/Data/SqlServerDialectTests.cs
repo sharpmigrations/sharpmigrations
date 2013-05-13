@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Sharp.Data.Databases.SqlServer;
 
 namespace Sharp.Tests.Databases.SqlServer {
-	public class SqlServerDialectDmlTests  : DialectDmlTests {
+	public class SqlServerDialectDataTests  : DialectDataTests {
 
 		[SetUp]
 		public void SetUp() {

@@ -13,7 +13,7 @@ namespace Sharp.Data {
 		public Dialect Dialect { get; set; }
         public bool ThrowException { get; set; }
 
-    	protected DataClient(IDatabase database, Dialect dialect) {
+    	public DataClient(IDatabase database, Dialect dialect) {
             Database = database;
 			Dialect = dialect;
             ThrowException = true;

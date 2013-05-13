@@ -6,6 +6,10 @@ namespace Sharp.Data.Providers {
         public SqLiteProvider(DbProviderFactory dbProviderFactory) : base(dbProviderFactory) {
         }
 
+        public override string Name {
+            get { return DataProviderNames.SqLite; }
+        }
+
         public override DatabaseKind DatabaseKind {
             get { return DatabaseKind.Oracle;}
         }

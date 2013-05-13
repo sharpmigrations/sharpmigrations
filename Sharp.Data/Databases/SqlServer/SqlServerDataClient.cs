@@ -2,9 +2,11 @@
 
 namespace Sharp.Data.Databases.SqlServer {
 	public class SqlServerDataClient : DataClient {
-        public SqlServerDataClient(IDatabase database) : base(database, new SqlDialect()) { }
+        public SqlServerDataClient(IDatabase database, Dialect dialect)
+            : base(database, dialect) {
+	    }
 
-		public override void RemoveColumn(string tableName, string columnName) {
+	    public override void RemoveColumn(string tableName, string columnName) {
 			string[] sqls = Dialect.GetDropColumnSql(tableName, columnName);
 			object defaultConstraintName = Database.QueryScalar(sqls[0]);
 			if (defaultConstraintName != null) {

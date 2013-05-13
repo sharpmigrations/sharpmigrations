@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Sharp.Data;
+using Sharp.Data.Databases.Oracle;
 using Sharp.Migrations;
 
 namespace Sharp.Tests.Migrations {

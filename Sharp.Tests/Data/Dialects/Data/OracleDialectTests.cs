@@ -1,10 +1,11 @@
 using System;
 using NUnit.Framework;
 using Sharp.Data;
+using Sharp.Data.Databases.Oracle;
 
 namespace Sharp.Tests.Databases.Oracle {
 	[TestFixture]
-	public class OracleDialectDmlTests : DialectDmlTests {
+	public class OracleDialectDataTests : DialectDataTests {
 		[SetUp]
 		public void SetUp() {
 			_dialect = new OracleDialect();

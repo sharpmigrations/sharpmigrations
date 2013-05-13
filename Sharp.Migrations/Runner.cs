@@ -15,11 +15,11 @@ namespace Sharp.Migrations {
 		private Assembly _targetAssembly;
 		private IDataClient _dataClient;
 	    private DatabaseKind _databaseKind;
-		private List<Migration> _migrationsToRun = new List<Migration>();
-
 		private int _currentVersion, _initialVersion, _targetVersion, _maxVersion;
         private MigrationFinder _migrationFinder;
-	    
+
+        protected List<Migration> MigrationsToRun = new List<Migration>();
+
         public IVersionRepository VersionRepository { private get; set; }
 
 	    public string MigrationGroup {
@@ -67,12 +67,16 @@ namespace Sharp.Migrations {
 		private void CreateMigrationsToRun() {
 			List<Type> migrationTypes = GetMigrationTypes();
 
-			var factory = new MigrationFactory(_dataClient);
+			var factory = new MigrationFactory(GetDataClientForMigration());
 			foreach (Type type in migrationTypes) {
 				Migration migration = factory.CreateMigration(type);
-				_migrationsToRun.Add(migration);
+				MigrationsToRun.Add(migration);
 			}
 		}
+
+        protected virtual IDataClient GetDataClientForMigration() {
+            return _dataClient;
+        }
 
 		private List<Type> GetMigrationTypes() {
 			_maxVersion = _migrationFinder.LastVersion;
@@ -98,7 +102,7 @@ namespace Sharp.Migrations {
 			_currentVersion = _initialVersion;
 
 			int i;
-			for (i = 0; i < _migrationsToRun.Count; i++) {
+			for (i = 0; i < MigrationsToRun.Count; i++) {
 				try {
 					RunOneMigration(i);
 				}
@@ -106,7 +110,7 @@ namespace Sharp.Migrations {
 					HandleNotSupportedByDialectException(i, nse);
 				}
 				catch (Exception ex) {
-					string errorMsg = String.Format("Error running migration {0}: {1}", _migrationsToRun[i], ex); 
+					string errorMsg = String.Format("Error running migration {0}: {1}", MigrationsToRun[i], ex); 
 					Log.Error(errorMsg);
 					_dataClient.RollBack();
 					throw new MigrationException(errorMsg, ex);
@@ -119,11 +123,11 @@ namespace Sharp.Migrations {
 		}
 
 		private bool NoWorkToDo() {
-			return _migrationsToRun.Count == 0;
+			return MigrationsToRun.Count == 0;
 		}
 
 		private void RunOneMigration(int i) {
-			Migration migration = _migrationsToRun[i];
+			Migration migration = MigrationsToRun[i];
 		    if (!ShouldMigrateForThisDatabase(migration)) {
                 Log.Info(String.Format(" -> [{0}] {1} {2}() NOT PERFORMED for database {3}", migration.Version, migration.GetType().Name, IsUp() ? "Up" : "Down", _databaseKind));
 		        UpdateVersion(i);
@@ -139,13 +143,13 @@ namespace Sharp.Migrations {
 		    UpdateVersion(i);
 		}
 
-	    private void UpdateVersion(int i) {
+        protected virtual void UpdateVersion(int i) {
             if (IsUp()) {
-                _currentVersion = _migrationsToRun[i].Version;
+                _currentVersion = MigrationsToRun[i].Version;
                 return;
             }
 	        if (IsNotTheLastMigration(i)) {
-	            _currentVersion = _migrationsToRun[i + 1].Version;
+	            _currentVersion = MigrationsToRun[i + 1].Version;
 	        }
             _currentVersion = _targetVersion;
 	    }
@@ -158,7 +162,7 @@ namespace Sharp.Migrations {
         }
 
 		private bool IsNotTheLastMigration(int i) {
-			return i < _migrationsToRun.Count - 1;
+			return i < MigrationsToRun.Count - 1;
 		}
 
 		private void HandleNotSupportedByDialectException(int i, NotSupportedByDialect nse) {
@@ -166,7 +170,7 @@ namespace Sharp.Migrations {
 				Log.Warn(
 					String.Format(
 						"Migration[{0}] NotSupportedException not thrown due user config. Dialect: {1} Function: {2} Msg: {3}",
-						_migrationsToRun[i], nse.DialectName, nse.FunctionName, nse.Message));
+						MigrationsToRun[i], nse.DialectName, nse.FunctionName, nse.Message));
 				return;
 			}
 			throw nse;

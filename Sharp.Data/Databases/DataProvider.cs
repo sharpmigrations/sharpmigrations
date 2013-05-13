@@ -5,6 +5,7 @@ using System.Data.Common;
 namespace Sharp.Data.Databases {
     public abstract class DataProvider : IDataProvider {
         protected DbProviderFactory DbProviderFactory { get; private set; }
+        public abstract string Name { get; }
         public abstract DatabaseKind DatabaseKind { get; }
 
         protected DataProvider(DbProviderFactory dbProviderFactory) {

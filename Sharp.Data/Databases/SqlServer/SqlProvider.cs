@@ -8,6 +8,10 @@ namespace Sharp.Data.Providers {
         public SqlProvider(DbProviderFactory dbProviderFactory) : base(dbProviderFactory) {
         }
 
+        public override string Name {
+            get { return DataProviderNames.SqlServer; }
+        }
+
         public override DatabaseKind DatabaseKind {
             get { return DatabaseKind.SqlServer; }
         }

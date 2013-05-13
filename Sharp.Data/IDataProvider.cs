@@ -4,6 +4,7 @@ using Sharp.Data.Databases;
 
 namespace Sharp.Data {
     public interface IDataProvider {
+        string Name { get; }
         DatabaseKind DatabaseKind { get; }
         IDbConnection GetConnection();
         void ConfigCommand(IDbCommand command);

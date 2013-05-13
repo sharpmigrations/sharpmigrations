@@ -4,7 +4,7 @@ using Sharp.Data.Databases.MySql;
 
 namespace Sharp.Tests.Databases.Mysql {
     [TestFixture]
-    public class MySqlDialectDmlTests : DialectDmlTests {
+    public class MySqlDialectDataTests : DialectDataTests {
     	
 		[SetUp]
     	public void SetUp() {

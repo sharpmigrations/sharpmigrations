@@ -65,17 +65,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssertSql.cs" />
-    <Compile Include="Data\Dialects\Ddl\DialectDdlTests.cs" />
-    <Compile Include="Data\Dialects\Ddl\MySqlDialectTests.cs" />
-    <Compile Include="Data\Dialects\Ddl\OracleDialectTests.cs" />
-    <Compile Include="Data\Dialects\Ddl\SqLiteDialectTests.cs" />
-    <Compile Include="Data\Dialects\Ddl\SqlServerDialectTests.cs" />
-    <Compile Include="Data\Dialects\Dml\DialectDmlTests.cs" />
+    <Compile Include="Data\Dialects\Schema\DialectSchemaTests.cs" />
+    <Compile Include="Data\Dialects\Schema\MySqlDialectSchemaTests.cs" />
+    <Compile Include="Data\Dialects\Schema\OracleDialectSchemaTests.cs" />
+    <Compile Include="Data\Dialects\Schema\SqLiteDialectSchemaTests.cs" />
+    <Compile Include="Data\Dialects\Schema\SqlServerDialectSchemaTests.cs" />
+    <Compile Include="Data\Dialects\Data\DialectDataTests.cs" />
     <Compile Include="Data\Dialects\DialectTests.cs" />
-    <Compile Include="Data\Dialects\Dml\MySqlDialectTests.cs" />
-    <Compile Include="Data\Dialects\Dml\OracleDialectTests.cs" />
-    <Compile Include="Data\Dialects\Dml\SqLiteDialectTests.cs" />
-    <Compile Include="Data\Dialects\Dml\SqlServerDialectTests.cs" />
+    <Compile Include="Data\Dialects\Data\MySqlDialectTests.cs" />
+    <Compile Include="Data\Dialects\Data\OracleDialectTests.cs" />
+    <Compile Include="Data\Dialects\Data\SqLiteDialectTests.cs" />
+    <Compile Include="Data\Dialects\Data\SqlServerDialectTests.cs" />
     <Compile Include="Data\DatabaseTests.cs" />
     <Compile Include="Data\DataParameterCollectionFake.cs" />
     <Compile Include="Data\Filters\CompareOperatorToSymbolTests.cs" />

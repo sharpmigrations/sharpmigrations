@@ -7,7 +7,7 @@ using Sharp.Tests.Data.Databases;
 
 namespace Sharp.Tests.Databases {
 	[Explicit]
-	public abstract class DialectDmlTests : DialectTests {
+	public abstract class DialectDataTests : DialectTests {
 
 		protected abstract string GetResultFor_Can_create_check_if_table_exists_sql();
 	    protected abstract string GetResultFor_Can_generate_count_sql();
@@ -114,11 +114,35 @@ namespace Sharp.Tests.Databases {
 
         [Test]
         public void Can_select_with_multiple_tables_sql_2() {
-            string[] tables = new string[] { "table1 t1", "table2 t2" };
-            string[] columns = new string[] { "t1.col1", "t2.col1", "t2.col2" };
+            var tables = new string[] { "table1 t1", "table2 t2" };
+            var columns = new string[] { "t1.col1", "t2.col1", "t2.col2" };
 
             string sql = _dialect.GetSelectSql(tables, columns);
             AssertSql.AreEqual("select t1.col1 ,t2.col1, t2.col2 from table1 t1 ,table2 t2", sql);
+        }
+
+	    [Test]
+	    public void Can_convert_to_named_parameters() {
+	        var objs = new object[] {"a", 1, DateTime.Today};
+	        In[] pars = _dialect.ConvertToNamedParameters(objs);
+            Assert.AreEqual(3, pars.Length);
+
+	        for (int i = 0; i < 3; i++) {
+                Assert.AreEqual(_dialect.ParameterPrefix + "par" + i, pars[i].Name);
+                Assert.AreEqual(objs[i], pars[i].Value);    
+	        }
+	    }
+
+        [Test]
+        public void Convert_to_named_parameters__ignores_already_named_parameters() {
+            object[] objs = new[] {In.Named(":par0", 1), In.Named(":par1", 2)};
+            
+            In[] pars = _dialect.ConvertToNamedParameters(objs);
+            Assert.AreEqual(2, pars.Length);
+
+            for (int i = 0; i < 2; i++) {
+                Assert.AreEqual(objs[i], pars[i]);
+            }
         }
 	}
 }

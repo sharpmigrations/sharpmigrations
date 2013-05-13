@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="Database.cs" />
     <Compile Include="Databases\DatabaseKind.cs" />
+    <Compile Include="DbFactory.cs" />
     <Compile Include="Exceptions\DatabaseException.cs" />
     <Compile Include="Databases\DataProvider.cs" />
     <Compile Include="Databases\DataProviderNames.cs" />
@@ -113,6 +114,10 @@
     <Compile Include="Log\ILogger.cs" />
     <Compile Include="Log\ILoggerFactory.cs" />
     <Compile Include="Log\LogManager.cs" />
+    <Compile Include="Databases\Oracle\OracleManagedDbFactory.cs" />
+    <Compile Include="Databases\Oracle\OracleOdpDbFactory.cs" />
+    <Compile Include="Databases\SqlServer\OleDbDbFactory.cs" />
+    <Compile Include="Databases\MySql\MySqlDbFactory.cs" />
     <Compile Include="Schema\OrderBy.cs" />
     <Compile Include="Databases\MySql\MySqlDialect.cs" />
     <Compile Include="Databases\MySql\MySqlProvider.cs" />
@@ -175,8 +180,9 @@
     <Compile Include="Schema\OrderByDirection.cs" />
     <Compile Include="Schema\Table.cs" />
     <Compile Include="SharpDbConfig.cs" />
-    <Compile Include="SharpDbProviderFactory.cs" />
     <Compile Include="SharpFactory.cs" />
+    <Compile Include="Databases\SqlServer\SqlServerDbFactory.cs" />
+    <Compile Include="Databases\SqLite\SqLiteDbFactory.cs" />
     <Compile Include="TableRow.cs" />
     <Compile Include="Util\IntExtensions.cs" />
     <Compile Include="Util\ReflectionHelper.cs" />

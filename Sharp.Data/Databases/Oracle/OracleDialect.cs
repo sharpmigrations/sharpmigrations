@@ -6,7 +6,7 @@ using System.Text;
 using Sharp.Data.Schema;
 using Sharp.Util;
 
-namespace Sharp.Data {
+namespace Sharp.Data.Databases.Oracle {
 	public class OracleDialect : Dialect {
 		public override string ParameterPrefix {
 			get { return ":"; }
@@ -23,7 +23,7 @@ namespace Sharp.Data {
 
 			int size = table.Columns.Count;
 			for (int i = 0; i < size; i++) {
-				sb.AppendLine(GetColumnToSqlWhenCreate(table.Columns[i]));
+				sb.Append(GetColumnToSqlWhenCreate(table.Columns[i]));
 				if (i != size - 1) {
 					sb.AppendLine(",");
 				}

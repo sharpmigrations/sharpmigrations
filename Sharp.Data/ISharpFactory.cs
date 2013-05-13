@@ -11,5 +11,8 @@
 
         IDataClient CreateDataClient(string connectionString, string databaseProviderName);
         IDataClient CreateDataClient();
+
+        Dialect CreateDialect(string databaseProviderName);
+        Dialect CreateDialect();
     }
 }

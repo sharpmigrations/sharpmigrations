@@ -2,17 +2,20 @@ using System;
 using System.Data;
 using System.Data.Common;
 using System.Reflection;
-using Sharp.Data.Databases;
 using Sharp.Data.Exceptions;
 using Sharp.Data.Util;
 
-namespace Sharp.Data.Providers {
+namespace Sharp.Data.Databases.Oracle {
     public class OracleOdpProvider : DataProvider {
 
         private static PropertyInfo _propOracleDbType;
         private static Type _oracleRefCursorType;
         private static Type _oracleDbCommandType;
         private static PropertyInfo _propBindByName;
+
+        public override string Name {
+            get { return DataProviderNames.OracleOdp; }
+        }
 
         public override DatabaseKind DatabaseKind {
             get { return DatabaseKind.Oracle; }

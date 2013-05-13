@@ -1,10 +1,11 @@
 using System;
 using NUnit.Framework;
 using Sharp.Data;
+using Sharp.Data.Databases.Oracle;
 
 namespace Sharp.Tests.Databases.Oracle {
 	[TestFixture]
-	public class OracleDialectDdlTests : DialectDdlTests {
+    public class OracleDialectSchemaTests : DialectSchemaTests {
 		[SetUp]
 		public void SetUp() {
 			_dialect = new OracleDialect();
@@ -55,7 +56,11 @@ namespace Sharp.Tests.Databases.Oracle {
 			};
 		}
 
-        protected override string GetResutFor_Can_drop_index_sql() {
+	    protected override string GetResultFor_Can_add_comment_to_column() {
+	        return "COMMENT ON column myTable.col1 is 'this is a comment'";
+	    }
+
+	    protected override string GetResutFor_Can_drop_index_sql() {
             return "drop index indexName";
         }
 	}

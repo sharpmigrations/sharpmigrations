@@ -4,7 +4,7 @@ using Sharp.Data.Databases.SqLite;
 
 namespace Sharp.Tests.Databases.SQLite {
 	[TestFixture]
-	public class SqLiteDialectDmlTests : DialectDmlTests {
+	public class SqLiteDialectDataTests : DialectDataTests {
 		[SetUp]
 		public void SetUp() {
 			_dialect = new SqLiteDialect();

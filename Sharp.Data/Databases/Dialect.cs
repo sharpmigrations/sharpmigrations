@@ -23,6 +23,14 @@ namespace Sharp.Data {
             get { return "WHERE"; }
         }
 
+        public virtual string ScriptSeparator {
+            get { return ";"; }
+        }
+
+        public virtual string ScriptCommentsPrefix {
+            get { return "--"; }
+        }
+
         public abstract string ParameterPrefix { get; }
 
         public string GetDialectName() {
@@ -36,6 +44,9 @@ namespace Sharp.Data {
 
         protected IEnumerable<string> GetColumnCommentsSql(Table table) {
             foreach (var column in table.Columns) {
+                if (column.Comment == null) {
+                    continue;
+                }
                 yield return GetAddCommentToColumnSql(table.Name, column.ColumnName, column.Comment);
             }
         }
@@ -79,7 +90,6 @@ namespace Sharp.Data {
 			if(values == null) {
 				values = new object[columns.Length];
 			}
-
             if (columns.Length != values.Length) {
                 throw new ArgumentException("Columns and values length must ge the same!");
             }
@@ -167,7 +177,10 @@ namespace Sharp.Data {
         public In[] ConvertToNamedParameters(int indexToStart, object[] values) {
             var pars = new In[values.Length];
             for (int i = 0; i < values.Length; i++) {
-                pars[i] = new In {Name = GetParameterName(i + indexToStart), Value = values[i]};
+                pars[i] = values[i] as In;
+                if (pars[i] == null) {
+                    pars[i] = new In { Name = GetParameterName(i + indexToStart), Value = values[i] };    
+                }
             }
             return pars;
         }
