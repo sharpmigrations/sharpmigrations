@@ -54,7 +54,7 @@ namespace Sharp.Tests.Databases.SqlServer {
 		}
 
 	    protected override string GetResultFor_Can_add_comment_to_column() {
-	        throw new NotImplementedException();
+            return "declare @currentuser sysname; select @currentuser = user_name(); execute sp_addextendedproperty 'ms_description','this is a comment','user',@currentuser,'table','mytable','column','col1'";
 	    }
 	}
 }

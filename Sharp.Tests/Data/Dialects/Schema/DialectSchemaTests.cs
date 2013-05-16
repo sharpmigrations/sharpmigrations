@@ -117,9 +117,9 @@ namespace Sharp.Tests.Databases {
         }
 
         [Test]
-        public void Can_add_comment_to_column() {
+        public virtual void Can_add_comment_to_column() {
             string sql = _dialect.GetAddCommentToColumnSql(TABLE_NAME, "col1", "this is a comment");
-            AssertSql.AreEqual("COMMENT ON column myTable.col1 is 'this is a comment'", sql);
+            AssertSql.AreEqual(GetResultFor_Can_add_comment_to_column(), sql);
         }
     }
 }

@@ -10,24 +10,26 @@ namespace Sharp.Migrations {
         public const string DEFAULT_MIGRATION_GROUP = "default";
 
         private IDataClient _dataClient;
-	    private Filter MigrationGroupFilter;
+	    private Filter _migrationGroupFilter;
 	    private string _migrationGroup;
 
 	    public string MigrationGroup {
 	        get { return _migrationGroup; }
 	        set {
 	            _migrationGroup = value;
-                MigrationGroupFilter = Filter.Eq("name", MigrationGroup);
+                _migrationGroupFilter = Filter.Eq("name", MigrationGroup);
 	        }
 	    }
 
-	    public VersionRepository(IDataClient dataClient) {
+	    public VersionRepository(IDataClient dataClient, bool createVersionTable = true) {
             _dataClient = dataClient;
 	        _migrationGroup = DEFAULT_MIGRATION_GROUP;
-            CreateVersionTable();
+            if (createVersionTable) {
+                CreateVersionTable();                
+            }
         }
 
-	    private void CreateVersionTable() {
+	    protected void CreateVersionTable() {
 	        try {
 	            TryCreateVersionTable();
 	        }
@@ -52,7 +54,7 @@ namespace Sharp.Migrations {
             _dataClient.Commit();
 	    }
 
-	    public int GetCurrentVersion() {
+	    public virtual int GetCurrentVersion() {
             try {
                 return TryGetCurrentVersion();
             }
@@ -71,13 +73,13 @@ namespace Sharp.Migrations {
             }
             object ret = _dataClient.Select.Columns("version")
 	                                .From(VERSION_TABLE_NAME)
-	                                .Where(MigrationGroupFilter).AllRows()[0][0];
+	                                .Where(_migrationGroupFilter).AllRows()[0][0];
 	        int version = Convert.ToInt32(ret);
 	        return version;
 	    }
 	    
 	    private bool MigrationGroupExists() {
-            int count = _dataClient.Count.Table(VERSION_TABLE_NAME).Where(MigrationGroupFilter);
+            int count = _dataClient.Count.Table(VERSION_TABLE_NAME).Where(_migrationGroupFilter);
             return count != 0;
         }
 
@@ -90,12 +92,12 @@ namespace Sharp.Migrations {
 			_dataClient.Commit();
 		}
 
-	    public void UpdateVersion(int version) {
+	    public virtual void UpdateVersion(int version) {
             try {
             	_dataClient.Update.Table(VERSION_TABLE_NAME)
             					  .SetColumns("version")
             					  .ToValues(version)
-                                  .Where(MigrationGroupFilter);
+                                  .Where(_migrationGroupFilter);
                 _dataClient.Commit();
             }
             finally {

@@ -3,7 +3,7 @@ using Sharp.Data;
 using Sharp.Migrations;
 using Sharp.Migrations.Runners;
 
-namespace Sharp.Tests.ReversableMigrations {
+namespace Sharp.Tests.ReversibleMigrations {
     public class LocalRunner : ChooseDbConsoleRunner {
         public LocalRunner()
             : base("", "") {

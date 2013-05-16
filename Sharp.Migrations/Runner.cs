@@ -9,7 +9,7 @@ using Sharp.Migrations.Attributes;
 
 namespace Sharp.Migrations {
 	public class Runner {
-		public static ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
+	    public static ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
         public static bool IgnoreDialectNotSupportedActions { get; set; }
 
 		private Assembly _targetAssembly;
@@ -19,7 +19,6 @@ namespace Sharp.Migrations {
         private MigrationFinder _migrationFinder;
 
         protected List<Migration> MigrationsToRun = new List<Migration>();
-
         public IVersionRepository VersionRepository { private get; set; }
 
 	    public string MigrationGroup {
@@ -40,21 +39,23 @@ namespace Sharp.Migrations {
 	        }
 	    }
 
-	    public Runner(IDataClient dataClient, Assembly targetAssembly) {
-			_dataClient = dataClient;
-	        _databaseKind = _dataClient.Database.Provider.DatabaseKind;
-			_targetAssembly = targetAssembly ?? Assembly.GetCallingAssembly();
-			VersionRepository = new VersionRepository(_dataClient);
+        public Runner(IDataClient dataClient, Assembly targetAssembly, IVersionRepository versionRepository) {
+            _dataClient = dataClient;
+            _databaseKind = _dataClient.Database.Provider.DatabaseKind;
+            _targetAssembly = targetAssembly ?? Assembly.GetCallingAssembly();
+            VersionRepository = versionRepository;
             _migrationFinder = new MigrationFinder(_targetAssembly);
-	        _initialVersion = -1;
+            _initialVersion = -1;
 	    }
+        
+	    public Runner(IDataClient dataClient, Assembly targetAssembly) : this(dataClient, targetAssembly, new VersionRepository(dataClient)) {}
 
 		public void Run(int version) {
 			GetCurrentVersion();
 			RunMigrations(version);
 		}
 
-		private void GetCurrentVersion() {
+		protected virtual void GetCurrentVersion() {
 			_initialVersion = VersionRepository.GetCurrentVersion();
 		}
 
@@ -67,17 +68,13 @@ namespace Sharp.Migrations {
 		private void CreateMigrationsToRun() {
 			List<Type> migrationTypes = GetMigrationTypes();
 
-			var factory = new MigrationFactory(GetDataClientForMigration());
+			var factory = new MigrationFactory(_dataClient);
 			foreach (Type type in migrationTypes) {
 				Migration migration = factory.CreateMigration(type);
 				MigrationsToRun.Add(migration);
 			}
 		}
-
-        protected virtual IDataClient GetDataClientForMigration() {
-            return _dataClient;
-        }
-
+       
 		private List<Type> GetMigrationTypes() {
 			_maxVersion = _migrationFinder.LastVersion;
 			if (_targetVersion < 0) {
@@ -94,7 +91,6 @@ namespace Sharp.Migrations {
 				Log.Info("No migrations to perform");
 				return;
 			}
-
 			Log.Info("Starting migrations");
 			Log.Info("Max version is " + _maxVersion);
 			Log.Info("Migrate from " + _initialVersion + " to " + _targetVersion);
@@ -116,11 +112,15 @@ namespace Sharp.Migrations {
 					throw new MigrationException(errorMsg, ex);
 				}
 				finally {
-					VersionRepository.UpdateVersion(_currentVersion);
+					UpdateSchemaVersion(_currentVersion);
 				}
 			}
 			Log.Info("Done. Current version: " + _currentVersion);
 		}
+
+        protected void UpdateSchemaVersion(int version) {
+            VersionRepository.UpdateVersion(_currentVersion);
+        }
 
 		private bool NoWorkToDo() {
 			return MigrationsToRun.Count == 0;
@@ -130,7 +130,7 @@ namespace Sharp.Migrations {
 			Migration migration = MigrationsToRun[i];
 		    if (!ShouldMigrateForThisDatabase(migration)) {
                 Log.Info(String.Format(" -> [{0}] {1} {2}() NOT PERFORMED for database {3}", migration.Version, migration.GetType().Name, IsUp() ? "Up" : "Down", _databaseKind));
-		        UpdateVersion(i);
+		        SetCurrentVersion(i);
                 return;
 		    }
             if (IsUp()) {
@@ -140,16 +140,17 @@ namespace Sharp.Migrations {
                 migration.Down();
             }
 		    Log.Info(String.Format(" -> [{0}] {1} {2}()", migration.Version, migration.GetType().Name, IsUp() ? "Up" : "Down"));
-		    UpdateVersion(i);
+		    SetCurrentVersion(i);
 		}
 
-        protected virtual void UpdateVersion(int i) {
+        private void SetCurrentVersion(int i) {
             if (IsUp()) {
                 _currentVersion = MigrationsToRun[i].Version;
                 return;
             }
 	        if (IsNotTheLastMigration(i)) {
 	            _currentVersion = MigrationsToRun[i + 1].Version;
+                return;
 	        }
             _currentVersion = _targetVersion;
 	    }

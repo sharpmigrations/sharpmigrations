@@ -1,5 +1,5 @@
 ﻿namespace Sharp.Data.Fluent {
-    public class FluentRename : ReversableFluentActions, IFluentRename {
+    public class FluentRename : ReversibleFluentActions, IFluentRename {
 
         private IDataClient _dataClient;
 

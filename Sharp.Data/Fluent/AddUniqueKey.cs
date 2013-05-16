@@ -24,7 +24,7 @@ namespace Sharp.Data.Fluent {
         }
 
         public override DataClientAction ReverseAction() {
-            return new RemoveForeignKey(DataClient, UniqueKeyName) {
+            return new RemoveUniqueKey(DataClient, UniqueKeyName) {
                 FirstTableName = FirstTableName
             };
         }

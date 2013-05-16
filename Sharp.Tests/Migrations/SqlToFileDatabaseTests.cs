@@ -6,15 +6,16 @@ using NUnit.Framework;
 using Sharp.Data;
 using Sharp.Data.Databases.Oracle;
 using Sharp.Migrations;
+using Sharp.Migrations.Runners.ScriptCreator;
 
 namespace Sharp.Tests.Migrations {
     public class SqlToFileDatabaseTests {
 
-        private SqlToFileDatabase _database;
+        private ScriptCreatorDatabase _database;
 
         [SetUp]
         public void SetUp() {
-            _database = new SqlToFileDatabase(new OracleDialect());
+            _database = new ScriptCreatorDatabase(new OracleDialect(), null);
         }
 
         [Test]

@@ -12,6 +12,10 @@ namespace Sharp.Data.Databases.Oracle {
 			get { return ":"; }
 		}
 
+        public override string ScriptSeparator {
+            get { return "/"; }
+        }
+
 		public override string[] GetCreateTableSqls(Table table) {
 			var sqls = new List<string>();
 			var primaryKeyColumns = new List<string>();

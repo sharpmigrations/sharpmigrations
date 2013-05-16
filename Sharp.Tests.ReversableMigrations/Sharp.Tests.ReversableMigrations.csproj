@@ -51,6 +51,8 @@
     <Compile Include="005_Add_column_to_table_revbar.cs" />
     <Compile Include="006_Add_primaryKey_to_table_revfoo.cs" />
     <Compile Include="007_Add_foreignkey_to_table_revbar_ref_revfoo.cs" />
+    <Compile Include="008_Add_indexkey_to_table_revbar.cs" />
+    <Compile Include="009_Add_uniquekey_to_table_revfoo.cs" />
     <Compile Include="LocalRunner.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -10,6 +10,7 @@ namespace Sharp.Tests.Databases.Oracle {
         public void SetUp() {
             _dataClient = DBBuilder.GetDataClient(DataProviderNames.OracleOdp);
             _database = _dataClient.Database;
+            CleanTables();
         } 
 
     }
@@ -21,6 +22,7 @@ namespace Sharp.Tests.Databases.Oracle {
         public void SetUp() {
             _dataClient = DBBuilder.GetDataClient(DataProviderNames.OracleManaged);
             _database = _dataClient.Database;
+            CleanTables();
         }
 
     }

@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using Sharp.Data;
 
-namespace Sharp.Migrations {
-    public class SqlToFileDatabase : IDatabase {
+namespace Sharp.Migrations.Runners.ScriptCreator {
+    public class ScriptCreatorDatabase : IDatabase {
+        private readonly IDatabase _databaseForReading;
 
-        public IDataProvider Provider { get; private set; }
+        public IDataProvider Provider { get { return _databaseForReading.Provider; } }
         public string ConnectionString { get; private set; }
         public Dialect Dialect { get; set; }
         public int Timeout { get; set; }
         public List<string> Sqls { get; set; }
 
-        public SqlToFileDatabase(Dialect dialect) {
+        public ScriptCreatorDatabase(Dialect dialect, IDatabase databaseForReading) {
+            _databaseForReading = databaseForReading;
             Sqls = new List<string>();
             Dialect = dialect;
         }
 
         private void AddSql(string sql) {
-            Sqls.Add(sql + Dialect.ScriptSeparator);
+            Sqls.Add(sql);
         }
 
         public object CallStoredFunction(DbType returnType, string call, params object[] parameters) {
@@ -53,7 +53,7 @@ namespace Sharp.Migrations {
         }
 
         public ResultSet Query(string call, params object[] parameters) {
-            throw new NotImplementedException();
+            return _databaseForReading.Query(call, parameters);
         }
 
         public ResultSet QueryAndDispose(string call, params object[] parameters) {
@@ -61,7 +61,7 @@ namespace Sharp.Migrations {
         }
 
         public object QueryScalar(string call, params object[] parameters) {
-            throw new NotImplementedException();
+            return _databaseForReading.QueryScalar(call, parameters);
         }
 
         public object QueryScalarAndDispose(string call, params object[] parameters) {

@@ -243,7 +243,6 @@ namespace Sharp.Data {
 
     	public bool TableExists(string table) {
     		string sql = Dialect.GetTableExistsSql(table);
-
     		return Convert.ToInt32(Database.QueryScalar(sql)) > 0;
     	}
 

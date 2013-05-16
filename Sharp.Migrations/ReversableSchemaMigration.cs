@@ -6,9 +6,9 @@ using Sharp.Data.Fluent;
 using Sharp.Data.Schema;
 
 namespace Sharp.Migrations {
-    public abstract class ReversableSchemaMigration : Migration {
+    public abstract class ReversibleSchemaMigration : Migration {
 
-        private List<DataClientAction> _reversableActions;
+        private List<DataClientAction> _reversibleActions;
         private FluentAdd _schemaMigrationAdd;
         private FluentRename _schemaMigrationRename;
         
@@ -41,16 +41,16 @@ namespace Sharp.Migrations {
         }
 
         public sealed override void Down() {
-            _reversableActions = new List<DataClientAction>();
+            _reversibleActions = new List<DataClientAction>();
             _schemaMigrationAdd = new FluentAdd(new FakeDataClient());
             _schemaMigrationRename = new FluentRename(new FakeDataClient());
 
-            _schemaMigrationAdd.OnAction += a => _reversableActions.Add(a);
-            _schemaMigrationRename.OnAction += a => _reversableActions.Add(a);
+            _schemaMigrationAdd.OnAction += a => _reversibleActions.Add(a);
+            _schemaMigrationRename.OnAction += a => _reversibleActions.Add(a);
 
             Up();
 
-            IEnumerable<DataClientAction> downActions = _reversableActions.Select(x => {
+            IEnumerable<DataClientAction> downActions = _reversibleActions.Select(x => {
                 x.DataClient = DataClient;
                 return x.ReverseAction();
             }).Reverse();
