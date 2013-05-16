@@ -16,6 +16,10 @@ namespace Sharp.Data.Databases.Oracle {
             get { return "/"; }
         }
 
+        public static string SequencePrefix = "SEQ_";
+        public static string TriggerPrefix = "TR_INC_";
+        public static string PrimaryKeyPrefix = "PK_";
+
 		public override string[] GetCreateTableSqls(Table table) {
 			var sqls = new List<string>();
 			var primaryKeyColumns = new List<string>();
@@ -43,23 +47,24 @@ namespace Sharp.Data.Databases.Oracle {
 
 			//create sequence and trigger for the autoincrement
 			if (autoIncrement != null) {
+			    string sequenceName = SequencePrefix + table.Name;
+			    string triggerName = TriggerPrefix + table.Name;
 				//create sequence in case of autoincrement
 				sb = new StringBuilder();
-				sb.AppendFormat("create sequence SEQ_{0} minvalue 1 maxvalue 999999999999999999999999999 ", table.Name);
+                sb.AppendFormat("create sequence {0} minvalue 1 maxvalue 999999999999999999999999999 ", sequenceName);
 				sb.Append("start with 1 increment by 1 cache 20");
 				sqls.Add(sb.ToString());
 
 				//create trigger to run the sequence
 				sb = new StringBuilder();
-				sb.AppendFormat("create or replace trigger \"TR_INC_{0}\" before insert on {0} for each row ", table.Name);
+                sb.AppendFormat("create or replace trigger \"{0}\" before insert on {1} for each row ", triggerName, table.Name);
 				sb.AppendFormat("when (new.{0} is null) ", autoIncrement.ColumnName);
-				sb.AppendFormat("begin select seq_{0}.nextval into :new.{1} from dual; end TR_INC_{0};", table.Name,
-				                autoIncrement.ColumnName);
+                sb.AppendFormat("begin select {0}.nextval into :new.{1} from dual; end {2};", sequenceName, autoIncrement.ColumnName, triggerName);
 				sqls.Add(sb.ToString());
 			}
 			//primary key
 			if (primaryKeyColumns.Count > 0) {
-				sqls.Add(GetPrimaryKeySql(table.Name, String.Format("pk_{0}", table.Name), primaryKeyColumns.ToArray()));
+				sqls.Add(GetPrimaryKeySql(table.Name, String.Format("{0}{1}", table.Name, PrimaryKeyPrefix), primaryKeyColumns.ToArray()));
 			}
             //comments
             sqls.AddRange(GetColumnCommentsSql(table));
@@ -69,8 +74,8 @@ namespace Sharp.Data.Databases.Oracle {
 		public override string[] GetDropTableSqls(string tableName) {
 			var sqls = new string[2];
 			sqls[0] = String.Format("drop table {0} cascade constraints", tableName);
-			sqls[1] = String.Format("begin execute immediate 'drop sequence SEQ_{0}'; exception when others then null; end;",
-			                        tableName);
+			sqls[1] = String.Format("begin execute immediate 'drop sequence {0}{1}'; exception when others then null; end;",
+                                    SequencePrefix, tableName);
 			return sqls;
 		}
 
@@ -141,18 +146,15 @@ namespace Sharp.Data.Databases.Oracle {
 			if (value is bool) {
 				return ((bool) value) ? "1" : "0";
 			}
-
 			if ((value is Int16) || (value is Int32) || (value is Int64) || (value is double) || (value is float) ||
 			    (value is decimal)) {
 				return Convert.ToString(value, CultureInfo.InvariantCulture);
 			}
-
 			if (value is DateTime) {
 				var dt = (DateTime) value;
 				return String.Format("to_date('{0}','dd/mm/yyyy hh24:mi:ss')", dt.ToString("d/M/yyyy H:m:s"));
 			}
-
-			return String.Format("'{0}'", value.ToString());
+			return String.Format("'{0}'", value);
 		}
 
 		protected override string GetDbTypeString(DbType type, int precision) {
