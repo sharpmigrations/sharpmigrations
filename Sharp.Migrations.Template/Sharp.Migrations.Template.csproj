@@ -77,10 +77,6 @@
       <Project>{8C494818-90AF-4133-94E1-0D1CBD961397}</Project>
       <Name>Sharp.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sharp.Integration.log4net\Sharp.Integration.Log4net.csproj">
-      <Project>{F1EB005B-89FF-4D72-A277-BABC677421CF}</Project>
-      <Name>Sharp.Integration.Log4net</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Sharp.Migrations\Sharp.Migrations.csproj">
       <Project>{703517B1-515E-4833-A1E0-B3CD9CF7E5E2}</Project>
       <Name>Sharp.Migrations</Name>

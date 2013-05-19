@@ -5,7 +5,7 @@ using Sharp.Data.Log;
 
 namespace Sharp.Data {
 	public class Database : IDatabase {
-		private static readonly ILogger Log = LogManager.GetLogger("Sharp.Data.Database");
+        private static readonly ISharpLogger Log = LogManager.GetLogger("Sharp.Data.Database");
 
 		protected IDbConnection _connection;
 		protected IDbTransaction _transaction;

@@ -83,7 +83,7 @@ namespace Sharp.Migrations {
             return count != 0;
         }
 
-	    private void InsertInitialVersionValue() {
+	    protected void InsertInitialVersionValue() {
 			_dataClient.Insert
 				.Into(VERSION_TABLE_NAME)
 				.Columns("version","name")

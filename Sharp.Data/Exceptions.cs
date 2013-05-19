@@ -13,7 +13,7 @@ namespace Sharp.Data {
 
     public class NotSupportedByDialect : Exception {
 
-        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
+        private static readonly ISharpLogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
 
         public string FunctionName { get; set; }
         public string DialectName { get; set; }

@@ -1,7 +1,5 @@
 ﻿using System.Configuration;
 using System.Reflection;
-using Sharp.Data.Log;
-using Sharp.Integration.Log4net;
 using Sharp.Migrations.Runners;
 
 namespace Sharp.Migrations.Template {
@@ -9,13 +7,8 @@ namespace Sharp.Migrations.Template {
 		private static string _connectionString;
 
 		private static void Main(string[] args) {
-			ConfigureLog();
 			GetConnectionString();
 			StartRunner();
-		}
-
-		private static void ConfigureLog() {
-			LogManager.Configure(new Log4NetLoggerFactory());
 		}
 
 		private static void StartRunner() {

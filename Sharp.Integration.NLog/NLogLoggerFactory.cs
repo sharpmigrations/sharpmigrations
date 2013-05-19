@@ -1,8 +1,8 @@
 using Sharp.Data.Log;
 
 namespace Sharp.Integration.NLog {
-    public class NLogLoggerFactory : ILoggerFactory {
-        public ILogger GetLogger(string name) {
+    public class NLogLoggerFactory : ISharpLoggerFactory {
+        public ISharpLogger GetLogger(string name) {
             return new NLogLogger(name);
         }
     }

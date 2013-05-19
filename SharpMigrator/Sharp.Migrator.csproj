@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{126DA668-B940-4E3D-AFCB-0BD64C65FE41}</ProjectGuid>
+    <ProjectGuid>{E1D482B5-8CE6-4A8C-8244-A03405D16920}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sharp.Tests.ReversableMigrations</RootNamespace>
-    <AssemblyName>Sharp.Tests.ReversableMigrations</AssemblyName>
+    <RootNamespace>Sharp.Migrator</RootNamespace>
+    <AssemblyName>SharpMigrator</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -33,10 +33,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CommandLine, Version=1.9.71.2, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CommandLineParser.1.9.71\lib\net40\CommandLine.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -45,23 +50,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="002_Create_table_rev.cs" />
-    <Compile Include="001_Create_table_revfoo_with_comments.cs" />
-    <Compile Include="003_Rename_table_rev_to_revbar.cs" />
-    <Compile Include="004_Rename_column_of_table_revbar.cs" />
-    <Compile Include="005_Add_column_to_table_revbar.cs" />
-    <Compile Include="006_Add_primaryKey_to_table_revfoo.cs" />
-    <Compile Include="007_Add_foreignkey_to_table_revbar_ref_revfoo.cs" />
-    <Compile Include="008_Add_indexkey_to_table_revbar.cs" />
-    <Compile Include="009_Add_uniquekey_to_table_revfoo.cs" />
-    <Compile Include="LocalRunner.cs" />
+    <Compile Include="Migrator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Sharp.Tests.Databases\App.config">
-      <Link>App.config</Link>
-    </None>
+    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sharp.Data\Sharp.Data.csproj">

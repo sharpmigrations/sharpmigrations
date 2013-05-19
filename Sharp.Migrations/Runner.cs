@@ -9,7 +9,7 @@ using Sharp.Migrations.Attributes;
 
 namespace Sharp.Migrations {
 	public class Runner {
-	    public static ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
+        public static ISharpLogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
         public static bool IgnoreDialectNotSupportedActions { get; set; }
 
 		private Assembly _targetAssembly;

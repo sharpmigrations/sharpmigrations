@@ -19,6 +19,7 @@ namespace Sharp.Migrations.Runners.ScriptCreator {
             }
             catch {
                 CreateVersionTable();
+                InsertInitialVersionValue();
                 return 0;
             }
         }
