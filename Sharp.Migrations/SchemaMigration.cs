@@ -8,6 +8,7 @@ namespace Sharp.Migrations {
         private FluentAdd _schemaMigrationAdd;
         private FluentRemove _schemaMigrationRemove;
         private FluentRename _schemaMigrationRename;
+        private FluentModify _schemaMigrationModify;
 
         public IFluentAdd Add {
             get { return _schemaMigrationAdd ?? (_schemaMigrationAdd = new FluentAdd(DataClient)); }
@@ -19,6 +20,10 @@ namespace Sharp.Migrations {
 
         public FluentRename Rename {
             get { return _schemaMigrationRename ?? (_schemaMigrationRename = new FluentRename(DataClient)); }
+        }
+
+        public FluentModify Mofify {
+            get { return _schemaMigrationModify ?? (_schemaMigrationModify = new FluentModify(DataClient)); }
         }
 
         protected class Column {

@@ -3,7 +3,6 @@ namespace Sharp.Data.Fluent {
     public class FluentRemove {
         
         private IDataClient _dataClient;
-        internal bool ThrowException { get; set; }
 
         public FluentRemove(IDataClient dataClient) {
             _dataClient = dataClient;

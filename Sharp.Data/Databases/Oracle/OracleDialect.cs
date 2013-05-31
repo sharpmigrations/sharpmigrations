@@ -64,7 +64,7 @@ namespace Sharp.Data.Databases.Oracle {
 			}
 			//primary key
 			if (primaryKeyColumns.Count > 0) {
-				sqls.Add(GetPrimaryKeySql(table.Name, String.Format("{0}{1}", table.Name, PrimaryKeyPrefix), primaryKeyColumns.ToArray()));
+				sqls.Add(GetPrimaryKeySql(table.Name, String.Format("{0}{1}", PrimaryKeyPrefix, table.Name), primaryKeyColumns.ToArray()));
 			}
             //comments
             sqls.AddRange(GetColumnCommentsSql(table));
@@ -256,8 +256,12 @@ namespace Sharp.Data.Databases.Oracle {
             return String.Format("ALTER TABLE {0} RENAME COLUMN {1} TO {2}", tableName, columnName, newColumnName);
         }
 
+        public override string GetModifyColumnSql(string tableName, string columnName, Column columnDefinition) {
+            return String.Format("alter table {0} modify {1}", tableName, GetColumnToSqlWhenCreate(columnDefinition));
+        }
 
-		//public OracleDialect() : base() { }
+
+	    //public OracleDialect() : base() { }
 
 		//public OracleDialect(Database database) : base(database) { }
 

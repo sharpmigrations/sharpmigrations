@@ -21,8 +21,9 @@ namespace Sharp.Data {
 		IFluentUpdate Update { get; }
 		IFluentDelete Delete { get; }
         IFluentCount Count { get; }
+        IFluentModify Modify { get; }
 
-    	void AddTable(string tableName, params FluentColumn[] columns);
+        void AddTable(string tableName, params FluentColumn[] columns);
         void AddColumn(string tableName, Column column);
         void AddForeignKey(string fkName, string table, string column, string referencingTable, string referencingColumn, OnDelete onDelete);
         void AddNamedPrimaryKey(string tableName, string pkName, params string[] columnNames);
@@ -44,6 +45,8 @@ namespace Sharp.Data {
         void RenameTable(string tableName, string newTableName);
         void RenameColumn(string tableName, string columnName, string newColumnName);
 
+        void ModifyColumn(string firstTableName, string columnName, Column columnDefinition);
+
         void Commit();
         void RollBack();
         void Close();
@@ -58,6 +61,6 @@ namespace Sharp.Data {
 
     	bool TableExists(string table);
 
-        
+
     }
 }

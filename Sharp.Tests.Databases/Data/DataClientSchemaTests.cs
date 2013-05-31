@@ -210,5 +210,20 @@ namespace Sharp.Tests.Databases.Data {
             CreateTableFoo();
             _dataClient.Rename.Column("name").OfTable("foo").To("name2");
         }
+
+	    [Test]
+	    public virtual void Can_modify_column() {
+            CreateTableFoo();
+	        _dataClient.Modify
+	                   .Column("name")
+	                   .OfTable("foo")
+	                   .WithDefinition(Column.String("name").NotNull());
+
+            try {
+                _dataClient.Insert.Into("foo").Columns("name").Values(DBNull.Value);
+                Assert.Fail("Should not insert in a non null column");
+            }
+            catch {}
+	    }
 	}
 }

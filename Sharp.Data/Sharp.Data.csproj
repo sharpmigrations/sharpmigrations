@@ -60,7 +60,6 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libs\System.Data.SQLite.DLL</HintPath>
@@ -101,6 +100,7 @@
     <Compile Include="Fluent\IFluentAdd.cs" />
     <Compile Include="Fluent\IFluentRename.cs" />
     <Compile Include="Fluent\IRemoveFromTable.cs" />
+    <Compile Include="Fluent\ModifyColumn.cs" />
     <Compile Include="Fluent\RemoveComment.cs" />
     <Compile Include="Fluent\RemoveIndexKey.cs" />
     <Compile Include="Fluent\DataClientAddIndexKey.cs" />
@@ -108,6 +108,7 @@
     <Compile Include="Fluent\RenameColumn.cs" />
     <Compile Include="Fluent\RenameTable.cs" />
     <Compile Include="Fluent\ReversableFluentActions.cs" />
+    <Compile Include="Fluent\IFluentModify.cs" />
     <Compile Include="ISharpFactory.cs" />
     <Compile Include="Log\ISharpLogger.cs" />
     <Compile Include="Log\ILoggerFactory.cs" />

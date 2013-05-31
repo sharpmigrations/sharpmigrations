@@ -150,5 +150,9 @@ namespace Sharp.Data.Databases.MySql {
         public override string GetRenameColumnSql(string tableName, string columnName, string newColumnName) {
             throw new NotImplementedException();
         }
+
+        public override string GetModifyColumnSql(string tableName, string columnName, Column columnDefinition) {
+            throw new NotImplementedException();
+        }
     }
 }

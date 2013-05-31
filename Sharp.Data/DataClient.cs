@@ -31,6 +31,10 @@ namespace Sharp.Data {
             get { return new FluentRename(this);}
         }
 
+        public IFluentModify Modify {
+            get { return new FluentModify(this); }
+        }
+
         public IFluentInsert Insert {
 			get { return new FluentInsert(this); }
 		}
@@ -159,6 +163,10 @@ namespace Sharp.Data {
             Database.ExecuteSql(sql);
         }
 
+        public void ModifyColumn(string tableName, string columnName, Column columnDefinition) {
+            Database.ExecuteSql(Dialect.GetModifyColumnSql(tableName, columnName, columnDefinition));
+        }
+
         public virtual ResultSet SelectSql(string[] tables, string[] columns, Filter filter, OrderBy[] orderBys, int skip, int take) {
             var selectBuilder = new SelectBuilder(Dialect, tables, columns);
             selectBuilder.Filter = filter;
@@ -211,11 +219,8 @@ namespace Sharp.Data {
 
             if (filter != null) {
                 string whereSql = Dialect.GetWhereSql(filter, 0);
-
 				object[] pars = filter.GetAllValueParameters();
-
                 In[] parameters = Dialect.ConvertToNamedParameters(0, pars);
-
                 return Database.ExecuteSql(sql + " " + whereSql, parameters);
             }
 
@@ -228,11 +233,8 @@ namespace Sharp.Data {
 
 			if (filter != null) {
 				string whereSql = Dialect.GetWhereSql(filter, 0);
-
 				object[] pars = filter.GetAllValueParameters();
-
 				In[] parameters = Dialect.ConvertToNamedParameters(0, pars);
-
 				obj = Database.QueryScalar(sql + " " + whereSql, parameters);
 				return Convert.ToInt32(obj);
 			}

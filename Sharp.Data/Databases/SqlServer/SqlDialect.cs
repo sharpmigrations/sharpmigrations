@@ -255,5 +255,9 @@ namespace Sharp.Data.Databases.SqlServer {
         public override string GetRenameColumnSql(string tableName, string columnName, string newColumnName) {
             return String.Format("execute sp_rename '{0}.{1}', '{2}', 'column'", tableName, columnName, newColumnName);
         }
+
+        public override string GetModifyColumnSql(string tableName, string columnName, Column columnDefinition) {
+            return String.Format("alter table {0} alter column {1}", tableName, GetColumnToSqlWhenCreate(columnDefinition));
+        }
     }
 }

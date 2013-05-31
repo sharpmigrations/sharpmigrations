@@ -240,5 +240,6 @@ namespace Sharp.Data {
         public abstract string GetRemoveCommentFromTableSql(string tableName);
         public abstract string GetRenameTableSql(string tableName, string newTableName);
         public abstract string GetRenameColumnSql(string tableName, string columnName, string newColumnName);
+        public abstract string GetModifyColumnSql(string tableName, string columnName, Column columnDefinition);
     }
 }
