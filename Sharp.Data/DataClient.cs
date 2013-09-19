@@ -207,6 +207,7 @@ namespace Sharp.Data {
                 string whereSql = Dialect.GetWhereSql(filter, parameters.Count());
             	object[] pars = filter.GetAllValueParameters();
                 In[] filterParameters = Dialect.ConvertToNamedParameters(parameters.Count(), pars);
+                filterParameters = filterParameters.Where(x => x.Value != null && x.Value != DBNull.Value).ToArray();
                 parameters = parameters.Concat(filterParameters).ToArray();
                 sql = sql + " " + whereSql;
             }

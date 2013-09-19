@@ -34,5 +34,10 @@ namespace Sharp.Tests.Data.Filters {
 		public void Should_return_less_or_equal_symbol() {
 			Assert.AreEqual("<=", CompareOperatorToSymbol.Get(CompareOperator.LessOrEqualThan));
 		}
+
+        [Test]
+        public void Should_return_is_symbol() {
+            Assert.AreEqual("is", CompareOperatorToSymbol.Get(CompareOperator.Is));
+        }
 	}
 }

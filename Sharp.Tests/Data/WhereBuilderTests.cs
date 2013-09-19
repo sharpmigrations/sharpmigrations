@@ -31,6 +31,7 @@ namespace Sharp.Tests.Data {
 			_dialect.Setup(p => p.WordWhere).Returns(_wordWhere);
 			_dialect.Setup(p => p.GetParameterName(It.IsAny<int>()))
 					.Returns((int input) => ":par" + input);
+		    _dialect.Setup(p => p.WordNull).Returns("null");
 
 			_whereBuilder = new WhereBuilder(_dialect.Object, 0);
 
@@ -87,5 +88,26 @@ namespace Sharp.Tests.Data {
 
 			AssertSql.AreEqual("where (((col1 = :par0) and (col2 = :par1)) or ((col3 = :par2) and (col4 = :par3)))", whereSql);
 		}
+
+        [Test]
+        public void Can_generate_whereSql_with_null() {
+            Filter filter = Filter.Eq("col1", null);
+            string whereSql = _whereBuilder.Build(filter);
+            AssertSql.AreEqual("where (col1 is null)", whereSql);
+        }
+
+	    [Test]
+	    public void Can_generate_whereSql_with_nulls_as_second_par() {
+            Filter filter = Filter.Or(Filter.Eq("col1", "foo"), Filter.Eq("col1", null));
+            string whereSql = _whereBuilder.Build(filter);
+            AssertSql.AreEqual("where ((col1 = :par0) Or (col1 is null))", whereSql);
+	    }
+
+        [Test]
+        public void Can_generate_whereSql_with_null_as_first_par() {
+            Filter filter = Filter.Or(Filter.Eq("col1", null), Filter.Eq("col1", "foo"));
+            string whereSql = _whereBuilder.Build(filter);
+            AssertSql.AreEqual("where ((col1 is null) Or (col1 = :par1))", whereSql);
+        }
 	}
 }

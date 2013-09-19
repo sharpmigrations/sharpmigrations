@@ -179,7 +179,7 @@ namespace Sharp.Data {
             for (int i = 0; i < values.Length; i++) {
                 pars[i] = values[i] as In;
                 if (pars[i] == null) {
-                    pars[i] = new In { Name = GetParameterName(i + indexToStart), Value = values[i] };    
+                    pars[i] = new In {Name = GetParameterName(i + indexToStart), Value = values[i]};
                 }
             }
             return pars;

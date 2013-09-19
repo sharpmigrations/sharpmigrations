@@ -18,6 +18,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Tests.Northwind", "Sharp.Tests.Northwind\Sharp.Tests.Northwind.csproj", "{10B4D903-B21C-49F4-9A94-1A505C6505F7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{8FBD36BE-F74F-48F4-871A-C7B8F775B416}"
+	ProjectSection(SolutionItems) = preProject
+		Push.bat = Push.bat
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{698A362D-9B6D-4B3B-BB6F-B8010B94368B}"
 	ProjectSection(SolutionItems) = preProject
@@ -29,6 +32,15 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Tests.ReversableMigrations", "Sharp.Tests.ReversableMigrations\Sharp.Tests.ReversableMigrations.csproj", "{126DA668-B940-4E3D-AFCB-0BD64C65FE41}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Migrator", "SharpMigrator\Sharp.Migrator.csproj", "{E1D482B5-8CE6-4A8C-8244-A03405D16920}"
+EndProject
+Project("{E09DD79A-4488-4AB9-8D3F-A7EEE78BF432}") = "Sharp.Nuget", "Sharp.Nuget\Sharp.Nuget.nuproj", "{FA28E6A4-49D4-4A5A-8860-545FCCFD261F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C657D4B8-C87B-4B39-A47B-805215572137}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,15 +84,20 @@ Global
 		{E1D482B5-8CE6-4A8C-8244-A03405D16920}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1D482B5-8CE6-4A8C-8244-A03405D16920}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1D482B5-8CE6-4A8C-8244-A03405D16920}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA28E6A4-49D4-4A5A-8860-545FCCFD261F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA28E6A4-49D4-4A5A-8860-545FCCFD261F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA28E6A4-49D4-4A5A-8860-545FCCFD261F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA28E6A4-49D4-4A5A-8860-545FCCFD261F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{0754B7C3-D4C2-4819-AE2D-D82CCF93E4B3} = {898075DB-5DBC-4042-86AD-F07F963FF9EE}
 		{BE5E12CF-D7EF-4603-9144-7A8AE748A907} = {898075DB-5DBC-4042-86AD-F07F963FF9EE}
 		{13D21A3B-BA34-4552-8E0F-9C1C02D1A5FF} = {898075DB-5DBC-4042-86AD-F07F963FF9EE}
 		{10B4D903-B21C-49F4-9A94-1A505C6505F7} = {898075DB-5DBC-4042-86AD-F07F963FF9EE}
+		{0754B7C3-D4C2-4819-AE2D-D82CCF93E4B3} = {898075DB-5DBC-4042-86AD-F07F963FF9EE}
 		{126DA668-B940-4E3D-AFCB-0BD64C65FE41} = {898075DB-5DBC-4042-86AD-F07F963FF9EE}
+		{FA28E6A4-49D4-4A5A-8860-545FCCFD261F} = {8FBD36BE-F74F-48F4-871A-C7B8F775B416}
 	EndGlobalSection
 EndGlobal

@@ -16,7 +16,8 @@ namespace Sharp.Data.Filters {
 					return "<=";
 				case CompareOperator.LessThan:
 					return "<";
-
+                case CompareOperator.Is:
+                    return "is";
 				default:
 					return "";
 			}

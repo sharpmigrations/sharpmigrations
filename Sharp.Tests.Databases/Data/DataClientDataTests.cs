@@ -222,6 +222,60 @@ namespace Sharp.Tests.Databases.Data {
 			Assert.AreEqual("v3", res[2][0]);
 		}
 
+        [Test]
+        public virtual void Can_update_rows_with_filter_with_null() {
+            CreateTableFoo();
+            PopulateTableFoo();
+
+            _dataClient.Insert.Into(tableFoo).Columns("id", "name").Values(10, null);
+
+            var vvvOrNull = Filter.Or(Filter.Eq("name", null), Filter.Eq("name", "vvv"));
+
+            int num = _dataClient.Update
+                .Table(tableFoo)
+                .SetColumns("name")
+                .ToValues("vvv")
+                .Where(
+                    Filter.And(Filter.Eq("id", 10), vvvOrNull)
+                );
+
+            ResultSet res = _dataClient.Select.Columns("name").From(tableFoo).AllRows();
+
+            Assert.AreEqual(1, num);
+            Assert.AreEqual(4, res.Count);
+            Assert.AreEqual("v1", res[0][0]);
+            Assert.AreEqual("v2", res[1][0]);
+            Assert.AreEqual("v3", res[2][0]);
+            Assert.AreEqual("vvv", res[3][0]);
+        }
+
+        [Test]
+        public virtual void Can_update_rows_with_filter_with_null_as_second_param() {
+            CreateTableFoo();
+            PopulateTableFoo();
+
+            _dataClient.Insert.Into(tableFoo).Columns("id", "name").Values(10, null);
+
+            var vvvOrNull = Filter.Or(Filter.Eq("name", "vvv"), Filter.Eq("name", null));
+
+            int num = _dataClient.Update
+                .Table(tableFoo)
+                .SetColumns("name")
+                .ToValues("vvv")
+                .Where(
+                    Filter.And(Filter.Eq("id", 10), vvvOrNull)
+                );
+
+            ResultSet res = _dataClient.Select.Columns("name").From(tableFoo).AllRows();
+
+            Assert.AreEqual(1, num);
+            Assert.AreEqual(4, res.Count);
+            Assert.AreEqual("v1", res[0][0]);
+            Assert.AreEqual("v2", res[1][0]);
+            Assert.AreEqual("v3", res[2][0]);
+            Assert.AreEqual("vvv", res[3][0]);
+        }
+
 		[Test]
 		public virtual void Can_delete_all_rows() {
 			CreateTableFoo();

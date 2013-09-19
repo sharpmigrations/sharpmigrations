@@ -222,7 +222,6 @@ namespace Sharp.Data {
 			if (parameters == null) {
 				return;
 			}
-
 			foreach (object parameter in parameters) {
 				IDbDataParameter par;
 				if (parameter is Out) {
@@ -234,7 +233,6 @@ namespace Sharp.Data {
 				} else {
 					par = GetInParameter(new In { Value = parameter });
 				}
-
 				//this is for when you have the cursor parameter, ignored by sql server
 				if (par != null) {
 					cmd.Parameters.Add(par);
@@ -264,7 +262,6 @@ namespace Sharp.Data {
 				par.Value = outParameter.Value;
 				par.DbType = outParameter.Type;
 			}
-
 			return par;
 		}
 

@@ -10,7 +10,7 @@ namespace Northwind.Sharp.Migrations {
 
 		public override void Up() {
 			Add.Table("Region").WithColumns(
-				Column.Int32("RegtionID").NotNull(),
+                Column.Int32("RegionID").NotNull(),
 				Column.String("RegionDescription").Size(50).NotNull()
 			);
 			Add.PrimaryKey("PK_Region").OnColumns("RegionID").OfTable("Region");

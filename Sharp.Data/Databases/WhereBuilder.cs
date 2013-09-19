@@ -16,11 +16,8 @@ namespace Sharp.Data.Databases {
 		}
 
 		public virtual string Build(Filter filter) {
-
 			AppendWordWhere();
-
 			BuildRecursive(filter);
-
 			return _builder.ToString();
 		}
 
@@ -29,61 +26,66 @@ namespace Sharp.Data.Databases {
 				AddFilterParameter((FilterCondition)filter);
 				return;
 			}
-
-			OpenBrackets();
-			
+			OpenParentesis();
 			BuildRecursive((Filter)filter.Left);
-
 			AddLogicOperator(filter);
-
 			BuildRecursive((Filter)filter.Right);
-			
-			CloseBrackets();
+			CloseParentesis();
 		}
 
 		private void AddLogicOperator(Filter filter) {
 			AddSpace();
-			FilterLogic filterLogic = filter as FilterLogic;
+            var filterLogic = filter as FilterLogic;
 			_builder.Append(LogicOperatorToSymbol.Get(filterLogic.LogicOperator));
 			AddSpace();
 		}
 
 		private void AddFilterParameter(FilterCondition filter) {
-			OpenBrackets();
-
+			OpenParentesis();
 			AppendParameter(filter.Left);
-
 			AppendCompareOperator(filter);
-
 			AppendParameter(filter.Right);
-
-			CloseBrackets();
+			CloseParentesis();
 		}
 
 		private void AppendParameter(object parameter) {
-			FilterParameter filterParameter = (FilterParameter)parameter;
-			
+			var filterParameter = (FilterParameter)parameter;
 			if(filterParameter.FilterParameterType == FilterParameterType.Column) {
 				_builder.Append(filterParameter.Value);
 			}
 			else {
-				_builder.Append(_dialect.GetParameterName(_numValues + _parameterStartIndex));
+			    string value = filterParameter.ValueIsNullOrDBNull ?
+			        _dialect.WordNull :
+			        _dialect.GetParameterName(_numValues + _parameterStartIndex);
+				_builder.Append(value);
 				_numValues++;
 			}
 		}
 
 		private void AppendCompareOperator(Filter filter) {
-			FilterCondition filterCondition = (FilterCondition) filter;
+			var filterCondition = (FilterCondition) filter;
+            var compareOperator = ChangeCompareOperatorToIsWhenParameterValueIsNull(filterCondition);
 			AddSpace();
-			_builder.Append(CompareOperatorToSymbol.Get(filterCondition.CompareOperator));
+            _builder.Append(CompareOperatorToSymbol.Get(compareOperator));
 			AddSpace();
 		}
 
-		private void OpenBrackets() {
+        private static CompareOperator ChangeCompareOperatorToIsWhenParameterValueIsNull(FilterCondition filterCondition) {
+	        var parameter = filterCondition.Right as FilterParameter;
+            if (parameter == null ||
+                parameter.FilterParameterType != FilterParameterType.Value ||
+                !parameter.ValueIsNullOrDBNull
+                ) {
+                    return filterCondition.CompareOperator;                
+            }
+            return CompareOperator.Is;
+        }
+
+	    private void OpenParentesis() {
 			_builder.Append("(");
 		}
 
-		private void CloseBrackets() {
+		private void CloseParentesis() {
 			_builder.Append(")");
 		}
 

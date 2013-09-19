@@ -4,6 +4,7 @@ using Moq;
 using System.Linq;
 using NUnit.Framework;
 using Sharp.Data;
+using Sharp.Data.Databases;
 using Sharp.Migrations;
 using System.Reflection;
 
@@ -18,8 +19,15 @@ namespace Sharp.Tests.Migrations {
 		public void SetUp() {
 			MigrationTestHelper.Clear();
 
+		    var provider = new Mock<IDataProvider>();
+		    provider.Setup(x => x.DatabaseKind).Returns(DatabaseKind.Oracle);
+
+		    var database = new Mock<IDatabase>();
+		    database.Setup(x => x.Provider).Returns(provider.Object);
+
 			_dataClient = new Mock<IDataClient>();
 		    _dataClient.Setup(p => p.TableExists(VersionRepository.VERSION_TABLE_NAME)).Returns(true);
+		    _dataClient.Setup(x => x.Database).Returns(database.Object);
 
 		    _versionRepository = new Mock<IVersionRepository>();
 
