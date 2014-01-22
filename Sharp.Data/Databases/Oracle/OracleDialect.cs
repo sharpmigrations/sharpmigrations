@@ -192,7 +192,7 @@ namespace Sharp.Data.Databases.Oracle {
 				case DbType.String:
                     if(precision == 0) return "VARCHAR2(255)";
                     if(precision <= 4000) return "VARCHAR2(" + precision + ")";
-                    return "NCLOB";
+                    return "CLOB";
 				case DbType.Time:
 					return "DATE";
 			}
@@ -208,10 +208,9 @@ namespace Sharp.Data.Databases.Oracle {
 				case "nchar":
 				case "nvarchar2":
 				case "rowid":
-					return DbType.String;
 				case "nclob":
 				case "clob":
-					return DbType.AnsiString;
+					return DbType.String;
 				case "number":
 					return DbType.Decimal;
 				case "float":

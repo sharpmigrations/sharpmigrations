@@ -61,6 +61,11 @@ namespace Sharp.Tests.Data.Schema {
             f = Column.Guid(col);
             Assert.AreEqual(col, f.Object.ColumnName);
             Assert.AreEqual(DbType.Guid, f.Object.Type);
+
+            f = Column.Clob(col);
+            Assert.AreEqual(col, f.Object.ColumnName);
+            Assert.AreEqual(DbType.String, f.Object.Type);
+            Assert.AreEqual(Int32.MaxValue, f.Object.Size);
         }
 
         [Test]

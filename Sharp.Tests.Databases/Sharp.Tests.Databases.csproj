@@ -96,6 +96,7 @@
     <Compile Include="Mysql\MySqlDataClientFactoryTests.cs" />
     <Compile Include="Mysql\MySqlDataTests.cs" />
     <Compile Include="Mysql\MySqlSchemaTests.cs" />
+    <Compile Include="Oracle\OracleManagedDatabaseTests.cs" />
     <Compile Include="Oracle\OracleOdpDatabaseTests.cs" />
     <Compile Include="Oracle\OracleOdpDataClientFactoryTests.cs" />
     <Compile Include="Oracle\OracleOdpDataTests.cs" />

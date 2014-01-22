@@ -25,7 +25,8 @@ namespace Sharp.Tests.Databases.Data {
 								 Column.Int32("col_int32"),
 								 Column.Int64("col_int64"),
 								 Column.Single("col_single"),
-								 Column.String("col_string")
+								 Column.String("col_string"),
+                                 Column.Clob("col_clob")
 				);
 		}
 

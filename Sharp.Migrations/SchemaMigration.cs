@@ -1,6 +1,7 @@
 using System.Data;
 using Sharp.Data.Fluent;
 using Sharp.Data.Schema;
+using SColumn = Sharp.Data.Schema.Column;
 
 namespace Sharp.Migrations {
     public abstract class SchemaMigration : Migration {
@@ -28,22 +29,25 @@ namespace Sharp.Migrations {
 
         protected class Column {
             public static FluentColumn AutoIncrement(string name) {
-                var fc = new FluentColumn(name, DbType.Int32);
+                var fc = SColumn.Int32(name);
                 fc.Object.IsAutoIncrement = true;
                 return fc;
             }
-            public static FluentColumn String(string name) { return new FluentColumn(name, DbType.String); }
-            public static FluentColumn String(string name, int size) { return new FluentColumn(name, DbType.String, size); }
-            public static FluentColumn Int16(string name) { return new FluentColumn(name, DbType.Int16); }
-            public static FluentColumn Int32(string name) { return new FluentColumn(name, DbType.Int32); }
-            public static FluentColumn Int64(string name) { return new FluentColumn(name, DbType.Int64); }
-            public static FluentColumn Boolean(string name) { return new FluentColumn(name, DbType.Boolean); }
-            public static FluentColumn Binary(string name) { return new FluentColumn(name, DbType.Binary); }
-            public static FluentColumn Date(string name) { return new FluentColumn(name, DbType.Date); }
-            public static FluentColumn Decimal(string name) { return new FluentColumn(name, DbType.Decimal); }
-            public static FluentColumn Single(string name) { return new FluentColumn(name, DbType.Single); }
-            public static FluentColumn Double(string name) { return new FluentColumn(name, DbType.Double); }
-            public static FluentColumn Guid(string name) { return new FluentColumn(name, DbType.Guid); }
+            public static FluentColumn String(string name) { return SColumn.String(name); }
+            public static FluentColumn String(string name, int size) { return SColumn.String(name, size); }
+            public static FluentColumn Clob(string name) { return SColumn.Clob(name); }
+            public static FluentColumn Int16(string name) { return SColumn.Int16(name); }
+            public static FluentColumn Int32(string name) { return SColumn.Int32(name); }
+            public static FluentColumn Int64(string name) { return SColumn.Int64(name); }
+            public static FluentColumn Boolean(string name) {
+                return SColumn.Boolean(name);
+            }
+            public static FluentColumn Binary(string name) { return SColumn.Binary(name); }
+            public static FluentColumn Date(string name) { return SColumn.Date(name); }
+            public static FluentColumn Decimal(string name) { return SColumn.Decimal(name); }
+            public static FluentColumn Single(string name) { return SColumn.Single(name); }
+            public static FluentColumn Double(string name) { return SColumn.Double(name); }
+            public static FluentColumn Guid(string name) { return SColumn.Guid(name); }
         }
     }
 }
