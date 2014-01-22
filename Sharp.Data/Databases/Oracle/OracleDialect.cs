@@ -152,7 +152,7 @@ namespace Sharp.Data.Databases.Oracle {
 			}
 			if (value is DateTime) {
 				var dt = (DateTime) value;
-				return String.Format("to_date('{0}','dd/mm/yyyy hh24:mi:ss')", dt.ToString("d/M/yyyy H:m:s"));
+				return String.Format("to_date('{0}','dd/mm/yyyy hh24:mi:ss')", dt.ToString("d/M/yyyy H:m:s", CultureInfo.InvariantCulture));
 			}
 			return String.Format("'{0}'", value);
 		}
