@@ -1,0 +1,11 @@
+Sharp.Migrations/obj/*
+Sharp.Tests.Chinook/obj/*
+Sharp.Migrations.Template/obj/*
+Sharp.Tests.Databases/obj/
+Sharp.Tests.Northwind/obj/
+Sharp.Tests.ReversableMigrations/obj/Debug/Sharp.Tests.ReversableMigrations.csproj.FileListAbsolute.txt
+Sharp.Tests.ReversableMigrations/obj/
+packages/
+Sharp.Data/obj/
+Sharp.Tests/obj/
+SharpMigrator/obj/

@@ -18,7 +18,7 @@ namespace Sharp.Migrations {
 		private int _currentVersion, _initialVersion, _targetVersion, _maxVersion;
         private MigrationFinder _migrationFinder;
 
-        protected List<Migration> MigrationsToRun = new List<Migration>();
+        protected List<Migration> MigrationsToRun;
         public IVersionRepository VersionRepository { private get; set; }
 
 	    public string MigrationGroup {
@@ -67,7 +67,7 @@ namespace Sharp.Migrations {
 
 		private void CreateMigrationsToRun() {
 			List<Type> migrationTypes = GetMigrationTypes();
-
+            MigrationsToRun = new List<Migration>();
 			var factory = new MigrationFactory(_dataClient);
 			foreach (Type type in migrationTypes) {
 				Migration migration = factory.CreateMigration(type);
@@ -80,10 +80,9 @@ namespace Sharp.Migrations {
 			if (_targetVersion < 0) {
 				_targetVersion = _maxVersion;
 			}
-
 			return _migrationFinder.FromVersion(_initialVersion)
-				.ToVersion(_targetVersion)
-				.FindMigrations();
+				                   .ToVersion(_targetVersion)
+				                   .FindMigrations();
 		}
 
 		private void RunCreatedMigrations() {

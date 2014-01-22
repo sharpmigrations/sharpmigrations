@@ -5,11 +5,10 @@ using System.Reflection;
 
 namespace Sharp.Migrations {
 	public class MigrationFinder {
-		private readonly Assembly _assembly;
+		private Assembly _assembly;
 		private List<Type> _allMigrations;
 		private int _fromVersion;
 		private int _toVersion;
-		private bool _revert;
 		
 		public MigrationFinder(Assembly assembly) {
 			_assembly = assembly;
@@ -31,9 +30,9 @@ namespace Sharp.Migrations {
 
         private void LoadAllMigrations() {
             _allMigrations = _assembly.GetTypes()
-                                                  .Where(p => p.IsSubclassOf(typeof(Migration)) && !p.IsAbstract)
-                                                  .OrderBy(p => VersionHelper.GetVersion(p))
-                                                  .ToList();
+                                      .Where(p => p.IsSubclassOf(typeof(Migration)) && !p.IsAbstract)
+                                      .OrderBy(VersionHelper.GetVersion)
+                                      .ToList();
         }
 
 		public MigrationFinder FromVersion(int version) {
@@ -47,25 +46,20 @@ namespace Sharp.Migrations {
 		}
 
 		public List<Type> FindMigrations() {
-
 			FindAllMigrations();
-
+            var selectedMigrations = new List<Type>(_allMigrations);
 			if(IsDownMigration()) {
 				InvertFromAndTo();
+			    selectedMigrations.Reverse();
 			}
-
-			List<Type> types = _allMigrations.Where(p => VersionHelper.GetVersion(p) > _fromVersion &&
-													     VersionHelper.GetVersion(p) <= _toVersion).ToList();
-
-			if (_revert) types.Reverse();
-			return types;
+            return selectedMigrations.Where(p => VersionHelper.GetVersion(p) > _fromVersion &&
+											     VersionHelper.GetVersion(p) <= _toVersion).ToList();
 		}
 
 		private void InvertFromAndTo() {
 			int aux = _fromVersion;
 			_fromVersion = _toVersion;
 			_toVersion = aux;
-			_revert = true;
 		}
 
 		private bool IsDownMigration() {

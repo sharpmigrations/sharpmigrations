@@ -14,6 +14,7 @@ namespace Sharp.Tests.Migrations {
 		private Runner _runner;
 		private Mock<IDataClient> _dataClient;
 		private Mock<IVersionRepository> _versionRepository;
+	    private int _version;
 
 		[SetUp]
 		public void SetUp() {
@@ -29,7 +30,10 @@ namespace Sharp.Tests.Migrations {
 		    _dataClient.Setup(p => p.TableExists(VersionRepository.VERSION_TABLE_NAME)).Returns(true);
 		    _dataClient.Setup(x => x.Database).Returns(database.Object);
 
+		    _version = 0;
 		    _versionRepository = new Mock<IVersionRepository>();
+		    _versionRepository.Setup(x => x.GetCurrentVersion()).Returns(() => _version);
+		    _versionRepository.Setup(x => x.UpdateVersion(It.IsAny<Int32>())).Callback<Int32>(v => _version = v);
 
 		    _runner = new Runner(_dataClient.Object, Assembly.GetExecutingAssembly());
 		    _runner.VersionRepository = _versionRepository.Object;
@@ -116,6 +120,23 @@ namespace Sharp.Tests.Migrations {
 			Assert.AreEqual(6, MigrationTestHelper.ExecutedMigrationsUp.Count);
 			Assert.AreEqual(typeof(Migration6), MigrationTestHelper.ExecutedMigrationsUp.Last().GetType());
 		}
+
+        [Test]
+        public void Go_up_and_down_twice() {
+            _runner.Run(6);
+            Assert.AreEqual(6, MigrationTestHelper.ExecutedMigrationsUp.Count);
+            Assert.AreEqual(typeof(Migration6), MigrationTestHelper.ExecutedMigrationsUp.Last().GetType());
+            MigrationTestHelper.Clear();
+
+            _runner.Run(0);
+            Assert.AreEqual(6, MigrationTestHelper.ExecutedMigrationsDown.Count);
+            Assert.AreEqual(typeof(Migration1), MigrationTestHelper.ExecutedMigrationsDown.Last().GetType());
+            MigrationTestHelper.Clear();
+
+            _runner.Run(3);
+            Assert.AreEqual(3, MigrationTestHelper.ExecutedMigrationsUp.Count);
+            Assert.AreEqual(typeof(Migration3), MigrationTestHelper.ExecutedMigrationsUp.Last().GetType());
+        }
 
 		[Test]
 		public void Negative_target_version_means_last_version() {
