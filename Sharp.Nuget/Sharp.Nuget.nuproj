@@ -3,8 +3,10 @@
   <PropertyGroup>
     <ProjectGuid>fa28e6a4-49d4-4a5a-8860-545fccfd261f</ProjectGuid>
     <OutputPath>Bin\</OutputPath>
-    <NuBuildVersionSource>library</NuBuildVersionSource>
-    <NuBuildVersionFileName>true</NuBuildVersionFileName>
+    <NuBuildVersionSource>Library</NuBuildVersionSource>
+    <NuBuildVersionFileName>True</NuBuildVersionFileName>
+    <NuBuildAddBinariesToSubfolder>False</NuBuildAddBinariesToSubfolder>
+    <NuBuildIncludePdbs>False</NuBuildIncludePdbs>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
   </PropertyGroup>
