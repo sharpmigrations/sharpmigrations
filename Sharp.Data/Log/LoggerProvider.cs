@@ -8,6 +8,9 @@ namespace Sharp.Data.Log {
 
         static LogManager() {
             string loggerClass = TryToFindLog4Net();
+            if (loggerClass == null) {
+                loggerClass = TryToFindNLog();
+            }
             ISharpLoggerFactory loggerFactory = String.IsNullOrEmpty(loggerClass) ? new NoLoggingLoggerFactory() : GetLoggerFactory(loggerClass);
             SetLoggersFactory(loggerFactory);
         }
@@ -31,14 +34,27 @@ namespace Sharp.Data.Log {
         }
 
         private static string TryToFindLog4Net() {
-            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            string relativeSearchPath = AppDomain.CurrentDomain.RelativeSearchPath;
-            string binPath = relativeSearchPath == null ? baseDir : Path.Combine(baseDir, relativeSearchPath);
-            var log4NetDllPath = Path.Combine(binPath, "log4net.dll");
+            var log4NetDllPath = FindDllPath("log4net.dll");
             if (File.Exists(log4NetDllPath)) {
                 return typeof(Log4NetLoggerFactory).AssemblyQualifiedName;
             }
             return null;
+        }
+
+        private static string TryToFindNLog() {
+            var nlogDllPath = FindDllPath("NLog.dll");
+            if (File.Exists(nlogDllPath)) {
+                return typeof(NLogLoggerFactory).AssemblyQualifiedName;
+            }
+            return null;
+        }
+
+        private static string FindDllPath(string dllfile) {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string relativeSearchPath = AppDomain.CurrentDomain.RelativeSearchPath;
+            string binPath = relativeSearchPath == null ? baseDir : Path.Combine(baseDir, relativeSearchPath);
+            var log4NetDllPath = Path.Combine(binPath, dllfile);
+            return log4NetDllPath;
         }
 
         public static void SetLoggersFactory(ISharpLoggerFactory loggerFactory) {

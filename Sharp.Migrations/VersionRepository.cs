@@ -48,7 +48,7 @@ namespace Sharp.Migrations {
 	        _dataClient.Add
 	            .Table(VERSION_TABLE_NAME)
 	            .WithColumns(
-	                Column.String("name").Size(200),
+	                Column.String("name").Size(200).AsPrimaryKey(),
 	                Column.Int64("version")
 	            );
             _dataClient.Commit();

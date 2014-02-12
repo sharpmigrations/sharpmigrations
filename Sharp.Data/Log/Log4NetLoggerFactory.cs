@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Sharp.Data.Log {
     public class Log4NetLoggerFactory : ISharpLoggerFactory {

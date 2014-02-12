@@ -9,3 +9,4 @@ packages/
 Sharp.Data/obj/
 Sharp.Tests/obj/
 SharpMigrator/obj/
+Sharp.Tests.Nlog/obj/

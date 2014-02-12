@@ -12,6 +12,7 @@ namespace Sharp.Tests.Chinook {
         protected override void TryRunMigrations() {
             IDataClient dataClient = SharpFactory.Default.CreateDataClient(_connectionString, DatabaseProvider);
             var runner = new Runner(dataClient, Assembly.GetEntryAssembly());
+            runner.MigrationGroup = "asdf";
             runner.Run(_targetVersion);
         }
     }
