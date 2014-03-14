@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Sharp.Data.Schema;
-using Sharp.Migrations;
+﻿using Sharp.Migrations;
 
 namespace Northwind.Sharp.Migrations {
-	public class _002_CreateTableTerritories : SchemaMigration {
+    public class _002_CreateTableTerritories : SchemaMigration {
+        public override void Up() {
+            Add.Table("Territories").WithColumns(
+                Column.String("TerritoryID").Size(20).NotNull(),
+                Column.String("TerritoryDescription").Size(50).NotNull(),
+                Column.Int32("RegionID").NotNull()
+                );
+            Add.PrimaryKey("PK_Territories").OnColumns("TerritoryID").OfTable("Territories");
+        }
 
-		public override void Up() {
-			Add.Table("Territories").WithColumns(
-				Column.String("TerritoryID").Size(20).NotNull(),
-				Column.String("TerritoryDescription").Size(50).NotNull(),
-				Column.Int32("RegionID").NotNull()
-			);
-			Add.PrimaryKey("PK_Territories").OnColumns("TerritoryID").OfTable("Territories");
-		}
-
-		public override void Down() {
-		}
-	}
+        public override void Down() {
+            Remove.Table("Territories");
+        }
+    }
 }

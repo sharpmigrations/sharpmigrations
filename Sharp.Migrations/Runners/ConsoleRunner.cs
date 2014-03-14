@@ -56,9 +56,6 @@ namespace Sharp.Migrations.Runners {
 
 	    protected virtual void TryRunMigrations() {
 	        Runner runner = GetRunner();
-	        if(MigrationGroup != null) {
-                runner.MigrationGroup = MigrationGroup;                
-            }
 	        runner.Run(_targetVersion);
 	    }
 
@@ -66,6 +63,9 @@ namespace Sharp.Migrations.Runners {
             if (_runner == null) {
                 IDataClient dataClient = SharpFactory.Default.CreateDataClient(_connectionString, DatabaseProvider);
                 _runner = new Runner(dataClient, AssemblyWithMigrations);
+                if (MigrationGroup != null) {
+                    _runner.MigrationGroup = MigrationGroup;
+                }
             }
 	        return _runner;
 	    }

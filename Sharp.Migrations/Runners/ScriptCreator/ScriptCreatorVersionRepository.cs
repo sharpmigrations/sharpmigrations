@@ -28,7 +28,5 @@ namespace Sharp.Migrations.Runners.ScriptCreator {
             base.UpdateVersion(version);
             RaiseOnUpdateVersion(version);
         }
-
-        
 	}
 }

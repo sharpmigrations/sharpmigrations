@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using CommandLine;
-using CommandLine.Text;
 using Sharp.Data;
 using Sharp.Migrations;
 using Sharp.Migrations.Runners;
@@ -28,28 +27,38 @@ namespace Sharp.Migrator {
             PrintPlataform();
 
             _options = new Options();
-            if (!Parser.Default.ParseArguments(_args, _options)) {
+            ParserResult<Options> result = Parser.Default.ParseArguments<Options>(_args);
+            if (result.Errors.Any()) {
                 Exit();
             }
+            if (_args.Length == 0) {
+                Console.WriteLine(_options.GetUsage());
+                Exit();
+            }
+            _options = result.Value;
             SetSharpConfig();
             PrintDataSource(SharpFactory.Default.ConnectionString);
             Run();
         }
 
 
-        private static void Exit() {
+        private static void Exit(string message = null) {
+            if (message != null) {
+                Console.WriteLine(message);
+            }
             Environment.Exit(0);
         }
 
         private static void SetSharpConfig() {
-            string connectionstringname = _options.ConnectionStringName;
-
-            if (String.IsNullOrEmpty(_options.ConnectionString)) {
-                _options.ConnectionString = ConfigurationManager.ConnectionStrings[connectionstringname].ConnectionString;
-            }
-            if (String.IsNullOrEmpty(_options.DatabaseProvider)) {
-                _options.DatabaseProvider = ConfigurationManager.ConnectionStrings[connectionstringname].ProviderName;
-            }
+            //if (_options.ConnectionString == "") {
+            //    if (_options.ConnectionStringName == "") {
+            //        Exit("Please, set ");
+            //    }
+            //    _options.ConnectionString = ConfigurationManager.ConnectionStrings[connectionstring].ConnectionString;
+            //}
+            //if (_options.DatabaseProvider == "") {
+            //    _options.DatabaseProvider = ConfigurationManager.ConnectionStrings[connectionstring].ProviderName;
+            //}
             SharpFactory.Default.ConnectionString = _options.ConnectionString;
             SharpFactory.Default.DataProviderName = _options.DatabaseProvider;
         }
@@ -74,12 +83,14 @@ namespace Sharp.Migrator {
                 return;
             }
             if (mode == "auto") {
-                new Runner(SharpFactory.Default.CreateDataClient(), GetAssemblyWithMigrations()).Run(version);
+                var runner = new Runner(SharpFactory.Default.CreateDataClient(), GetAssemblyWithMigrations());
+                runner.MigrationGroup = _options.MigrationGroup;
+                runner.Run(version);
                 return;
             }
-            var runner = new ConsoleRunner(SharpFactory.Default.ConnectionString, SharpFactory.Default.DataProviderName);
-            runner.AssemblyWithMigrations = GetAssemblyWithMigrations();
-            runner.Start();
+            var crunner = new ConsoleRunner(SharpFactory.Default.ConnectionString, SharpFactory.Default.DataProviderName);
+            crunner.AssemblyWithMigrations = GetAssemblyWithMigrations();
+            crunner.Start();
         }
 
         private static Assembly GetAssemblyWithMigrations() {
@@ -94,42 +105,9 @@ namespace Sharp.Migrator {
                 Exit();
             }
             var runner = new ScriptCreatorRunner(SharpFactory.Default.CreateDataClient(), GetAssemblyWithMigrations());
-            runner.Run(version);
+            runner.Run(version, _options.MigrationGroup);
             File.WriteAllText(_options.Filename, runner.GetCreatedScript(), Encoding.UTF8);
             Console.WriteLine(" * Check {0} for the script dump. No migrations were performed on the database.", _options.Filename);
-        }
-    }
-
-    public class Options {
-        [Option('a', "assembly", HelpText = "Assembly with migrations")]
-        public string AssemblyWithMigrations { get; set; }
-
-        [Option('n', "connectionstringname", HelpText = "This is the name of the connection string in app.config")]
-        public string ConnectionStringName { get; set; }
-
-        [Option('c', "connectionstring", HelpText = "This is the connection string of the target database (default")]
-        public string ConnectionString { get; set; }
-
-        [Option('p', "provider", HelpText = "This is the database provider")]
-        public string DatabaseProvider { get; set; }
-
-        [Option('v', "version", HelpText = "Target version to migrate automatically to. Specifying -1 will migrate to the latest version")]
-        public int? TargetVersion { get; set; }
-
-        [Option('m', "mode", HelpText = "manual: prompt user for version. auto: run migrations without prompting the user (see parameter -v for version). script: generate scritps to the file specified on -f parameter.")]
-        public string Mode { get; set; }
-
-        [Option('f', "filename", HelpText = "name of the file when using --mode=script")]
-        public string Filename { get; set; }
-
-        [HelpOption]
-        public string GetUsage() {
-            var help = new HelpText("Usage:");
-            help.AddPreOptionsLine("Ex: Ccee.Migrations -m auto -v 10 -> Migrates to version 10 (no prompt)");
-            help.AddPreOptionsLine("Ex: Ccee.Migrations -m script -f script.sql -v 10 -> Generates scripts from current version to version 10 into script.sql file");
-            help.AddOptions(this);
-
-            return help.ToString();
         }
     }
 }

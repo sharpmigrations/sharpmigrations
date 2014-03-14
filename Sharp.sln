@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.20930.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{54DB89DA-E94D-451E-A8CF-847E0778B425}"
 EndProject
@@ -45,6 +45,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C657D4
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Tests.Nlog", "Sharp.Tests.Nlog\Sharp.Tests.Nlog.csproj", "{77E9F96D-2B28-4E55-AB2D-B60C05000ACA}"
+EndProject
+Project("{E09DD79A-4488-4AB9-8D3F-A7EEE78BF432}") = "Sharp.OracleManaged.Nuget", "Sharp.OracleManaged.Nuget\Sharp.OracleManaged.Nuget.nuproj", "{AFDD8825-E01A-4F43-B206-DFB76B3B10BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -96,6 +98,10 @@ Global
 		{77E9F96D-2B28-4E55-AB2D-B60C05000ACA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77E9F96D-2B28-4E55-AB2D-B60C05000ACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77E9F96D-2B28-4E55-AB2D-B60C05000ACA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFDD8825-E01A-4F43-B206-DFB76B3B10BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFDD8825-E01A-4F43-B206-DFB76B3B10BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFDD8825-E01A-4F43-B206-DFB76B3B10BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFDD8825-E01A-4F43-B206-DFB76B3B10BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,5 +114,6 @@ Global
 		{126DA668-B940-4E3D-AFCB-0BD64C65FE41} = {898075DB-5DBC-4042-86AD-F07F963FF9EE}
 		{77E9F96D-2B28-4E55-AB2D-B60C05000ACA} = {898075DB-5DBC-4042-86AD-F07F963FF9EE}
 		{FA28E6A4-49D4-4A5A-8860-545FCCFD261F} = {8FBD36BE-F74F-48F4-871A-C7B8F775B416}
+		{AFDD8825-E01A-4F43-B206-DFB76B3B10BB} = {8FBD36BE-F74F-48F4-871A-C7B8F775B416}
 	EndGlobalSection
 EndGlobal

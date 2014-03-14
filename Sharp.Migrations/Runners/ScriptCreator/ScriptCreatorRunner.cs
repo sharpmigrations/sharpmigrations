@@ -25,7 +25,10 @@ namespace Sharp.Migrations.Runners.ScriptCreator {
             _runner = new Runner(_scriptCreatorDataClient, targetAssembly, _versionRepository);
         }
 
-        public void Run(int version) {
+        public void Run(int version, string migrationGroup = null) {
+            if (migrationGroup != null) {
+                _runner.MigrationGroup = migrationGroup;
+            }
             _runner.Run(version);
         }
         
