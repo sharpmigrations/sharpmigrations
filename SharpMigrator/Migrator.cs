@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using CommandLine;
 using Sharp.Data;
 using Sharp.Migrations;
 using Sharp.Migrations.Runners;
@@ -27,15 +26,15 @@ namespace Sharp.Migrator {
             PrintPlataform();
 
             _options = new Options();
-            ParserResult<Options> result = Parser.Default.ParseArguments<Options>(_args);
-            if (result.Errors.Any()) {
-                Exit();
-            }
+            //ParserResult<Options> result = Parser.Default.ParseArguments<Options>(_args);
+            //if (result.Errors.Any()) {
+            //    Exit();
+            //}
             if (_args.Length == 0) {
                 Console.WriteLine(_options.GetUsage());
                 Exit();
             }
-            _options = result.Value;
+            //_options = result.Value;
             SetSharpConfig();
             PrintDataSource(SharpFactory.Default.ConnectionString);
             Run();
@@ -94,7 +93,7 @@ namespace Sharp.Migrator {
         }
 
         private static Assembly GetAssemblyWithMigrations() {
-            if(String.IsNullOrEmpty(_options.AssemblyWithMigrations)) {
+            if (String.IsNullOrEmpty(_options.AssemblyWithMigrations)) {
                 return Assembly.GetEntryAssembly();
             }
             return Assembly.LoadFile(Path.GetFullPath(_options.AssemblyWithMigrations));

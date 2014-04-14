@@ -171,17 +171,15 @@ namespace Sharp.Data {
 			IDbCommand cmd = CreateCommand(call, parameters);
 			cmd.Parameters.Insert(0, returnPar);
 			cmd.CommandType = CommandType.StoredProcedure;
-
 			cmd.ExecuteNonQuery();
 
 			object returnObject = returnPar.Value;
-
 			return returnObject;
 		}
 
 		private IDbCommand CreateCommand(string call, object[] parameters) {
 			OpenConnection();
-			IDbCommand cmd = CreateIDbCommand(call);
+			IDbCommand cmd = CreateIDbCommand(call, parameters);
 			SetTimeoutForCommand(cmd);
 			PopulateCommandParameters(cmd, parameters);
 			LogCommandCall(call, cmd);
@@ -195,11 +193,11 @@ namespace Sharp.Data {
 			}
 		}
 
-		private IDbCommand CreateIDbCommand(string call) {
+		private IDbCommand CreateIDbCommand(string call, object[] parameters) {
 			IDbCommand cmd = _connection.CreateCommand();
 			cmd.CommandText = call;
 			cmd.Transaction = _transaction;
-			Provider.ConfigCommand(cmd);
+            Provider.ConfigCommand(cmd, parameters);
 			return cmd;
 		}
 
@@ -208,9 +206,9 @@ namespace Sharp.Data {
 				var sb = new StringBuilder();
 				sb.Append("Call: ").AppendLine(call);
 				foreach (IDbDataParameter p in cmd.Parameters) {
-					sb.Append(p.Direction.ToString()).Append("-> ").Append(p.ParameterName);
+					sb.Append(p.Direction).Append("-> ").Append(p.ParameterName);
 					if (p.Value != null) {
-						sb.Append(": ").Append(p.Value.ToString());
+						sb.Append(": ").Append(p.Value);
 					}
 					sb.AppendLine();
 				}

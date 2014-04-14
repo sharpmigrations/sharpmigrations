@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using System.Reflection;
 using Sharp.Data.Exceptions;
 using Sharp.Data.Util;
@@ -12,6 +14,7 @@ namespace Sharp.Data.Databases.Oracle {
         private static Type _oracleRefCursorType;
         private static Type _oracleDbCommandType;
         private static PropertyInfo _propBindByName;
+        private static PropertyInfo _propArrayBindCount;
 
         public override string Name {
             get { return DataProviderNames.OracleOdp; }
@@ -29,9 +32,18 @@ namespace Sharp.Data.Databases.Oracle {
             
         }
 
-        public override void ConfigCommand(IDbCommand command) {
+        public override void ConfigCommand(IDbCommand command, object[] parameters) {
             EnsureCommandProperties(command);
             _propBindByName.SetValue(command, true, null);
+
+            if(parameters == null || !parameters.Any()) return;
+            var param = parameters[0];
+            if (param is In) {
+                param = ((In) param).Value;
+            }
+            var collParam = param as ICollection;
+            if(collParam == null || collParam.Count == 0) return;
+            _propArrayBindCount.SetValue(command, collParam.Count, null);
         }
 
         public override IDbDataParameter GetParameterCursor() {
@@ -45,6 +57,7 @@ namespace Sharp.Data.Databases.Oracle {
             if (_oracleDbCommandType != null) return;
             _oracleDbCommandType = dbCommand.GetType();
             _propBindByName = _oracleDbCommandType.GetProperty("BindByName", ReflectionHelper.NoRestrictions);
+            _propArrayBindCount = _oracleDbCommandType.GetProperty("ArrayBindCount", ReflectionHelper.NoRestrictions);
         }
 
         private void EnsureDataParameterProperties(IDbDataParameter parameter) {

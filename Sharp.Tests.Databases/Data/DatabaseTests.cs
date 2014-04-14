@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Sharp.Data;
+using Sharp.Data.Filters;
 using Sharp.Data.Schema;
 
 namespace Sharp.Tests.Databases.Data {
@@ -60,6 +61,26 @@ namespace Sharp.Tests.Databases.Data {
             );
 
             Assert.AreEqual("foo", resultSet[0][0].ToString());
+        }
+
+        [Test]
+        public void Can_bulk_insert() {
+            _dataClient.AddTable(TableFoo,
+                                 Column.String("colString"),
+                                 Column.Int32("colInt"));
+            var v1s = new[] {"1", "2", "3", "4"};
+            var v2s = new[] { 1, 2, 3, 4 };
+
+            _database.ExecuteSql("insert into " + TableFoo + " (colString, colInt) values (:v1,:v2)",
+                In.Named("v1", v1s), 
+                In.Named("v2", v2s)
+            );
+            ResultSet res = _dataClient.Select
+                .AllColumns()
+                .From(TableFoo)
+                .AllRows();
+                                        
+            Assert.AreEqual(4, res.Count);
         }
 
         [TearDown]

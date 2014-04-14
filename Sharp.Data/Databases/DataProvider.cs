@@ -16,7 +16,7 @@ namespace Sharp.Data.Databases {
             return DbProviderFactory.CreateConnection();
         }
 
-        public virtual void ConfigCommand(IDbCommand command) {}
+        public virtual void ConfigCommand(IDbCommand command, object[] parameters) {}
 
         public virtual IDbDataParameter GetParameter() {
             return DbProviderFactory.CreateParameter();

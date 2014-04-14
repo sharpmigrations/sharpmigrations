@@ -7,7 +7,7 @@ namespace Sharp.Data {
         string Name { get; }
         DatabaseKind DatabaseKind { get; }
         IDbConnection GetConnection();
-        void ConfigCommand(IDbCommand command);
+        void ConfigCommand(IDbCommand command, object[] parameters);
         IDbDataParameter GetParameter();
         IDbDataParameter GetParameterCursor();
         DatabaseException CreateSpecificException(Exception exception, string sql);
