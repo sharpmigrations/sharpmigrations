@@ -83,6 +83,27 @@ namespace Sharp.Tests.Databases.Data {
             Assert.AreEqual(4, res.Count);
         }
 
+        [Test]
+        public void Can_bulk_insert_stored_procedure() {
+            _dataClient.AddTable(TableFoo,
+                                 Column.Int32("colInt"));
+            try {
+                _database.ExecuteSql("drop procedure pr_bulk");
+            }
+            catch {}
+            _database.ExecuteSql("create or replace procedure pr_bulk(v_value in number) is begin insert into foo (colInt) values (v_value); end pr_bulk;");
+
+            var v1s = new[] { 1, 2, 3, 4 };
+
+            _database.ExecuteStoredProcedure("pr_bulk", In.Named("v_value",v1s));
+            ResultSet res = _dataClient.Select
+                .AllColumns()
+                .From(TableFoo)
+                .AllRows();
+
+            Assert.AreEqual(4, res.Count);
+        }
+
         [TearDown]
         public virtual void TearDown() {
             _database.RollBack();

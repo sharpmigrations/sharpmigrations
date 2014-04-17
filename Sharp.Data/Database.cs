@@ -227,9 +227,9 @@ namespace Sharp.Data {
 				} else if (parameter is InOut) {
 					par = GetInOutParameter((InOut)parameter);
 				} else if (parameter is In) {
-					par = GetInParameter((In)parameter);
+					par = GetInParameter((In)parameter, cmd);
 				} else {
-					par = GetInParameter(new In { Value = parameter });
+                    par = GetInParameter(new In { Value = parameter }, cmd);
 				}
 				//this is for when you have the cursor parameter, ignored by sql server
 				if (par != null) {
@@ -238,10 +238,11 @@ namespace Sharp.Data {
 			}
 		}
 
-		private IDbDataParameter GetInParameter(In p) {
-			IDbDataParameter par = Provider.GetParameter();
-			par.ParameterName = p.Name;
-			par.Value = p.Value ?? DBNull.Value;
+        private IDbDataParameter GetInParameter(In p, IDbCommand cmd) {
+            IDbDataParameter par = Provider.GetParameter();
+            par.Direction = ParameterDirection.Input;
+            par.Value = p.Value ?? DBNull.Value;
+            par.ParameterName = p.Name;
 			return par;
 		}
 

@@ -46,6 +46,13 @@ namespace Sharp.Data.Databases.Oracle {
             _propArrayBindCount.SetValue(command, collParam.Count, null);
         }
 
+        public override IDbDataParameter GetParameter() {
+            var par = base.GetParameter();
+            //without this, bulk insert doesn't work. Thanks Oracle.
+            par.DbType = DbType.String;
+            return par;
+        }
+
         public override IDbDataParameter GetParameterCursor() {
             IDbDataParameter parameter = DbProviderFactory.CreateParameter();
             EnsureDataParameterProperties(parameter);

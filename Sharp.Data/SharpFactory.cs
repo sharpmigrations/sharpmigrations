@@ -23,7 +23,7 @@ namespace Sharp.Data {
             DataProviderName = settings.ProviderName;
 
             _dbFactoryTypes.Add(DataProviderNames.OracleManaged, typeof(OracleManagedDbFactory));
-            _dbFactoryTypes.Add(DataProviderNames.OracleOdp, typeof(OracleManagedDbFactory));
+            _dbFactoryTypes.Add(DataProviderNames.OracleOdp, typeof(OracleOdpDbFactory));
             _dbFactoryTypes.Add(DataProviderNames.MySql, typeof(MySqlDbFactory));
             _dbFactoryTypes.Add(DataProviderNames.OleDb, typeof(OleDbDbFactory));
             _dbFactoryTypes.Add(DataProviderNames.SqLite, typeof(SqLiteDbFactory));
