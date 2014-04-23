@@ -40,11 +40,27 @@ namespace Sharp.Migrations.Runners.ScriptCreator {
             return 1;
         }
 
+        public int ExecuteBulkSql(string call, params object[] parameters) {
+            throw new NotImplementedException();
+        }
+
         public int ExecuteSqlCommitAndDispose(string call, params object[] parameters) {
             throw new NotImplementedException();
         }
 
+        public int ExecuteBulkSqlCommitAndDispose(string call, params object[] parameters) {
+            throw new NotImplementedException();
+        }
+
         public void ExecuteStoredProcedure(string call, params object[] parameters) {
+            throw new NotImplementedException();
+        }
+
+        public void ExecuteBulkStoredProcedure(string call, params object[] parameters) {
+            throw new NotImplementedException();
+        }
+
+        public void ExecuteBulkStoredProcedureAndDispose(string call, params object[] parameters) {
             throw new NotImplementedException();
         }
 

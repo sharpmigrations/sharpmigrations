@@ -16,10 +16,14 @@ namespace Sharp.Data.Databases {
             return DbProviderFactory.CreateConnection();
         }
 
-        public virtual void ConfigCommand(IDbCommand command, object[] parameters) {}
+        public virtual void ConfigCommand(IDbCommand command, object[] parameters, bool isBulk) {}
 
-        public virtual IDbDataParameter GetParameter() {
+        public IDbDataParameter GetParameter() {
             return DbProviderFactory.CreateParameter();
+        }
+
+        public virtual IDbDataParameter GetParameter(In parameter) {
+            return GetParameter();
         }
 
         public virtual IDbDataParameter GetParameterCursor() {

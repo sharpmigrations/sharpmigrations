@@ -33,7 +33,16 @@ namespace Sharp.Data {
 			}
 		}
 
-		public int ExecuteSqlCommitAndDispose(string call, params object[] parameters) {
+	    public int ExecuteBulkSql(string call, params object[] parameters) {
+            try {
+                return TryExecuteSql(call, parameters, isBulk:true);
+            }
+            catch (Exception ex) {
+                throw Provider.CreateSpecificException(ex, call);
+            }
+	    }
+
+	    public int ExecuteSqlCommitAndDispose(string call, params object[] parameters) {
 			try {
 				return ExecuteSql(call, parameters);
 			} finally {
@@ -42,8 +51,18 @@ namespace Sharp.Data {
 			}
 		}
 
-		private int TryExecuteSql(string call, params object[] parameters) {
-			IDbCommand cmd = CreateCommand(call, parameters);
+        public int ExecuteBulkSqlCommitAndDispose(string call, params object[] parameters) {
+            try {
+                return ExecuteBulkSql(call, parameters);
+            }
+            finally {
+                Commit();
+                Dispose();
+            }
+        }
+
+		private int TryExecuteSql(string call, object[] parameters, bool isBulk = false) {
+            IDbCommand cmd = CreateCommand(call, parameters, isBulk);
 			int modifiedRows = cmd.ExecuteNonQuery();
 			RetrieveOutParameters(parameters, cmd);
 			return modifiedRows;
@@ -53,7 +72,6 @@ namespace Sharp.Data {
 			if (parameters == null) {
 				return;
 			}
-
 			foreach (object parameter in parameters) {
 				Out pout = parameter as Out;
 				if (pout != null) {
@@ -68,7 +86,7 @@ namespace Sharp.Data {
 			}
 		}
 
-		public ResultSet Query(string call, params object[] parameters) {
+	    public ResultSet Query(string call, params object[] parameters) {
 			IDataReader reader = null;
 			try {
 				reader = TryCreateReader(call, parameters, CommandType.Text);
@@ -126,7 +144,16 @@ namespace Sharp.Data {
 			}
 		}
 
-		public void ExecuteStoredProcedureAndDispose(string call, params object[] parameters) {
+	    public void ExecuteBulkStoredProcedure(string call, params object[] parameters) {
+            try {
+                TryExecuteStoredProcedure(call, parameters, isBulk:true);
+            }
+            catch (Exception ex) {
+                throw Provider.CreateSpecificException(ex, call);
+            }
+	    }
+
+	    public void ExecuteStoredProcedureAndDispose(string call, params object[] parameters) {
 			try {
 				ExecuteStoredProcedure(call, parameters);
 			} finally {
@@ -135,8 +162,18 @@ namespace Sharp.Data {
 			}
 		}
 
-		private void TryExecuteStoredProcedure(string call, params object[] parameters) {
-			IDbCommand cmd = CreateCommand(call, parameters);
+        public void ExecuteBulkStoredProcedureAndDispose(string call, params object[] parameters) {
+            try {
+                ExecuteBulkStoredProcedure(call, parameters);
+            }
+            finally {
+                Commit();
+                Dispose();
+            }
+        }
+
+		private void TryExecuteStoredProcedure(string call, object[] parameters, bool isBulk = false) {
+            IDbCommand cmd = CreateCommand(call, parameters, isBulk);
 			cmd.CommandType = CommandType.StoredProcedure;
 			cmd.ExecuteNonQuery();
 			RetrieveOutParameters(parameters, cmd);
@@ -177,9 +214,10 @@ namespace Sharp.Data {
 			return returnObject;
 		}
 
-		private IDbCommand CreateCommand(string call, object[] parameters) {
+		private IDbCommand CreateCommand(string call, object[] parameters, bool isBulk = false) {
 			OpenConnection();
 			IDbCommand cmd = CreateIDbCommand(call, parameters);
+		    Provider.ConfigCommand(cmd, parameters, isBulk);
 			SetTimeoutForCommand(cmd);
 			PopulateCommandParameters(cmd, parameters);
 			LogCommandCall(call, cmd);
@@ -197,7 +235,6 @@ namespace Sharp.Data {
 			IDbCommand cmd = _connection.CreateCommand();
 			cmd.CommandText = call;
 			cmd.Transaction = _transaction;
-            Provider.ConfigCommand(cmd, parameters);
 			return cmd;
 		}
 
@@ -239,7 +276,7 @@ namespace Sharp.Data {
 		}
 
         private IDbDataParameter GetInParameter(In p, IDbCommand cmd) {
-            IDbDataParameter par = Provider.GetParameter();
+            IDbDataParameter par = Provider.GetParameter(p);
             par.Direction = ParameterDirection.Input;
             par.Value = p.Value ?? DBNull.Value;
             par.ParameterName = p.Name;
@@ -276,7 +313,7 @@ namespace Sharp.Data {
 		}
 
 		private IDbDataParameter GetReturnParameter(DbType type) {
-			IDbDataParameter par = Provider.GetParameter();
+			IDbDataParameter par = Provider.GetParameter(null);
 			par.Direction = ParameterDirection.ReturnValue;
 			par.DbType = type;
 			return par;

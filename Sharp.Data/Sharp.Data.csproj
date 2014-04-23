@@ -112,6 +112,7 @@
     <Compile Include="Fluent\RenameTable.cs" />
     <Compile Include="Fluent\ReversableFluentActions.cs" />
     <Compile Include="Fluent\IFluentModify.cs" />
+    <Compile Include="GenericDbTypeMap.cs" />
     <Compile Include="ISharpFactory.cs" />
     <Compile Include="Log\ISharpLogger.cs" />
     <Compile Include="Log\ILoggerFactory.cs" />

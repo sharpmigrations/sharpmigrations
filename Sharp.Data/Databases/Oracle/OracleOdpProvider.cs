@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
@@ -32,24 +33,31 @@ namespace Sharp.Data.Databases.Oracle {
             
         }
 
-        public override void ConfigCommand(IDbCommand command, object[] parameters) {
+        public override void ConfigCommand(IDbCommand command, object[] parameters, bool isBulk) {
             EnsureCommandProperties(command);
+            if (parameters == null || !parameters.Any()) return;
             _propBindByName.SetValue(command, true, null);
+            if (!isBulk) {
+                return;
+            }
+            ConfigForBulkSql(command, parameters);
+        }
 
-            if(parameters == null || !parameters.Any()) return;
+        protected virtual void ConfigForBulkSql(IDbCommand command, object[] parameters) {
             var param = parameters[0];
             if (param is In) {
-                param = ((In) param).Value;
+                param = ((In)param).Value;
             }
             var collParam = param as ICollection;
-            if(collParam == null || collParam.Count == 0) return;
+            if (collParam == null || collParam.Count == 0) return;
             _propArrayBindCount.SetValue(command, collParam.Count, null);
         }
 
-        public override IDbDataParameter GetParameter() {
-            var par = base.GetParameter();
-            //without this, bulk insert doesn't work. Thanks Oracle.
-            par.DbType = DbType.String;
+        public override IDbDataParameter GetParameter(In parIn) {
+            var par = GetParameter();
+            var collParam = parIn.Value as ICollection;
+            if (collParam == null || collParam.Count == 0) return par;
+            par.DbType = GenericDbTypeMap.GetDbType(collParam.Cast<object>().First().GetType());
             return par;
         }
 
@@ -60,14 +68,14 @@ namespace Sharp.Data.Databases.Oracle {
             return parameter;
         }
 
-        private void EnsureCommandProperties(IDbCommand dbCommand) {
+        protected virtual void EnsureCommandProperties(IDbCommand dbCommand) {
             if (_oracleDbCommandType != null) return;
             _oracleDbCommandType = dbCommand.GetType();
             _propBindByName = _oracleDbCommandType.GetProperty("BindByName", ReflectionHelper.NoRestrictions);
             _propArrayBindCount = _oracleDbCommandType.GetProperty("ArrayBindCount", ReflectionHelper.NoRestrictions);
         }
 
-        private void EnsureDataParameterProperties(IDbDataParameter parameter) {
+        protected virtual void EnsureDataParameterProperties(IDbDataParameter parameter) {
             if(_propOracleDbType != null) return;
             
             Type parameterType = parameter.GetType();

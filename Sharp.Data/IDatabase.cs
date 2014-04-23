@@ -9,10 +9,12 @@ namespace Sharp.Data {
         object CallStoredFunction(DbType returnType, string call, params object[] parameters);
 		ResultSet CallStoredProcedure(string call, params object[] parameters);
         int ExecuteSql(string call, params object[] parameters);
+        int ExecuteBulkSql(string call, params object[] parameters);
         int ExecuteSqlCommitAndDispose(string call, params object[] parameters);
-
+        int ExecuteBulkSqlCommitAndDispose(string call, params object[] parameters);
 		void ExecuteStoredProcedure(string call, params object[] parameters);
-		void ExecuteStoredProcedureAndDispose(string call, params object[] parameters);
+		void ExecuteBulkStoredProcedure(string call, params object[] parameters);
+        void ExecuteBulkStoredProcedureAndDispose(string call, params object[] parameters);
 
         ResultSet Query(string call, params object[] parameters);
         ResultSet QueryAndDispose(string call, params object[] parameters);
