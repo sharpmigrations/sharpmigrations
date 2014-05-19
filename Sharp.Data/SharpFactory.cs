@@ -17,17 +17,17 @@ namespace Sharp.Data {
         private Dictionary<string, DbFactory> _dbFactories = new Dictionary<string, DbFactory>();
 
         public SharpFactory() {
-            if (ConfigurationManager.ConnectionStrings.Count <= 0) return;
-            ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings[0];
-            ConnectionString = settings.ConnectionString;
-            DataProviderName = settings.ProviderName;
-
             _dbFactoryTypes.Add(DataProviderNames.OracleManaged, typeof(OracleManagedDbFactory));
             _dbFactoryTypes.Add(DataProviderNames.OracleOdp, typeof(OracleOdpDbFactory));
             _dbFactoryTypes.Add(DataProviderNames.MySql, typeof(MySqlDbFactory));
             _dbFactoryTypes.Add(DataProviderNames.OleDb, typeof(OleDbDbFactory));
             _dbFactoryTypes.Add(DataProviderNames.SqLite, typeof(SqLiteDbFactory));
             _dbFactoryTypes.Add(DataProviderNames.SqlServer, typeof(SqlServerDbFactory));
+
+            if (ConfigurationManager.ConnectionStrings.Count <= 0) return;
+            ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings[0];
+            ConnectionString = settings.ConnectionString;
+            DataProviderName = settings.ProviderName;
         }
 
         public SharpFactory(string connectionString, string databaseProviderName) {
@@ -44,7 +44,7 @@ namespace Sharp.Data {
         }
 
         public IDatabase CreateDatabase(string connectionString, string databaseProviderName) {
-        	return GetConfig(databaseProviderName, connectionString).CreateDatabase();
+            return GetConfig(databaseProviderName, connectionString).CreateDatabase();
         }
 
         public IDatabase CreateDatabase() {
@@ -52,7 +52,7 @@ namespace Sharp.Data {
         }
 
         public IDataClient CreateDataClient(string connectionString, string databaseProviderName) {
-			return GetConfig(databaseProviderName, connectionString).CreateDataClient();            
+            return GetConfig(databaseProviderName, connectionString).CreateDataClient();
         }
 
         public IDataClient CreateDataClient() {
@@ -68,33 +68,44 @@ namespace Sharp.Data {
         }
 
         private DbFactory GetConfig() {
-			return GetConfig(DataProviderName, ConnectionString);
-		}
+            return GetConfig(DataProviderName, ConnectionString);
+        }
 
-		private DbFactory GetConfig(string databaseProviderName, string connectionString) {
+        private DbFactory GetConfig(string databaseProviderName, string connectionString) {
             EnsureProvider(databaseProviderName);
             EnsureProviderInstance(databaseProviderName, connectionString);
             return _dbFactories[databaseProviderName];
         }
 
         private void EnsureProvider(string databaseProviderName) {
-            if (!_dbFactoryTypes.ContainsKey(databaseProviderName)) {
-                throw new ProviderNotFoundException("Could not find provider " + databaseProviderName);
+            lock (_sync) {
+                if (!_dbFactoryTypes.ContainsKey(databaseProviderName)) {
+                    throw new ProviderNotFoundException("Could not find provider " + databaseProviderName);
+                }
             }
         }
 
         private void EnsureProviderInstance(string databaseProviderName, string connectionString) {
-            if (!_dbFactories.ContainsKey(databaseProviderName)) {
-                _dbFactories.Add(databaseProviderName, (DbFactory) Activator.CreateInstance(_dbFactoryTypes[databaseProviderName], databaseProviderName, connectionString));
-                return;
+            lock (_sync) {
+                if (!_dbFactories.ContainsKey(databaseProviderName)) {
+                    _dbFactories.Add(databaseProviderName, (DbFactory)Activator.CreateInstance(_dbFactoryTypes[databaseProviderName], databaseProviderName, connectionString));
+                    return;
+                }
+                _dbFactories[databaseProviderName].ConnectionString = connectionString;
             }
-            _dbFactories[databaseProviderName].ConnectionString = connectionString;
+
         }
 
         private static ISharpFactory _default;
         public static ISharpFactory Default {
-            get { return _default ?? (_default = new SharpFactory()); }
+            get {
+                lock (_sync) {
+                    return _default ?? (_default = new SharpFactory());
+                }
+            }
             set { _default = value; }
         }
+
+        private static object _sync = new object();
     }
 }
