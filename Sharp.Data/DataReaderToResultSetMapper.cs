@@ -6,13 +6,9 @@ namespace Sharp.Data {
 	public class DataReaderToResultSetMapper {
 
 		public static ResultSet Map(IDataReader dr) {
-			
 			int numberOfColumns = dr.FieldCount;
-			
 			string[] colNames = GetColumnNames(dr, numberOfColumns);
-
-			ResultSet table = new ResultSet(colNames);
-			
+			var table = new ResultSet(colNames);
 			while (dr.Read()) {
 				MapRow(dr, numberOfColumns, table);
 			}
@@ -20,8 +16,7 @@ namespace Sharp.Data {
 		}
 
 		private static void MapRow(IDataReader dr, int numberOfColumns, ResultSet table) {
-			object[] row = new object[numberOfColumns];
-
+			var row = new object[numberOfColumns];
 			for (int i = 0; i < numberOfColumns; i++) {
 				row[i] = (DBNull.Value.Equals(dr[i])) ? null : dr[i];
 			}
@@ -29,7 +24,7 @@ namespace Sharp.Data {
 		}
 
 		private static string[] GetColumnNames(IDataReader dr, int numberOfColumns) {
-			List<string> colNames = new List<string>();
+			var colNames = new List<string>();
 			for (int i = 0; i < numberOfColumns; i++) {
 				colNames.Add(dr.GetName(i));
 			}

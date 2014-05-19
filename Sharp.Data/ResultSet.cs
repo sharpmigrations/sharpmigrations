@@ -14,16 +14,22 @@ namespace Sharp.Data {
             _originalColumnNames = new List<string>();
 
             for (int i = 0; i < cols.Length; i++) {
-                _originalColumnNames.Add(cols[i]);
-                _cols.Add(cols[i].ToUpper(),i);
+                SetColumnName(cols[i], i);
             }
         }
 
-        public void AddRow(params object[] row) {
+	    private void SetColumnName(string col, int order) {
+	        if (_cols.ContainsKey(col.ToUpper())) {
+	            col+="_" + order;
+	        }
+	        _originalColumnNames.Add(col);
+	        _cols.Add(col.ToUpper(), order);
+	    }
+
+	    public void AddRow(params object[] row) {
             if (row.Length != _cols.Keys.Count) {
                 throw new ArgumentException("Wrong number of columns in row");
             }
-
             Add(new TableRow(this,row));
         }
 

@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssertSql.cs" />
+    <Compile Include="Data\DataReaderToResultSetMapperTests.cs" />
     <Compile Include="Data\Dialects\Schema\DialectSchemaTests.cs" />
     <Compile Include="Data\Dialects\Schema\MySqlDialectSchemaTests.cs" />
     <Compile Include="Data\Dialects\Schema\OracleDialectSchemaTests.cs" />
