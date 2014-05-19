@@ -38,6 +38,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Sharp.Data, Version=1.2.5242.35244, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SharpData.1.2.5242.35244\lib\Sharp.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -75,12 +79,6 @@
     <Compile Include="Runners\ScriptCreator\ScriptCreatorDatabase.cs" />
     <Compile Include="VersionHelper.cs" />
     <Compile Include="VersionRepository.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Sharp.Data\Sharp.Data.csproj">
-      <Project>{8C494818-90AF-4133-94E1-0D1CBD961397}</Project>
-      <Name>Sharp.Data</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

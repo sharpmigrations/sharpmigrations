@@ -22,6 +22,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{8FBD36BE-F74F-48F4-871A-C7B8F775B416}"
 	ProjectSection(SolutionItems) = preProject
 		Push.bat = Push.bat
+		PushSharpData.bat = PushSharpData.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{698A362D-9B6D-4B3B-BB6F-B8010B94368B}"
@@ -53,6 +54,8 @@ Project("{E09DD79A-4488-4AB9-8D3F-A7EEE78BF432}") = "Sharp.OracleManaged.Nuget",
 	ProjectSection(ProjectDependencies) = postProject
 		{703517B1-515E-4833-A1E0-B3CD9CF7E5E2} = {703517B1-515E-4833-A1E0-B3CD9CF7E5E2}
 	EndProjectSection
+EndProject
+Project("{E09DD79A-4488-4AB9-8D3F-A7EEE78BF432}") = "Sharp.Data.Nuget", "Sharp.Data.Nuget\Sharp.Data.Nuget.nuproj", "{97EAE091-287E-4E72-A0DA-1C234A8F0C94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -108,6 +111,10 @@ Global
 		{AFDD8825-E01A-4F43-B206-DFB76B3B10BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFDD8825-E01A-4F43-B206-DFB76B3B10BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFDD8825-E01A-4F43-B206-DFB76B3B10BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97EAE091-287E-4E72-A0DA-1C234A8F0C94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97EAE091-287E-4E72-A0DA-1C234A8F0C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97EAE091-287E-4E72-A0DA-1C234A8F0C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97EAE091-287E-4E72-A0DA-1C234A8F0C94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -121,5 +128,6 @@ Global
 		{FA28E6A4-49D4-4A5A-8860-545FCCFD261F} = {8FBD36BE-F74F-48F4-871A-C7B8F775B416}
 		{77E9F96D-2B28-4E55-AB2D-B60C05000ACA} = {898075DB-5DBC-4042-86AD-F07F963FF9EE}
 		{AFDD8825-E01A-4F43-B206-DFB76B3B10BB} = {8FBD36BE-F74F-48F4-871A-C7B8F775B416}
+		{97EAE091-287E-4E72-A0DA-1C234A8F0C94} = {8FBD36BE-F74F-48F4-871A-C7B8F775B416}
 	EndGlobalSection
 EndGlobal

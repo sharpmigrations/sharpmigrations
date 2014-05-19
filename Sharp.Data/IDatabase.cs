@@ -15,7 +15,6 @@ namespace Sharp.Data {
 		void ExecuteStoredProcedure(string call, params object[] parameters);
 		void ExecuteBulkStoredProcedure(string call, params object[] parameters);
         void ExecuteBulkStoredProcedureAndDispose(string call, params object[] parameters);
-
         ResultSet Query(string call, params object[] parameters);
         ResultSet QueryAndDispose(string call, params object[] parameters);
         object QueryScalar(string call, params object[] parameters);
