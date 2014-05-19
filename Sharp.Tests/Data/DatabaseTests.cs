@@ -9,7 +9,7 @@ namespace Sharp.Tests.Data {
 
     [TestFixture]
     public class DatabaseTests {
-    
+
         protected DataParameterCollectionFake _allParameters;
         protected Mock<IDbCommand> _cmd;
         protected Mock<IDbConnection> _connection;
@@ -18,11 +18,11 @@ namespace Sharp.Tests.Data {
         protected Mock<IDataProvider> _provider;
         protected string _sql = "foo";
         protected Mock<IDbTransaction> _transaction;
-    	protected Mock<Dialect> _dialect;
+        protected Mock<Dialect> _dialect;
 
         [SetUp]
         public void SetUp() {
-			_dialect = new Mock<Dialect>();
+            _dialect = new Mock<Dialect>();
             _provider = new Mock<IDataProvider>();
             _connection = new Mock<IDbConnection>();
             _transaction = new Mock<IDbTransaction>();
@@ -40,7 +40,11 @@ namespace Sharp.Tests.Data {
             _provider.Setup(p => p.GetParameter())
                 .Returns(() => _parameter1.Object)
                 .Callback(() => _provider.Setup(p => p.GetParameter())
-                                    .Returns(_parameter2.Object));
+                                         .Returns(_parameter2.Object));
+
+            _provider.Setup(p => p.GetParameter(It.IsAny<In>())).Returns(() => _parameter1.Object)
+                                  .Callback(() => _provider.Setup(p => p.GetParameter())
+                                  .Returns(_parameter2.Object));
 
             _cmd.SetupGet(p => p.Parameters).Returns(_allParameters);
 
