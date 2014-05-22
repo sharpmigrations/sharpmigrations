@@ -55,8 +55,13 @@ namespace Sharp.Data.Databases.Oracle {
 
         public override IDbDataParameter GetParameter(In parIn) {
             var par = GetParameter();
+            if (parIn == null) {
+                return par;
+            }
             var collParam = parIn.Value as ICollection;
-            if (collParam == null || collParam.Count == 0) return par;
+            if (collParam == null || collParam.Count == 0) {
+                return par;
+            }
             par.DbType = GenericDbTypeMap.GetDbType(collParam.Cast<object>().First().GetType());
             return par;
         }

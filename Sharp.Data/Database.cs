@@ -315,6 +315,7 @@ namespace Sharp.Data {
 		private IDbDataParameter GetReturnParameter(DbType type) {
 			IDbDataParameter par = Provider.GetParameter(null);
 			par.Direction = ParameterDirection.ReturnValue;
+		    par.Size = 4000;
 			par.DbType = type;
 			return par;
 		}

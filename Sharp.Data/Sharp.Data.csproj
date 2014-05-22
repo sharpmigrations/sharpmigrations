@@ -118,6 +118,7 @@
     <Compile Include="Log\NLogLoggerFactory.cs" />
     <Compile Include="Log\NoLoggingInternalLogger.cs" />
     <Compile Include="Log\NoLoggingLoggerFactory.cs" />
+    <Compile Include="ResultSetExtensions.cs" />
     <Compile Include="Schema\OrderBy.cs" />
     <Compile Include="Databases\MySql\MySqlDialect.cs" />
     <Compile Include="Databases\MySql\MySqlProvider.cs" />
