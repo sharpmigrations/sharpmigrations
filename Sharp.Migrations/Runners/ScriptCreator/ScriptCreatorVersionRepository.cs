@@ -4,29 +4,32 @@ using Sharp.Data;
 namespace Sharp.Migrations.Runners.ScriptCreator {
 	public class ScriptCreatorVersionRepository : VersionRepository {
 
-	    public event Action<int> OnUpdateVersion;
+	    public event Action<long> OnUpdateVersion;
 
-	    protected virtual void RaiseOnUpdateVersion(int version) {
-	        Action<int> handler = OnUpdateVersion;
+	    protected virtual void RaiseOnUpdateVersion(long version) {
+	        Action<long> handler = OnUpdateVersion;
             if (handler != null) handler(version);
 	    }
 
-	    public ScriptCreatorVersionRepository(IDataClient dataClient, bool createVersionTable = true) : base(dataClient, createVersionTable) {}
+	    public ScriptCreatorVersionRepository(IDataClient dataClient) : base(dataClient) {}
 
-        public override int GetCurrentVersion() {
+        public override long GetCurrentVersion() {
             try {
                 return base.GetCurrentVersion();
             }
             catch {
-                CreateVersionTable();
-                InsertInitialVersionValue();
-                return 0;
+                return -1;
             }
         }
 
-        public override void UpdateVersion(int version) {
-            base.UpdateVersion(version);
-            RaiseOnUpdateVersion(version);
-        }
+	    public override void InsertVersion(MigrationInfo migrationInfo) {
+	        base.InsertVersion(migrationInfo);
+            RaiseOnUpdateVersion(migrationInfo.Version);
+	    }
+
+	    public override void RemoveVersion(MigrationInfo migrationInfo) {
+	        base.RemoveVersion(migrationInfo);
+            RaiseOnUpdateVersion(migrationInfo.Version);
+	    }
 	}
 }

@@ -7,7 +7,6 @@ namespace Sharp.Migrations {
 
         public static int GetVersion(Type type) {
 			string versionInString = Regex.Match(type.Name, "[0-9]+").Value;
-
 			int version = ParseVersion(type, versionInString);
 			return version;
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Sharp.Migrations.Runners;
 
 namespace Sharp.Migrations {
 	public class MigrationFinder {
@@ -65,5 +66,13 @@ namespace Sharp.Migrations {
 		private bool IsDownMigration() {
 			return _fromVersion > _toVersion;
 		}
+
+	    public static List<MigrationInfo> FindMigrations(Assembly assembly) {
+            return assembly.GetTypes()
+                           .Where(p => p.IsSubclassOf(typeof(Migration)) && !p.IsAbstract)
+                           .Select(x => new MigrationInfo(x))
+                           .OrderBy(x => x.Version)
+                           .ToList();
+	    } 
 	}
 }

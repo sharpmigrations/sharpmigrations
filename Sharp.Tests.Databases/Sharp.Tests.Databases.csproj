@@ -96,6 +96,7 @@
     <Compile Include="Data\DataClientTests.cs" />
     <Compile Include="Data\SpecificExceptionsTests.cs" />
     <Compile Include="DBBuilder.cs" />
+    <Compile Include="Migrations\VersionRepositoryTests.cs" />
     <Compile Include="Mysql\MySqlDataClientFactoryTests.cs" />
     <Compile Include="Mysql\MySqlDataTests.cs" />
     <Compile Include="Mysql\MySqlSchemaTests.cs" />

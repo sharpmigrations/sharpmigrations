@@ -2,128 +2,149 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
-using log4net;
+using System.Threading;
 using Sharp.Data;
-using Sharp.Migrations;
-using Sharp.Data.Config;
+using Sharp.Data.Databases;
+using Sharp.Data.Log;
+using Sharp.Migrations.Runners;
 
 namespace Sharp.Migrations {
-    public class Runner {
+	public class Runner {
+        public static ISharpLogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
+        public static bool IgnoreDialectNotSupportedActions { get; set; }
 
-		public static ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
+		private Assembly _targetAssembly;
+		private IDataClient _dataClient;
+	    private DatabaseKind _databaseKind;
+		private long _initialVersion;
+        private MigrationFinder _migrationFinder;
+	    private MigrationFactory _migrationFactory;
 
-    	private Assembly _targetAssembly;
-    	private IDataClient _dataClient;
-    	private List<Migration> _migrationsToRun = new List<Migration>();
+        public IVersionRepository VersionRepository { private get; set; }
 
-		private int _currentVersion, _initialVersion, _targetVersion, _maxVersion;
+	    public string MigrationGroup {
+	        get { return VersionRepository.MigrationGroup; }
+            set { VersionRepository.MigrationGroup = value; }
+	    }
 
-		public IVersionRepository VersionRepository { private get; set; }
+	    public int LastVersionNumber {
+            get { return _migrationFinder.LastVersion; }
+	    }
 
-		public Runner(IDataClient dataClient, Assembly targetAssembly) {
-			_dataClient = dataClient;
-			_targetAssembly = targetAssembly ?? Assembly.GetCallingAssembly();
-			VersionRepository = new VersionRepository(_dataClient);
+	    public long CurrentVersionNumber {
+	        get {
+	            if (_initialVersion == -1) {
+                    GetCurrentVersion();
+	            }
+	            return _initialVersion;
+	        }
+	    }
+
+        public Runner(IDataClient dataClient, Assembly targetAssembly, IVersionRepository versionRepository) {
+            _dataClient = dataClient;
+            _databaseKind = _dataClient.Database.Provider.DatabaseKind;
+            _targetAssembly = targetAssembly ?? Assembly.GetCallingAssembly();
+            VersionRepository = versionRepository;
+            _migrationFinder = new MigrationFinder(_targetAssembly);
+            _migrationFactory = new MigrationFactory(_dataClient);
+            _initialVersion = -1;
+	    }
+        
+	    public Runner(IDataClient dataClient, Assembly targetAssembly) : this(dataClient, targetAssembly, new VersionRepository(dataClient)) {}
+
+		public void Run(long targetVersion) {
+		    List<MigrationInfo> migrationsFromAssembly = MigrationFinder.FindMigrations(_targetAssembly);
+            VersionRepository.EnsureSchemaVersionTable(migrationsFromAssembly);
+		    List<long> migrationsFromDatabase = VersionRepository.GetAppliedMigrations();
+		    MigrationPlan migrationPlan = CreateMigrationPlan(migrationsFromDatabase, migrationsFromAssembly, targetVersion);
+            RunMigrations(migrationPlan);
 		}
 
-        public void Run(int version) {
-        	CreateVersionTable();
-			GetCurrentVersion();
-			RunMigrations(version);
-        }
+        private MigrationPlan CreateMigrationPlan(List<long> migrationsFromDatabase, List<MigrationInfo> migrationsFromAssembly, long targetVersion) {
+            long currentVersion = migrationsFromDatabase.Count == 0 ? 0 : migrationsFromDatabase.Last();
+            if (targetVersion < 0) {
+                targetVersion = migrationsFromAssembly.Last().Version;
+            }
+            if (targetVersion < currentVersion) { //down
+                return new MigrationPlan(currentVersion, targetVersion, migrationsFromAssembly
+                      .Where(m => m.Version > targetVersion && migrationsFromDatabase.Contains(m.Version))
+                      .Reverse().ToList());
+            }
+            return new MigrationPlan(currentVersion, targetVersion, migrationsFromAssembly
+                      .Where(m => !migrationsFromDatabase.Contains(m.Version) && m.Version <= targetVersion)
+                      .ToList());
+	    }
 
-    	private void CreateVersionTable() {
-			try {
-				VersionRepository.CreateVersionTable();
-				LogInfo("Schema_info table created");
-			}
-			catch {}
-    	}
+	    protected virtual void GetCurrentVersion() {
+			_initialVersion = VersionRepository.GetCurrentVersion();
+		}
 
-    	private void GetCurrentVersion() {
-    		_initialVersion = VersionRepository.GetCurrentVersion();
-    	}
+	    private void RunMigrations(MigrationPlan migrationPlan) {
+	        if (NoWorkToDo(migrationPlan)) {
+	            Log.Info("No migrations to perform");
+	            return;
+	        }
+	        Log.Info("Starting migrations");
+	        Log.Info("Current version is " + migrationPlan.CurrentVersion);
+	        Log.Info("Target version is " + migrationPlan.TargetVersion);
+	        Log.Info(String.Format("Migrate action is: {0} from {1} to {2}",
+	            (migrationPlan.IsUp ? "UP" : "DOWN"),
+	            migrationPlan.CurrentVersion,
+	            migrationPlan.TargetVersion));
 
-    	private void RunMigrations(int version) {
-    		_targetVersion = version;
-    		CreateMigrationsToRun();
-			RunCreatedMigraions();
-    	}
+	        foreach (var migrationInfo in migrationPlan.OrderedMigrationsToRun) {
+	            try {
+	                if (!migrationInfo.MigratesFor(_databaseKind)) {
+	                    Log.Info(String.Format(" -> [{0}] {1} {2}() NOT PERFORMED for database {3}", migrationInfo.Version,
+	                        migrationInfo.Name, migrationPlan.Direction, _databaseKind));
+	                    UpdateCurrentVersion(migrationInfo, migrationPlan.Direction);
+	                    return;
+	                }
+                    Log.Info(String.Format(" -> [{0}] {1} {2}()", migrationInfo.Version, migrationInfo.Name, migrationPlan.Direction));
+	                var migration = _migrationFactory.CreateMigration(migrationInfo.MigrationType);
+	                if (migrationPlan.IsUp) {
+	                    migration.Up();
+	                }
+	                else {
+	                    migration.Down();
+	                }
+	                UpdateCurrentVersion(migrationInfo, migrationPlan.Direction);
+	            }
+	            catch (NotSupportedByDialect nse) {
+	                HandleNotSupportedByDialectException(migrationInfo, nse);
+	            }
+	            catch (Exception ex) {
+	                string errorMsg = String.Format("Error running migration {0}: {1}", migrationInfo.Name, ex);
+	                Log.Error(errorMsg);
+	                _dataClient.RollBack();
+	                throw new MigrationException(errorMsg, ex);
+	            }
+	        }
+            Log.Info("Done. Current version: " + migrationPlan.TargetVersion);
+	    }
 
-    	private bool NoWorkToDo() {
-    		return _migrationsToRun.Count == 0;
-    	}
+	    private void UpdateCurrentVersion(MigrationInfo migrationInfo, Direction direction) {
+	        if (direction == Direction.Up) {
+	            VersionRepository.InsertVersion(migrationInfo);
+	        }
+	        else {
+	            VersionRepository.RemoveVersion(migrationInfo);
+	        }
+		}
 
-    	private void CreateMigrationsToRun() {
-			List<Type> migrationTypes = GetMigrationTypes();
-			
-			MigrationFactory factory = new MigrationFactory(_dataClient);
-			foreach (var type in migrationTypes) {
-				Migration migration = factory.CreateMigration(type);
-				_migrationsToRun.Add(migration);
-			}
-    	}
-
-    	private List<Type> GetMigrationTypes() {
-			MigrationFinder migrationFinder = new MigrationFinder(_targetAssembly);
-
-    		_maxVersion = migrationFinder.LastVersion;
-			if (_targetVersion < 0) _targetVersion = _maxVersion;
-
-			return migrationFinder.FromVersion(_initialVersion)
-											 .ToVersion(_targetVersion)
-    										 .FindMigrations();
-    	}
-
-    	private void RunCreatedMigraions() {
-			if (NoWorkToDo()) {
-				LogInfo("No migrations to perform");
+		private bool NoWorkToDo(MigrationPlan migrationPlan) {
+			return migrationPlan.OrderedMigrationsToRun.Count == 0;
+		}
+        
+		private void HandleNotSupportedByDialectException(MigrationInfo migrationInfo, NotSupportedByDialect nse) {
+			if (IgnoreDialectNotSupportedActions) {
+				Log.Warn(
+					String.Format(
+						"Migration[{0}] NotSupportedException not thrown due user config. Dialect: {1} Function: {2} Msg: {3}",
+                        migrationInfo.Name, nse.DialectName, nse.FunctionName, nse.Message));
 				return;
 			}
-
-			Log.Info("Starting migrations");
-			Log.Info("Max version is " + _maxVersion);
-			Log.Info("Migrate from " + _initialVersion + " to " + _targetVersion);
-
-			_currentVersion = _initialVersion;
-			try {
-				for (int i = 0; i < _migrationsToRun.Count; i++) {
-					RunOneMigration(i);
-				}
-				Log.Info("Done. Current version: " + _currentVersion);
-			}
-    		finally {
-				VersionRepository.UpdateVersion(_currentVersion);	
-			}
-    	}
-
-    	private void RunOneMigration(int i) {
-    		Migration migration = _migrationsToRun[i];
-    		if (IsUp()) {
-    			migration.Up();
-    			_currentVersion = migration.Version;
-    		}
-    		else {
-    			migration.Down();
-    			if(i < _migrationsToRun.Count-1) {
-    				_currentVersion = _migrationsToRun[i + 1].Version;							
-    			}
-    			else {
-    				_currentVersion = _targetVersion;
-    			}
-    		}
-			Log.Info(String.Format(" -> [{0}] {1} {2}()", migration.Version, migration.GetType().Name, IsUp() ? "Up" : "Down"));
-    	}
-
-
-    	private bool IsUp() {
-			return _initialVersion < _targetVersion;
+			throw nse;
 		}
-
-		private void LogInfo(string message) {
-			if (Log.IsInfoEnabled) {
-				Log.Info(message);
-			}
-		}
-    }
+	}
 }

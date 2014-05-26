@@ -76,7 +76,7 @@ namespace Sharp.Migrations.Runners {
 			_targetVersion = GetIntFromConsole(string.Format(ASK_FOR_VERSION, runner.LastVersionNumber));
 		}
 
-        protected void ShowCurrentVersion(int version) {
+        protected void ShowCurrentVersion(long version) {
             Console.WriteLine(SHOW_CURRENT_VERSION, version);
         }
 

@@ -18,7 +18,7 @@ namespace Sharp.Migrations.Runners.ScriptCreator {
             _dialect = dataClient.Dialect;
             _scriptCreatorDatabase = new ScriptCreatorDatabase(_dialect, dataClient.Database);
             _scriptCreatorDataClient = new DataClient(_scriptCreatorDatabase, _dialect);
-            _versionRepository = new ScriptCreatorVersionRepository(_scriptCreatorDataClient, false);
+            _versionRepository = new ScriptCreatorVersionRepository(_scriptCreatorDataClient);
             _versionRepository.OnUpdateVersion += UpdateSchemaVersion;
 
             Runner.Log = new ScriptCreatorLogger(Runner.Log, this);
@@ -32,7 +32,7 @@ namespace Sharp.Migrations.Runners.ScriptCreator {
             _runner.Run(version);
         }
         
-        protected void UpdateSchemaVersion(int version) {
+        protected void UpdateSchemaVersion(long version) {
             foreach (var sql in _scriptCreatorDatabase.Sqls) {
                 AddScript(sql);
             }

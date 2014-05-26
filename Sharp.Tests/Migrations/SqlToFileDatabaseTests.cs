@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using Sharp.Data;
+﻿using NUnit.Framework;
 using Sharp.Data.Databases.Oracle;
-using Sharp.Migrations;
 using Sharp.Migrations.Runners.ScriptCreator;
 
 namespace Sharp.Tests.Migrations {
     public class SqlToFileDatabaseTests {
-
         private ScriptCreatorDatabase _database;
 
         [SetUp]
