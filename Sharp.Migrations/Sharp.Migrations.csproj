@@ -81,12 +81,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Push.bat" />
+    <None Include="Sharp.Migrations.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sharp.Data\Sharp.Data.csproj">
       <Project>{8c494818-90af-4133-94e1-0d1cbd961397}</Project>
       <Name>Sharp.Data</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

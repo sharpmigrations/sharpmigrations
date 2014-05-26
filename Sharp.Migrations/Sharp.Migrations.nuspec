@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+      <id>SharpMigrations</id>
+      <version>1.4.1-alpha</version>
+      <title>Sharp Migrations</title>
+      <authors>André Carlucci</authors>
+      <summary>Database Migration Framework for C#</summary>
+      <description>Sharp migrations is a framework to help you deal with database changes and versioning over time. The idea comes from the excellent Ruby on Rails migrations and it is the best way to alter your database in a structured and organised manner.</description>
+      <tags>migration, migrations, c#, database, database-migrations</tags>
+      <projectUrl>https://github.com/andrecarlucci/sharpmigrations</projectUrl>
+     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+      <frameworkAssemblies>
+         <frameworkAssembly assemblyName="System" targetFramework=".NETFramework4.0" />
+      </frameworkAssemblies>
+     <dependencies>
+       <dependency id="SharpData" version="1.4.0" />
+     </dependencies>
+   </metadata>
+  <files>
+    <file src=".\bin\Release\Sharp.Migrations.dll" target="lib\Sharp.Migrations.dll"/>
+    <file src=".\readme.txt" target="readme.txt"/>
+  </files>
+</package>
