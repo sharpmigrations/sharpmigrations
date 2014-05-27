@@ -27,7 +27,7 @@ namespace Sharp.Migrations {
             set { VersionRepository.MigrationGroup = value; }
 	    }
 
-	    public int LastVersionNumber {
+	    public long LastVersionNumber {
             get { return _migrationFinder.LastVersion; }
 	    }
 

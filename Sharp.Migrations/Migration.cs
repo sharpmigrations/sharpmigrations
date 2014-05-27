@@ -3,7 +3,7 @@ using Sharp.Data;
 namespace Sharp.Migrations {
     public abstract class Migration {
     	private IDataClient _dataClient;
-        public int Version { get; set; }
+        public long Version { get; set; }
         public string Name { get; protected set; }
 
         public IDataClient DataClient {

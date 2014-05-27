@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using Sharp.Data;
 using Sharp.Data.Databases;
+using Sharp.Data.Filters;
 using Sharp.Data.Schema;
 using Sharp.Migrations;
 using Sharp.Migrations.Runners;
@@ -26,6 +27,7 @@ namespace Sharp.Tests.Databases.Migrations {
             if (_client.TableExists(VersionRepository.OLD_VERSION_TABLE_NAME)) {
                 _client.RemoveTable(VersionRepository.OLD_VERSION_TABLE_NAME);
             }
+             AllMigrations = new[] {M1, M2, M3, M4, M5}.ToList();
         }
 
         [TearDown]
@@ -89,10 +91,70 @@ namespace Sharp.Tests.Databases.Migrations {
         }
 
         [Test]
-        public void Old_version_table_is_destroyed_after_migration() {
+        public void Old_version_table_is_not_destroyed_after_upgrade_if_there_is_other_group() {
+            CreateOldVersionTable();
+            InsertOldVersionTableVersionNumber(3);
+            InsertOldVersionTableVersionNumber(3, "othergroup");
+            _versionRepository.EnsureSchemaVersionTable(AllMigrations);
+            Assert.IsTrue(_client.TableExists(VersionRepository.OLD_VERSION_TABLE_NAME));
+        }
+
+        [Test]
+        public void Old_version_table_is_destroyed_if_empty() {
             CreateOldVersionTable();
             InsertOldVersionTableVersionNumber(3);
             _versionRepository.EnsureSchemaVersionTable(AllMigrations);
+            Assert.IsFalse(_client.TableExists(VersionRepository.OLD_VERSION_TABLE_NAME));
+        }
+
+        [Test]
+        public void Rollback_upgrade_on_fail() {
+            CreateOldVersionTable();
+            InsertOldVersionTableVersionNumber(3);
+            try {
+                AllMigrations.Add(M1);
+                _versionRepository.EnsureSchemaVersionTable(AllMigrations);
+                Assert.Fail("Should throw UpgradeSharpMigrationException");
+            }
+            catch (UpgradeSharpMigrationException ex) {
+                
+            }
+            Assert.IsFalse(_client.TableExists(VersionRepository.VERSION_TABLE_NAME));
+        }
+
+        [Test]
+        public void Rollback_upgrade_on_fail__with_multiple_migration_groups() {
+            CreateOldVersionTable();
+            InsertOldVersionTableVersionNumber(3);
+            InsertOldVersionTableVersionNumber(3, "othergroup");
+            try {
+                _versionRepository.EnsureSchemaVersionTable(AllMigrations);
+                _versionRepository.MigrationGroup = "othergroup";
+                AllMigrations.Add(M1);
+                _versionRepository.EnsureSchemaVersionTable(AllMigrations);
+                Assert.Fail("Should throw UpgradeSharpMigrationException");
+            }
+            catch (UpgradeSharpMigrationException ex) {
+
+            }
+            Assert.IsTrue(_client.TableExists(VersionRepository.VERSION_TABLE_NAME));
+            Assert.AreEqual(3, QueryVersionTable().Count);
+            Assert.AreEqual("default", QueryVersionTable()[0].MigrationGroup);
+        }
+
+        [Test]
+        public void Should_migrate_one_migration_group_at_a_time() {
+            CreateOldVersionTable();
+            InsertOldVersionTableVersionNumber(3);
+            InsertOldVersionTableVersionNumber(3, "othergroup");
+            _versionRepository.EnsureSchemaVersionTable(AllMigrations);
+
+            Assert.IsTrue(_client.TableExists(VersionRepository.OLD_VERSION_TABLE_NAME));
+            Assert.AreEqual(1, QueryOldVersionTable().Count);
+
+            _versionRepository.MigrationGroup = "othergroup";
+            _versionRepository.EnsureSchemaVersionTable(AllMigrations);
+
             Assert.IsFalse(_client.TableExists(VersionRepository.OLD_VERSION_TABLE_NAME));
         }
 
@@ -122,6 +184,25 @@ namespace Sharp.Tests.Databases.Migrations {
             Assert.AreEqual(1, _versionRepository.GetAppliedMigrations().Count);
         }
 
+        [Test]
+        public void GetCurrentVersion_for_old_schema_table() {
+            CreateOldVersionTable();
+            InsertOldVersionTableVersionNumber(3);
+            Assert.AreEqual(3, _versionRepository.GetCurrentVersion());
+        }
+
+        [Test]
+        public void GetCurrentVersion_for_old_and_new_schema_table() {
+            CreateOldVersionTable();
+            InsertOldVersionTableVersionNumber(3);
+            InsertOldVersionTableVersionNumber(4, "othergroup");
+            _versionRepository.EnsureSchemaVersionTable(AllMigrations);
+            Assert.AreEqual(3, _versionRepository.GetCurrentVersion());
+
+            _versionRepository.MigrationGroup = "othergroup";
+            Assert.AreEqual(4, _versionRepository.GetCurrentVersion());
+        }
+
         private void CreateOldVersionTable() {
             if (_client.TableExists(VersionRepository.OLD_VERSION_TABLE_NAME)) {
                 _client.RemoveTable(VersionRepository.OLD_VERSION_TABLE_NAME);
@@ -138,10 +219,18 @@ namespace Sharp.Tests.Databases.Migrations {
             _client.Insert.Into(VersionRepository.OLD_VERSION_TABLE_NAME)
                           .Columns("name", "version")
                           .Values(group, number);
+            _client.Commit();
         }
 
         private List<VersionInfo> QueryVersionTable() {
             return _client.Select.AllColumns().From(VersionRepository.VERSION_TABLE_NAME).AllRows().Map<VersionInfo>();
+        }
+
+        private List<OldVersionInfo> QueryOldVersionTable() {
+            return _client.Select
+                .AllColumns()
+                .From(VersionRepository.OLD_VERSION_TABLE_NAME)
+                .AllRows().Map<OldVersionInfo>();
         }
 
         public static MigrationInfo M1 = new MigrationInfo(typeof(Migration1));
@@ -149,7 +238,7 @@ namespace Sharp.Tests.Databases.Migrations {
         public static MigrationInfo M3 = new MigrationInfo(typeof(Migration3));
         public static MigrationInfo M4 = new MigrationInfo(typeof(Migration4));
         public static MigrationInfo M5 = new MigrationInfo(typeof(Migration5));
-        public static List<MigrationInfo> AllMigrations = new[] {M1, M2, M3, M4, M5}.ToList();
+        public static List<MigrationInfo> AllMigrations;
     }
 
     public class VersionInfo {
@@ -157,6 +246,11 @@ namespace Sharp.Tests.Databases.Migrations {
         public long Version { get; set; }
         public string Info { get; set; }
         public DateTime Applied { get; set; }
+    }
+
+    public class OldVersionInfo {
+        public string Name { get; set; }
+        public long Version { get; set; }
     }
 
     public class Migration1 : Migration {

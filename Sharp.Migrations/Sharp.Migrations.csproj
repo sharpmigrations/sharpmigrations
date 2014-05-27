@@ -76,6 +76,7 @@
     <Compile Include="Runners\Runner.cs" />
     <Compile Include="SchemaMigration.cs" />
     <Compile Include="Runners\ScriptCreator\ScriptCreatorDatabase.cs" />
+    <Compile Include="UpgradeSharpMigrationException.cs" />
     <Compile Include="VersionRepository.cs" />
     <Compile Include="VersionHelper.cs" />
   </ItemGroup>

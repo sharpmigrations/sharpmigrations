@@ -31,18 +31,16 @@ namespace Sharp.Migrations {
         }
 
         public void EnsureSchemaVersionTable(List<MigrationInfo> allMigrationsFromAssembly) {
-            if (CreateVersionTable()) {
-                MigrateOldSchema(allMigrationsFromAssembly);
-            }
+            CreateVersionTable();
+            MigrateOldSchema(allMigrationsFromAssembly);
         }
 
-        private bool CreateVersionTable() {
+        private void CreateVersionTable() {
             if (_dataClient.TableExists(VERSION_TABLE_NAME)) {
-                return false;
+                return;
             }
             try {
                 TryCreateVersionTable();
-                return true;
             }
             catch (Exception ex) {
                 throw new MigrationException("Could not create schema version table (" + VERSION_TABLE_NAME + "). See inner exception for details.", ex);
@@ -74,14 +72,38 @@ namespace Sharp.Migrations {
                 .Where(Filter.Eq("name", MigrationGroup))
                 .AllRows();
             if (res.Count == 0) {
+                DeleteOldSchemaVersionTable();
                 return;
             }
             var version = Convert.ToInt32(res[0]["version"]);
             var migrationsToSave = allMigrationsFromAssembly.Where(m => m.Version <= version).OrderBy(m => m.Version);
-            foreach (var migrationInfo in migrationsToSave) {
-                InsertVersion(migrationInfo);
+
+            try {
+                foreach (var migrationInfo in migrationsToSave) {
+                    InsertVersion(migrationInfo);
+                }    
             }
-            _dataClient.RemoveTable(OLD_VERSION_TABLE_NAME);
+            catch (Exception ex) {
+                RollbackFailedUpgrade();
+                throw new UpgradeSharpMigrationException("Could not upgrade migration group {0}. Check Migration {1} (maybe already used version?)", ex);
+            }
+            DeleteOldSchemaVersionTable();
+        }
+
+        private void RollbackFailedUpgrade() {
+            _dataClient.Delete.From(VERSION_TABLE_NAME).Where(_migrationGroupFilter);
+            _dataClient.Commit();
+            if (_dataClient.Count.Table(VERSION_TABLE_NAME).AllRows() == 0) {
+                _dataClient.RemoveTable(VERSION_TABLE_NAME);
+            }
+        }
+
+        private void DeleteOldSchemaVersionTable() {
+            _dataClient.Delete.From(OLD_VERSION_TABLE_NAME).Where(Filter.Eq("name", MigrationGroup));
+            _dataClient.Commit();
+            if (_dataClient.Count.Table(OLD_VERSION_TABLE_NAME).AllRows() == 0) {
+                _dataClient.RemoveTable(OLD_VERSION_TABLE_NAME);
+            }
         }
 
         public List<long> GetAppliedMigrations() {
@@ -89,7 +111,7 @@ namespace Sharp.Migrations {
                 return TryGetAppliedMigrations();
             }
             catch (Exception ex) {
-                throw new MigrationException("Could not retrieve applied (table " + VERSION_TABLE_NAME + "). See inner exception for details.", ex);
+                throw new MigrationException("Could not retrieve schema version table (" + VERSION_TABLE_NAME + "). See inner exception for details.", ex);
             }
             finally {
                 _dataClient.Close();
@@ -128,7 +150,7 @@ namespace Sharp.Migrations {
                 return TryGetCurrentVersion();
             }
             catch (Exception ex) {
-                throw new MigrationException("Could not get schema version (table "+VERSION_TABLE_NAME+"). See inner exception for details.", ex);
+                throw new MigrationException("Could not get schema version (table " + VERSION_TABLE_NAME + "). See inner exception for details.", ex);
             }
             finally {
                 _dataClient.Close();
@@ -136,27 +158,25 @@ namespace Sharp.Migrations {
         }
 
         private long TryGetCurrentVersion() {
-            if (!_dataClient.TableExists(VERSION_TABLE_NAME)) {
-                if (_dataClient.TableExists(OLD_VERSION_TABLE_NAME)) {
-                    return
-                        Convert.ToInt64(_dataClient.Select.Columns("version")
-                            .From(OLD_VERSION_TABLE_NAME)
-                            .Where(Filter.Eq("name", MigrationGroup))
-                            .AllRows()[0][0]);
-                }
-                return 0;
+            if (_dataClient.TableExists(OLD_VERSION_TABLE_NAME) && MigrationGroupExistsOnOldTable()) {
+                return Convert.ToInt64(_dataClient.Select.Columns("version")
+                        .From(OLD_VERSION_TABLE_NAME)
+                        .Where(Filter.Eq("name", MigrationGroup))
+                        .AllRows()[0][0]);    
             }
-            if (!MigrationGroupExists()) {
-                return 0;
+            if (_dataClient.TableExists(VERSION_TABLE_NAME) && MigrationGroupExists()) {
+                var sql = "select max(version) from " + VERSION_TABLE_NAME + " where migrationgroup = '" + MigrationGroup + "'";
+                return Convert.ToInt64(_dataClient.Database.QueryScalar(sql));
             }
-            var sql = "select max(version) from " + VERSION_TABLE_NAME + " where migrationgroup = '" + MigrationGroup + "'";
-            var version = Convert.ToInt64(_dataClient.Database.QueryScalar(sql));
-            return version;
+            return 0;
         }
 
         private bool MigrationGroupExists() {
-            int count = _dataClient.Count.Table(VERSION_TABLE_NAME).Where(_migrationGroupFilter);
-            return count != 0;
+            return _dataClient.Count.Table(VERSION_TABLE_NAME).Where(_migrationGroupFilter) > 0;
+        }
+
+        private bool MigrationGroupExistsOnOldTable() {
+            return _dataClient.Count.Table(OLD_VERSION_TABLE_NAME).Where(Filter.Eq("name", MigrationGroup)) > 0;
         }
     }
 }

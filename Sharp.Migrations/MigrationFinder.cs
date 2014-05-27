@@ -8,14 +8,14 @@ namespace Sharp.Migrations {
 	public class MigrationFinder {
 		private Assembly _assembly;
 		private List<Type> _allMigrations;
-		private int _fromVersion;
-		private int _toVersion;
+        private long _fromVersion;
+        private long _toVersion;
 		
 		public MigrationFinder(Assembly assembly) {
 			_assembly = assembly;
 		}
 
-		public int LastVersion { 
+		public long LastVersion { 
 			get {
 				FindAllMigrations();
 				return (_allMigrations.Count > 0) ? VersionHelper.GetVersion(FindAllMigrations().Last()) : 0;
@@ -58,7 +58,7 @@ namespace Sharp.Migrations {
 		}
 
 		private void InvertFromAndTo() {
-			int aux = _fromVersion;
+			long aux = _fromVersion;
 			_fromVersion = _toVersion;
 			_toVersion = aux;
 		}

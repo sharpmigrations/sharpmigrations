@@ -147,7 +147,7 @@ namespace Sharp.Tests.Migrations {
 		[Test]
 		public void Negative_target_version_means_last_version() {
 			_runner.Run(-1);
-			int maxVersion = VersionHelper.GetVersion(MigrationTestHelper.GetMigrations().Last());
+			long maxVersion = VersionHelper.GetVersion(MigrationTestHelper.GetMigrations().Last());
 			Assert.AreEqual(maxVersion, MigrationTestHelper.ExecutedMigrationsUp.Last().Version);
 		}
 

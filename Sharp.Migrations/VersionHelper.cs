@@ -5,15 +5,14 @@ namespace Sharp.Migrations {
     
 	public static class VersionHelper {
 
-        public static int GetVersion(Type type) {
+        public static long GetVersion(Type type) {
 			string versionInString = Regex.Match(type.Name, "[0-9]+").Value;
-			int version = ParseVersion(type, versionInString);
-			return version;
+            return ParseVersion(type, versionInString);
         }
 
-		private static int ParseVersion(Type type, string versionInString) {
-			int version;
-			if(!Int32.TryParse(versionInString, out version)) {
+        private static long ParseVersion(Type type, string versionInString) {
+			long version;
+			if(!Int64.TryParse(versionInString, out version)) {
 				throw new InvalidMigrationException(String.Format("Could not figure out the version of migration {0}", type.Name));
 			}
 			return version;
