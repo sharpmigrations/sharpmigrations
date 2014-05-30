@@ -21,9 +21,9 @@ namespace Sharp.Migrator {
         }
 
         public void Start() {
-            Console.WriteLine("");
-            Console.WriteLine("Sharp Migrator");
-            Console.WriteLine("");
+            Console.WriteLine("--------------------------------");
+            Console.WriteLine("Sharp Migrator v" + Assembly.GetExecutingAssembly().GetName().Version);
+            Console.WriteLine("--------------------------------");
             PrintPlataform();
 
             _options = new Options();
@@ -34,9 +34,16 @@ namespace Sharp.Migrator {
             if (!Parser.Default.ParseArguments(_args, _options)) {
                 Exit();
             }
+            PrintMigrationGroup();
             SetSharpConfig();
             PrintDataSource(SharpFactory.Default.ConnectionString);
             Run();
+        }
+
+        private void PrintMigrationGroup() {
+            string migrationGroup = String.IsNullOrEmpty(_options.MigrationGroup) ? "not set" : _options.MigrationGroup;            
+            Console.WriteLine("MigrationGroup: " + migrationGroup);
+            Console.WriteLine("--------------------------------"); 
         }
 
 
@@ -48,19 +55,50 @@ namespace Sharp.Migrator {
         }
 
         private static void SetSharpConfig() {
-            if (_options.ConnectionString == "") {
-                if (_options.ConnectionStringName == "") {
-                    Exit("Please, set a connectionstring");
-                }
-                _options.ConnectionString = ConfigurationManager.ConnectionStrings[_options.ConnectionStringName].ConnectionString;
+            if (SetConnectionString() || SetConnectionStringViaConnectionName() || SetConnectionStringViaAppConfig()) {
+                SetSharpConfigFromOptions();
+                return;
+            }
+            Exit("Please, set a connectionstring");                        
+        }
+
+        private static void SetSharpConfigFromOptions() {
+            if (String.IsNullOrEmpty(_options.ConnectionString)) {
+                Exit("Please, set a connectionstring");        
+            }
+            if (String.IsNullOrEmpty(_options.DatabaseProvider)) {
+                Exit("Please, set a database provider");                        
             }
             SharpFactory.Default.ConnectionString = _options.ConnectionString;
             SharpFactory.Default.DataProviderName = _options.DatabaseProvider;
         }
 
+        private static bool SetConnectionString() {
+            return !String.IsNullOrEmpty(_options.ConnectionString) && !String.IsNullOrEmpty(_options.DatabaseProvider);
+        }
+
+        private static bool SetConnectionStringViaConnectionName() {
+            if (String.IsNullOrEmpty(_options.ConnectionStringName)) {
+                return false;
+            }
+            _options.ConnectionString = ConfigurationManager.ConnectionStrings[_options.ConnectionStringName].ConnectionString;
+            _options.DatabaseProvider = ConfigurationManager.ConnectionStrings[_options.ConnectionStringName].ProviderName;
+            return true;
+        }
+        private static bool SetConnectionStringViaAppConfig() {
+            if (String.IsNullOrEmpty(_options.AssemblyWithMigrations)) {
+                return false;
+            }
+            var appConfig = ConfigurationManager.OpenExeConfiguration(_options.AssemblyWithMigrations);
+            var cs = GetConnectionStringSettings(appConfig.ConnectionStrings.ConnectionStrings);
+            _options.ConnectionString = cs.ConnectionString;
+            _options.DatabaseProvider = cs.ProviderName;
+            return true;
+        }
+
         private static void PrintPlataform() {
             int bits = IntPtr.Size == 4 ? 32 : 64;
-            Console.WriteLine("Running in " + bits + " bits");
+            Console.WriteLine("Running in    : " + bits + " bits");
         }
 
         private static void PrintDataSource(string connectionString) {
@@ -85,6 +123,7 @@ namespace Sharp.Migrator {
             }
             var crunner = new ConsoleRunner(SharpFactory.Default.ConnectionString, SharpFactory.Default.DataProviderName);
             crunner.AssemblyWithMigrations = GetAssemblyWithMigrations();
+            crunner.MigrationGroup = _options.MigrationGroup;
             crunner.Start();
         }
 
@@ -103,6 +142,24 @@ namespace Sharp.Migrator {
             runner.Run(version, _options.MigrationGroup);
             File.WriteAllText(_options.Filename, runner.GetCreatedScript(), Encoding.UTF8);
             Console.WriteLine(" * Check {0} for the script dump. No migrations were performed on the database.", _options.Filename);
+        }
+
+        private static ConnectionStringSettings GetConnectionStringSettings(ConnectionStringSettingsCollection section) {
+            Console.WriteLine("No connection string was informed, pick one from app.config:");
+            Console.WriteLine("");
+            for (var i = 0; i < section.Count; i++) {
+                Console.WriteLine("{0} - {1}", i, section[i].Name);
+                Console.WriteLine(section[i].ConnectionString);
+                Console.WriteLine();
+            }
+            Console.Write("> ");
+            int index;
+            while (!Int32.TryParse(Console.ReadLine(), out index)) {
+                Console.WriteLine(ConsoleRunner.INVALID_NUMBER);
+            }
+            Console.WriteLine("");
+            Console.WriteLine("--------------------------------"); 
+            return section[index];
         }
     }
 }
