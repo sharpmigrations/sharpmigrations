@@ -56,7 +56,10 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Attributes\SeedAttribute.cs" />
     <Compile Include="Runners\Direction.cs" />
+    <Compile Include="Runners\FromAppConfigRunner.cs" />
+    <Compile Include="Runners\IRunner.cs" />
     <Compile Include="Runners\MigrationInfo.cs" />
     <Compile Include="Runners\MigrationPlan.cs" />
     <Compile Include="Runners\ScriptCreator\ScriptCreatorVersionRepository.cs" />
@@ -81,9 +84,11 @@
     <Compile Include="VersionHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="init.ps1" />
     <None Include="packages.config" />
     <None Include="Push.bat" />
     <None Include="Sharp.Migrations.nuspec" />
+    <None Include="SharpMigrator.psm1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sharp.Data\Sharp.Data.csproj">

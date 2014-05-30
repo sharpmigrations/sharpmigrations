@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using CommandLine;
 using Sharp.Data;
 using Sharp.Migrations;
 using Sharp.Migrations.Runners;
@@ -26,15 +27,13 @@ namespace Sharp.Migrator {
             PrintPlataform();
 
             _options = new Options();
-            //ParserResult<Options> result = Parser.Default.ParseArguments<Options>(_args);
-            //if (result.Errors.Any()) {
-            //    Exit();
-            //}
             if (_args.Length == 0) {
                 Console.WriteLine(_options.GetUsage());
                 Exit();
             }
-            //_options = result.Value;
+            if (!Parser.Default.ParseArguments(_args, _options)) {
+                Exit();
+            }
             SetSharpConfig();
             PrintDataSource(SharpFactory.Default.ConnectionString);
             Run();
@@ -49,15 +48,12 @@ namespace Sharp.Migrator {
         }
 
         private static void SetSharpConfig() {
-            //if (_options.ConnectionString == "") {
-            //    if (_options.ConnectionStringName == "") {
-            //        Exit("Please, set ");
-            //    }
-            //    _options.ConnectionString = ConfigurationManager.ConnectionStrings[connectionstring].ConnectionString;
-            //}
-            //if (_options.DatabaseProvider == "") {
-            //    _options.DatabaseProvider = ConfigurationManager.ConnectionStrings[connectionstring].ProviderName;
-            //}
+            if (_options.ConnectionString == "") {
+                if (_options.ConnectionStringName == "") {
+                    Exit("Please, set a connectionstring");
+                }
+                _options.ConnectionString = ConfigurationManager.ConnectionStrings[_options.ConnectionStringName].ConnectionString;
+            }
             SharpFactory.Default.ConnectionString = _options.ConnectionString;
             SharpFactory.Default.DataProviderName = _options.DatabaseProvider;
         }

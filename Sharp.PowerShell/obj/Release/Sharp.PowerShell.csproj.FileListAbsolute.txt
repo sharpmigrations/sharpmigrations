@@ -1,0 +1,6 @@
+C:\dev\opensource\sharpmigrations\Sharp.PowerShell\bin\Release\Sharp.PowerShell.dll
+C:\dev\opensource\sharpmigrations\Sharp.PowerShell\bin\Release\Sharp.PowerShell.pdb
+C:\dev\opensource\sharpmigrations\Sharp.PowerShell\bin\Release\System.Management.Automation.dll
+C:\dev\opensource\sharpmigrations\Sharp.PowerShell\obj\Release\Sharp.PowerShell.csprojResolveAssemblyReference.cache
+C:\dev\opensource\sharpmigrations\Sharp.PowerShell\obj\Release\Sharp.PowerShell.dll
+C:\dev\opensource\sharpmigrations\Sharp.PowerShell\obj\Release\Sharp.PowerShell.pdb

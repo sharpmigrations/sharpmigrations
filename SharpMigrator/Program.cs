@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using log4net.Config;
 
 namespace Sharp.Migrator {
-    internal class Program {
+    public class Program {
         public static void Main(string[] args) {
             //string[] files = Directory.GetFiles(Path.GetFullPath("."), "*.dll");
             //foreach(string file in files) { File.Delete(file); }
-            //args = @"-a|..\..\..\Sharp.Tests.Chinook\bin\Debug\Sharp.Tests.Chinook.exe|-m|manual|-f|sql.txt|-v|-1|-c|Data Source=//localhost:1521/XE;User Id=sharp2;Password=sharp2;|-p|Oracle.ManagedDataAccess.Client".Split('|');
+            args = @"-a|..\..\..\Sharp.Tests.Chinook\bin\Debug\Sharp.Tests.Chinook.exe|-m|manual|-f|sql.txt|-v|-1|-c|Data Source=//localhost:1521/XE;User Id=sharp2;Password=sharp2;|-p|Oracle.ManagedDataAccess.Client".Split('|');
             //args = @"-a|..\..\..\Sharp.Tests.Chinook\bin\Debug\Sharp.Tests.Chinook.exe|-c|Data Source=//localhost:1521/XE;User Id=sharp;Password=sharp;|-p|Oracle.ManagedDataAccess.Client|-g|plugin|-m|script|-f|script.sql".Split('|');
+            XmlConfigurator.Configure();
             var m = new Migrator(args);
             m.Start();
         }

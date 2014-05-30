@@ -56,6 +56,10 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Management.Automation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\System.Management.Automation.6.1.7601.17515\lib\net40\System.Management.Automation.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -96,6 +100,7 @@
     <Compile Include="Migrations\RunnerTests.cs" />
     <Compile Include="Migrations\SqlToFileDatabaseTests.cs" />
     <Compile Include="Migrations\VersionRepositoryTests.cs" />
+    <Compile Include="PowerShell\UpdateDatabaseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +111,10 @@
     <ProjectReference Include="..\Sharp.Migrations\Sharp.Migrations.csproj">
       <Project>{703517B1-515E-4833-A1E0-B3CD9CF7E5E2}</Project>
       <Name>Sharp.Migrations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sharp.PowerShell\Sharp.PowerShell.csproj">
+      <Project>{5352bf92-6107-46b0-ad17-44a2ff49a73a}</Project>
+      <Name>Sharp.PowerShell</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
