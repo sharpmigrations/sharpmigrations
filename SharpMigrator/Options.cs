@@ -12,7 +12,7 @@ namespace Sharp.Migrator {
         [Option('c', "connectionstring", HelpText = "This is the connection string of the target database")]
         public string ConnectionString { get; set; }
 
-        [Option('p', "provider", HelpText = "This is the database provider", DefaultValue = "")]
+        [Option('p', "provider", HelpText = "This is the database provider")]
         public string DatabaseProvider { get; set; }
 
         [Option('v', "version", HelpText = "Target version to migrate automatically to. Specifying -1 will migrate to the latest version")]
@@ -29,9 +29,9 @@ namespace Sharp.Migrator {
 
         public string GetUsage() {
             var help = new HelpText("Usage:");
-            help.AddPreOptionsLine("Ex: My.Migrations -m auto -v 10 -> Migrates to version 10 (no prompt)");
-            help.AddPreOptionsLine("Ex: My.Migrations -m script -f script.sql -v 10 -> Generates scripts from current version to version 10 into script.sql file");
-            help.AddPreOptionsLine("Ex: My.Migrations -m script -v 10 -g superplugin -> Generates scripts from current version to version 10 using migration group 'superplugin'");
+            help.AddPreOptionsLine("Ex: SharpMigrations -a MyAssembly.dll -m auto -v 10 -> Migrates to version 10 (no prompt)");
+            help.AddPreOptionsLine("Ex: SharpMigrations -a MyAssembly.dll -m script -f script.sql -v 10 -> Generates scripts from current version to version 10 into script.sql file");
+            help.AddPreOptionsLine("Ex: SharpMigrations -a MyAssembly.dll -m script -v 10 -g superplugin -> Generates scripts from current version to version 10 using migration group 'superplugin'");
             help.AddOptions(this);
             return help.ToString();
         }

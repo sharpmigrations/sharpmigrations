@@ -9,7 +9,7 @@ using Sharp.Data.Log;
 using Sharp.Migrations.Runners;
 
 namespace Sharp.Migrations {
-	public class Runner {
+    public class Runner : IRunner {
         public static ISharpLogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.Name);
         public static bool IgnoreDialectNotSupportedActions { get; set; }
 
@@ -59,6 +59,11 @@ namespace Sharp.Migrations {
 		    MigrationPlan migrationPlan = CreateMigrationPlan(migrationsFromDatabase, migrationsFromAssembly, targetVersion);
             RunMigrations(migrationPlan);
 		}
+
+	    public void Run(long targetVersion, string migrationGroup) {
+	        MigrationGroup = migrationGroup;
+            Run(targetVersion);
+	    }
 
         private MigrationPlan CreateMigrationPlan(List<long> migrationsFromDatabase, List<MigrationInfo> migrationsFromAssembly, long targetVersion) {
             long currentVersion = migrationsFromDatabase.Count == 0 ? 0 : migrationsFromDatabase.Last();
