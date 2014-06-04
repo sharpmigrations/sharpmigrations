@@ -84,11 +84,11 @@
     <Compile Include="VersionHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="init.ps1" />
+    <None Include="Nuget\init.ps1" />
     <None Include="packages.config" />
-    <None Include="Push.bat" />
-    <None Include="Sharp.Migrations.nuspec" />
-    <None Include="SharpMigrator.psm1" />
+    <None Include="Nuget\Push.bat" />
+    <None Include="Nuget\Sharp.Migrations.nuspec" />
+    <None Include="Nuget\SharpMigrator.psm1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sharp.Data\Sharp.Data.csproj">

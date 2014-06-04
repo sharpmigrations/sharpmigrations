@@ -18,7 +18,7 @@ namespace Sharp.Migrations {
         private string _migrationGroup;
 
         public string MigrationGroup {
-            get { return _migrationGroup; }
+            get { return _migrationGroup ?? DEFAULT_MIGRATION_GROUP; }
             set {
                 _migrationGroup = value;
                 _migrationGroupFilter = Filter.Eq("migrationgroup", MigrationGroup);
@@ -119,11 +119,18 @@ namespace Sharp.Migrations {
         }
 
         public virtual void InsertVersion(MigrationInfo migrationInfo) {
+            EnsureMigrationGroup();
             _dataClient.Insert
                 .Into(VERSION_TABLE_NAME)
                 .Columns("migrationgroup", "version", "info", "applied")
                 .Values(MigrationGroup, migrationInfo.Version, migrationInfo.Name, DateTime.Now);
             _dataClient.Commit();
+        }
+
+        private void EnsureMigrationGroup() {
+            if (String.IsNullOrEmpty(MigrationGroup)) {
+                MigrationGroup = DEFAULT_MIGRATION_GROUP;
+            }
         }
 
         public virtual void RemoveVersion(MigrationInfo migrationInfo) {

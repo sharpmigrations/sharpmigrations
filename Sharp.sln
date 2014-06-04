@@ -28,8 +28,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Migrator", "SharpMigr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Tests.Nlog", "Sharp.Tests.Nlog\Sharp.Tests.Nlog.csproj", "{77E9F96D-2B28-4E55-AB2D-B60C05000ACA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.PowerShell", "Sharp.PowerShell\Sharp.PowerShell.csproj", "{5352BF92-6107-46B0-AD17-44A2FF49A73A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,10 +70,6 @@ Global
 		{77E9F96D-2B28-4E55-AB2D-B60C05000ACA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77E9F96D-2B28-4E55-AB2D-B60C05000ACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77E9F96D-2B28-4E55-AB2D-B60C05000ACA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5352BF92-6107-46B0-AD17-44A2FF49A73A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5352BF92-6107-46B0-AD17-44A2FF49A73A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5352BF92-6107-46B0-AD17-44A2FF49A73A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5352BF92-6107-46B0-AD17-44A2FF49A73A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
