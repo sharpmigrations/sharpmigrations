@@ -74,6 +74,7 @@
     <Compile Include="Database.cs" />
     <Compile Include="Databases\DatabaseKind.cs" />
     <Compile Include="DbFactory.cs" />
+    <Compile Include="ExceptionHelper.cs" />
     <Compile Include="Exceptions\DatabaseException.cs" />
     <Compile Include="Databases\DataProvider.cs" />
     <Compile Include="Databases\DataProviderNames.cs" />

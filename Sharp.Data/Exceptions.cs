@@ -49,20 +49,10 @@ namespace Sharp.Data {
         }
 
         private static string GetErrorMessage(string factoryName, Exception innerException) {
-            var allErrors = new StringBuilder();
-            GetAllErrors(allErrors, innerException);
             if (_allFactories.Contains(factoryName)) {
-                return "DbProviderFactory named [" + factoryName + "] was found, but some error occurred trying to instantiate it." + allErrors;
+                return "DbProviderFactory named [" + factoryName + "] was found, but some error occurred trying to instantiate it." ;
             }
-            return "Could not find the DbProviderFactory named [" + factoryName + "]. Available factories are: " + _allFactories + ". Check your machine.config for " + (IsX64 ? "64" : "32") + "bits. " + allErrors;
-        }
-
-        private static void GetAllErrors(StringBuilder sb, Exception ex) {
-            sb.AppendLine();
-            sb.Append("Error: " + ex.Message);
-            if (ex.InnerException != null) {
-                GetAllErrors(sb, ex.InnerException);
-            }
+            return "Could not find the DbProviderFactory named [" + factoryName + "]. Available factories are: " + _allFactories + ". Check your machine.config for " + (IsX64 ? "64" : "32") + "bits. ";
         }
 
         public DataClientFactoryNotFoundException(string factoryName, Exception innerException)

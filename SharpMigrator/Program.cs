@@ -1,5 +1,6 @@
 ﻿using System;
 using log4net.Config;
+using Sharp.Data;
 
 namespace Sharp.Migrator {
     public class Program {
@@ -18,8 +19,8 @@ namespace Sharp.Migrator {
             }
             catch (Exception ex) {
                 Console.WriteLine();
-                Console.WriteLine("Error: ");
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("Error running migrator: ");
+                Console.WriteLine(ExceptionHelper.GetAllErrors(ex));
             }
         }
 
