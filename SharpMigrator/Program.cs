@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using log4net.Config;
 
 namespace Sharp.Migrator {
@@ -12,10 +9,18 @@ namespace Sharp.Migrator {
             //args = @"-a|..\..\..\Sharp.Tests.Chinook\bin\Debug\Sharp.Tests.Chinook.exe|-m|manual|-f|sql.txt|-v|-1|-c|Data Source=//localhost:1521/XE;User Id=sharp2;Password=sharp2;|-p|Oracle.ManagedDataAccess.Client".Split('|');
             //args = @"-a|..\..\..\Sharp.Tests.Chinook\bin\Debug\Sharp.Tests.Chinook.exe|-c|Data Source=//localhost:1521/XE;User Id=sharp;Password=sharp;|-p|Oracle.ManagedDataAccess.Client|-g|plugin|-m|script|-f|script.sql".Split('|');
             //args = @"-a|c:\dev\opensource\sharpmigrations\Sharp.Tests.Northwind\bin\Debug\Sharp.Tests.Northwind.exe".Split('|');
-            //args = @"-a|C:\dev\test\TestApp\TestApp\bin\Debug\TestApp.exe|-p|Oracle.ManagedDataAccess.Client|-c|Data Source=//localhost:1521/XE; User Id=sharp; Password=sharp;|-m|auto|-v|0".Split('|');
+            //args = @"-a|C:\dev\test\TestApp\TestApp\bin\Debug\TestApp.exe|-p|Oracle.DataAccess.Client|-c|Data Source=//localhost:1521/XE; User Id=sharp; Password=sharp;|-m|auto|-v|0".Split('|');
+            //args = @"-a|C:\dev\test\TestApp\TestApp\bin\Debug\TestApp.exe|-c|Data Source=//localhost:1521/XE; User Id=sharp; Password=sharp;|-m|auto".Split('|');
             XmlConfigurator.Configure();
             var m = new Migrator(args);
-            m.Start();
+            try {
+                m.Start();
+            }
+            catch (Exception ex) {
+                Console.WriteLine();
+                Console.WriteLine("Error: ");
+                Console.WriteLine(ex.Message);
+            }
         }
 
         //private static void SetResolveAssembliesStrategy() {

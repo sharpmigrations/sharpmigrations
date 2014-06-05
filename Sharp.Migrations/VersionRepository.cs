@@ -54,7 +54,7 @@ namespace Sharp.Migrations {
             _dataClient.Add
                 .Table(VERSION_TABLE_NAME)
                 .WithColumns(
-                    Column.String("migrationgroup").Size(200),
+                    Column.String("migrationgroup").Size(200).NotNull(),
                     Column.Int64("version").NotNull(),
                     Column.String("info").Size(1000),
                     Column.Date("applied")

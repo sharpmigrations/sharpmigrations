@@ -82,6 +82,7 @@ function Get-ConnectionString {
 		Write-Host "" [$($i)] Name: $connString.name " ConnStr: "  $connString.connectionString
 		$connectionStrings+= $connString.connectionString
 		$providers+= $connString.providerName
+		$i = $i + 1
 	}
 	[Int]$connectionStringIndex = Read-Host "Pick one or (0) to exit: " 
 	if($connectionStringIndex -eq 0) {
