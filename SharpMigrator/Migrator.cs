@@ -121,6 +121,15 @@ namespace Sharp.Migrator {
                 runner.Run(version);
                 return;
             }
+            if (mode == "seed") {
+                if (String.IsNullOrEmpty(_options.SeedName)) {
+                    Exit("Please, set the seed name");
+                    return;
+                }
+                var seedRunner = new SeedRunner(SharpFactory.Default.CreateDataClient(), GetAssemblyWithMigrations());
+                seedRunner.Run(_options.SeedName, _options.SeedArgs, _options.MigrationGroup);
+                return;
+            }
             var crunner = new ConsoleRunner(SharpFactory.Default.ConnectionString, SharpFactory.Default.DataProviderName);
             crunner.AssemblyWithMigrations = GetAssemblyWithMigrations();
             crunner.MigrationGroup = _options.MigrationGroup;

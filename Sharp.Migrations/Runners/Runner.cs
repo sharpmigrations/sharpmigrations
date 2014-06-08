@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Threading;
 using Sharp.Data;
 using Sharp.Data.Databases;
 using Sharp.Data.Log;
@@ -17,7 +16,6 @@ namespace Sharp.Migrations {
 		private IDataClient _dataClient;
 	    private DatabaseKind _databaseKind;
 		private long _initialVersion;
-        private MigrationFinder _migrationFinder;
 	    private MigrationFactory _migrationFactory;
 
         public IVersionRepository VersionRepository { private get; set; }
@@ -28,7 +26,7 @@ namespace Sharp.Migrations {
 	    }
 
 	    public long LastVersionNumber {
-            get { return _migrationFinder.LastVersion; }
+            get { return MigrationFinder.FindLastMigration(_targetAssembly); }
 	    }
 
 	    public long CurrentVersionNumber {
@@ -45,12 +43,16 @@ namespace Sharp.Migrations {
             _databaseKind = _dataClient.Database.Provider.DatabaseKind;
             _targetAssembly = targetAssembly ?? Assembly.GetCallingAssembly();
             VersionRepository = versionRepository;
-            _migrationFinder = new MigrationFinder(_targetAssembly);
             _migrationFactory = new MigrationFactory(_dataClient);
             _initialVersion = -1;
 	    }
         
 	    public Runner(IDataClient dataClient, Assembly targetAssembly) : this(dataClient, targetAssembly, new VersionRepository(dataClient)) {}
+
+        public void Run(long targetVersion, string migrationGroup) {
+            MigrationGroup = migrationGroup;
+            Run(targetVersion);
+        }
 
 		public void Run(long targetVersion) {
 		    List<MigrationInfo> migrationsFromAssembly = MigrationFinder.FindMigrations(_targetAssembly);
@@ -59,11 +61,6 @@ namespace Sharp.Migrations {
 		    MigrationPlan migrationPlan = CreateMigrationPlan(migrationsFromDatabase, migrationsFromAssembly, targetVersion);
             RunMigrations(migrationPlan);
 		}
-
-	    public void Run(long targetVersion, string migrationGroup) {
-	        MigrationGroup = migrationGroup;
-            Run(targetVersion);
-	    }
 
         private MigrationPlan CreateMigrationPlan(List<long> migrationsFromDatabase, List<MigrationInfo> migrationsFromAssembly, long targetVersion) {
             long currentVersion = migrationsFromDatabase.Count == 0 ? 0 : migrationsFromDatabase.Last();

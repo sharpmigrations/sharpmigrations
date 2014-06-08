@@ -18,11 +18,15 @@ namespace Sharp.Migrations {
         private string _migrationGroup;
 
         public string MigrationGroup {
-            get { return _migrationGroup ?? DEFAULT_MIGRATION_GROUP; }
+            get { return GetMigrationGroup(_migrationGroup); }
             set {
                 _migrationGroup = value;
                 _migrationGroupFilter = Filter.Eq("migrationgroup", MigrationGroup);
             }
+        }
+
+        public static string GetMigrationGroup(string migrationGroup) {
+            return String.IsNullOrEmpty(migrationGroup) ? DEFAULT_MIGRATION_GROUP : migrationGroup;
         }
 
         public VersionRepository(IDataClient dataClient) {

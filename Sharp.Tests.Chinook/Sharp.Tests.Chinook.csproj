@@ -76,23 +76,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="001_Create_table_Genre.cs" />
-    <Compile Include="002_Create_table_MediaType.cs" />
-    <Compile Include="003_Create_table_Artist.cs" />
-    <Compile Include="004_Create_table_Album.cs" />
-    <Compile Include="005_Create_table_Track.cs" />
-    <Compile Include="006_Create_table_Employee.cs" />
-    <Compile Include="007_Create_table_Customer.cs" />
-    <Compile Include="008_Create_table_Involce.cs" />
-    <Compile Include="009_Create_table_InvoiceLine.cs" />
-    <Compile Include="010_Create_table_Playlist.cs" />
-    <Compile Include="011_Create_table_PlaylistTrack.cs" />
-    <Compile Include="012_Create_Foreign_Keys.cs" />
-    <Compile Include="013_Populate_genres.cs" />
-    <Compile Include="014_Populate_media_types.cs" />
+    <Compile Include="Migrations\001_Create_table_Genre.cs" />
+    <Compile Include="Migrations\002_Create_table_MediaType.cs" />
+    <Compile Include="Migrations\003_Create_table_Artist.cs" />
+    <Compile Include="Migrations\004_Create_table_Album.cs" />
+    <Compile Include="Migrations\005_Create_table_Track.cs" />
+    <Compile Include="Migrations\006_Create_table_Employee.cs" />
+    <Compile Include="Migrations\007_Create_table_Customer.cs" />
+    <Compile Include="Migrations\008_Create_table_Involce.cs" />
+    <Compile Include="Migrations\009_Create_table_InvoiceLine.cs" />
+    <Compile Include="Migrations\010_Create_table_Playlist.cs" />
+    <Compile Include="Migrations\011_Create_table_PlaylistTrack.cs" />
+    <Compile Include="Migrations\012_Create_Foreign_Keys.cs" />
+    <Compile Include="Migrations\013_Populate_genres.cs" />
+    <Compile Include="Migrations\014_Populate_media_types.cs" />
     <Compile Include="ChinookMigrations.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Seeds\SomeInserts.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sharp.Data\Sharp.Data.csproj">

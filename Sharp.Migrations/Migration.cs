@@ -4,7 +4,6 @@ namespace Sharp.Migrations {
     public abstract class Migration {
     	private IDataClient _dataClient;
         public long Version { get; set; }
-        public string Name { get; protected set; }
 
         public IDataClient DataClient {
             get { return _dataClient; }
@@ -12,7 +11,6 @@ namespace Sharp.Migrations {
 
     	protected Migration() {
             Version = VersionHelper.GetVersion(GetType());
-            Name = GetType().Name;
         }
 
         public void SetDataClient(IDataClient dataClient) {

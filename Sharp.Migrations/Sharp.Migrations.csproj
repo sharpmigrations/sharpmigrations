@@ -56,14 +56,14 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Attributes\SeedAttribute.cs" />
     <Compile Include="Runners\Direction.cs" />
     <Compile Include="Runners\FromAppConfigRunner.cs" />
     <Compile Include="Runners\IRunner.cs" />
+    <Compile Include="Runners\ISeedRunner.cs" />
     <Compile Include="Runners\MigrationInfo.cs" />
     <Compile Include="Runners\MigrationPlan.cs" />
     <Compile Include="Runners\ScriptCreator\ScriptCreatorVersionRepository.cs" />
-    <Compile Include="ReversableSchemaMigration.cs" />
+    <Compile Include="ReversibleSchemaMigration.cs" />
     <Compile Include="DataMigration.cs" />
     <Compile Include="InvalidMigrationException.cs" />
     <Compile Include="IVersionRepository.cs" />
@@ -77,8 +77,11 @@
     <Compile Include="Runners\ScriptCreator\ScriptCreatorRunner.cs" />
     <Compile Include="Runners\ConsoleRunner.cs" />
     <Compile Include="Runners\Runner.cs" />
+    <Compile Include="Runners\SeedRunner.cs" />
     <Compile Include="SchemaMigration.cs" />
     <Compile Include="Runners\ScriptCreator\ScriptCreatorDatabase.cs" />
+    <Compile Include="SeedMigration.cs" />
+    <Compile Include="SeedNotFoundException.cs" />
     <Compile Include="UpgradeSharpMigrationException.cs" />
     <Compile Include="VersionRepository.cs" />
     <Compile Include="VersionHelper.cs" />
