@@ -27,11 +27,8 @@ namespace Sharp.Migrator {
             PrintPlataform();
 
             _options = new Options();
-            if (_args.Length == 0) {
+            if (_args.Length == 0 || !Parser.Default.ParseArguments(_args, _options)) {
                 Console.WriteLine(_options.GetUsage());
-                Exit();
-            }
-            if (!Parser.Default.ParseArguments(_args, _options)) {
                 Exit();
             }
             PrintMigrationGroup();

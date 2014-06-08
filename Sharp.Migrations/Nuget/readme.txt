@@ -1,6 +1,25 @@
-Version 1.4.7
+Version 1.4.8
 
 New features:
+---------------------------------------------------------------------------------------------
+Seeds
+---------------------------------------------------------------------------------------------
+Seeds are data migrations completely independent that are not versioned. They are very 
+usefull to create specific scenarios for your database.
+For instance, you can create a DevSeed that when called adds default users and data specific
+for testing.
+
+Create any class that extends SeedMigrations. You can put it anywhere. No need for version 
+numbers. To run this seed, use the Package Manager Console (Invoke-Seed command, see below) 
+or the SharpMigrator.exe.
+
+Seeds have no "Down()" method. If you want to revert changes of a Seed, create another Seed
+that undo the changes.
+
+You can pass an argument to your seed too. The argument is always a string and it's up to you
+to parse and use it the way you want. Ex: you could pass the number of dummy users you want
+to create in some Seed.
+
 ---------------------------------------------------------------------------------------------
 PowerShell command: Update-Database
 ---------------------------------------------------------------------------------------------
@@ -8,6 +27,20 @@ Just type Update-Database in your Package Manager Console and your database will
 The params are:
 
 -version          : the version to migrate (default latest)
+-assemblyPath     : assembly with migrations. (default current project)
+-connectionString : database connectionstring. If not set, a menu with all connection strings 
+					from app.config will be shown
+-provider		  : database provider (see Sharp.Data.Databases.DataProviderNames)
+-group			  : migration group (default if not set)
+
+---------------------------------------------------------------------------------------------
+PowerShell command: Invoke-Seed
+---------------------------------------------------------------------------------------------
+Invoke-Seed applies some seed to the database.
+The params are:
+
+-seedName         : name of the seed to apply (mandatory)
+-seedArgs		  : some argument to pass to the seed (default nothing)
 -assemblyPath     : assembly with migrations. (default current project)
 -connectionString : database connectionstring. If not set, a menu with all connection strings 
 					from app.config will be shown

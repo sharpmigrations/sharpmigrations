@@ -1,18 +1,12 @@
 ﻿function Update-Database {
 	param(
-		$version,
+		$version = -1,
 		[String] $assemblyPath,
 		[String] $connectionString,
 		[String] $provider,
-		[String] $group
+		[String] $group = "default"
 	)
-  
-	if($version -eq $null) {
-		$version = -1
-	}
-	if($group -eq "") {
-		$group = "default"
-	}
+	
 	if($assemblyPath -eq "") {
 		$assemblyPath = Get-AssemblyPath
 	}
@@ -46,6 +40,55 @@
 			$version
 			)            
 	& "SharpMigrator.exe" $args
+}
+
+function Invoke-Seed {
+	param(
+		[string] $seedName = $(throw "please, inform seed name"),
+		[string] $seedArgs,
+		[String] $assemblyPath,
+		[String] $connectionString,
+		[String] $provider,
+		[String] $group = "default"
+	)
+	
+	if($assemblyPath -eq "") {
+		$assemblyPath = Get-AssemblyPath
+	}
+	
+	Write-Host "---------------------------------------------------"
+	Write-Host "SharpMigrator PowerShell"
+	Write-Host "---------------------------------------------------"
+	Write-Host "Assembly: " $assemblyPath
+	
+	if($connectionString -eq "") {
+		$connectionStringAndProvider = Get-ConnectionString
+		$connectionString = $connectionStringAndProvider[0]
+		$provider = $connectionStringAndProvider[1]
+	}
+	elseif($provider -eq "") {
+		WriteHost "Please. specify a provider"
+		Exit
+	}
+
+	$args = @("-a",
+			$assemblyPath,
+			"-p",
+			$provider,
+			"-c",
+			$connectionstring,
+			"-g",
+			$group,
+			"-m",
+			"seed",
+			"-s",
+			$seedName
+			)        
+	if($seedArgs -ne "") {
+		$args+="-i"
+		$args+=$seedArgs
+	}		    
+	& 'SharpMigrator.exe' $args
 }
 
 function Get-AssemblyPath {
@@ -96,3 +139,4 @@ function Get-ConnectionString {
 }
 
 Export-ModuleMember -function Update-Database;
+Export-ModuleMember -function Invoke-Seed;
