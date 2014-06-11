@@ -9,7 +9,7 @@ namespace Sharp.Data {
         IDbConnection GetConnection();
         void ConfigCommand(IDbCommand command, object[] parameters, bool isBulk);
         IDbDataParameter GetParameter();
-        IDbDataParameter GetParameter(In parameter);
+        IDbDataParameter GetParameter(In parameter, bool isBulk);
         IDbDataParameter GetParameterCursor();
         DatabaseException CreateSpecificException(Exception exception, string sql);
     }

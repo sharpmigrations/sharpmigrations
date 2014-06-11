@@ -4,6 +4,8 @@ using Sharp.Data;
 using Sharp.Data.Schema;
 
 namespace Sharp.Tests.Databases.Data {
+
+    [TestFixture]
     public abstract class DatabaseTests {
         protected IDataClient _dataClient;
         protected IDatabase _database;
@@ -93,7 +95,35 @@ namespace Sharp.Tests.Databases.Data {
         }
 
         [Test]
-        public virtual void Can_bulk_insert_stored_procedure() { }
+        public void Can_insert_blob() {
+            _dataClient.AddTable(TableFoo, Column.Binary("colBin"));
+            var bytes = new byte[10];
+            for (int i = 0; i < 10; i++) {
+                bytes[i] = 66;
+            }
+            _database.ExecuteSql("insert into " + TableFoo + " (colBin) values (:v1)", In.Named("v1", bytes));
+            var res = _dataClient.Select.AllColumns().From(TableFoo).AllRows();
+            var bs = (byte[])res[0][0];
+            CollectionAssert.AreEqual(bytes, bs);
+        }
+
+        [Test]
+        public void Can_insert_two_blobs() {
+            _dataClient.AddTable(TableFoo, Column.Binary("colBin"), Column.Binary("colBin2"));
+            var bytes = new byte[10];
+            for (int i = 0; i < 10; i++) {
+                bytes[i] = 66;
+            }
+            _database.ExecuteSql("insert into " + TableFoo + " (colBin,colBin2) values (:v1,:v2)", In.Named("v1", bytes), In.Named("v2", bytes));
+            var res = _dataClient.Select.AllColumns().From(TableFoo).AllRows();
+            var bs1 = (byte[])res[0][0];
+            var bs2 = (byte[])res[0][1];
+            CollectionAssert.AreEqual(bytes, bs1);
+            CollectionAssert.AreEqual(bytes, bs2);
+        }
+
+        [Test]
+        public abstract void Can_bulk_insert_stored_procedure();
 
         [Test]
         public abstract void Can_bulk_insert_stored_procedure_with_nullable();

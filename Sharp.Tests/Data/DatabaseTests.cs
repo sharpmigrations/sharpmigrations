@@ -42,7 +42,7 @@ namespace Sharp.Tests.Data {
                 .Callback(() => _provider.Setup(p => p.GetParameter())
                                          .Returns(_parameter2.Object));
 
-            _provider.Setup(p => p.GetParameter(It.IsAny<In>())).Returns(() => _parameter1.Object)
+            _provider.Setup(p => p.GetParameter(It.IsAny<In>(), false)).Returns(() => _parameter1.Object)
                                   .Callback(() => _provider.Setup(p => p.GetParameter())
                                   .Returns(_parameter2.Object));
 

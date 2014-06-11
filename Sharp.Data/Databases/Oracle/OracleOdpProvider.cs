@@ -53,9 +53,9 @@ namespace Sharp.Data.Databases.Oracle {
             _propArrayBindCount.SetValue(command, collParam.Count, null);
         }
 
-        public override IDbDataParameter GetParameter(In parIn) {
+        public override IDbDataParameter GetParameter(In parIn, bool isBulk) {
             var par = GetParameter();
-            if (parIn == null) {
+            if (parIn == null || !isBulk) {
                 return par;
             }
             var collParam = parIn.Value as ICollection;

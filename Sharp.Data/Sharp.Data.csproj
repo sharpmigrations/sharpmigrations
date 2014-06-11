@@ -209,8 +209,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Push.bat" />
-    <None Include="Sharp.Data.nuspec" />
+    <None Include="Nuget\Push.bat" />
+    <None Include="Nuget\Sharp.Data.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -22,7 +22,7 @@ namespace Sharp.Data.Databases {
             return DbProviderFactory.CreateParameter();
         }
 
-        public virtual IDbDataParameter GetParameter(In parameter) {
+        public virtual IDbDataParameter GetParameter(In parameter, bool isBulk) {
             return GetParameter();
         }
 

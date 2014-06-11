@@ -1,9 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Data.Common;
-using System.Reflection;
-using Sharp.Data.Providers;
-using Sharp.Data.Util;
+﻿using System.Data.Common;
 
 namespace Sharp.Data.Databases.Oracle {
     public class OracleManagedProvider : OracleOdpProvider {
@@ -11,8 +6,7 @@ namespace Sharp.Data.Databases.Oracle {
             get { return DataProviderNames.OracleManaged; }
         }
 
-        public OracleManagedProvider(DbProviderFactory dbProviderFactory) : base(dbProviderFactory) {
-        }
+        public OracleManagedProvider(DbProviderFactory dbProviderFactory) : base(dbProviderFactory) {}
 
 
         protected override string RefCursorFullName {

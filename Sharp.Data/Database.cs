@@ -219,7 +219,7 @@ namespace Sharp.Data {
 			IDbCommand cmd = CreateIDbCommand(call, parameters);
 		    Provider.ConfigCommand(cmd, parameters, isBulk);
 			SetTimeoutForCommand(cmd);
-			PopulateCommandParameters(cmd, parameters);
+			PopulateCommandParameters(cmd, parameters, isBulk);
 			LogCommandCall(call, cmd);
 			return cmd;
 		}
@@ -253,7 +253,7 @@ namespace Sharp.Data {
 			}
 		}
 
-		private void PopulateCommandParameters(IDbCommand cmd, object[] parameters) {
+		private void PopulateCommandParameters(IDbCommand cmd, object[] parameters, bool isBulk) {
 			if (parameters == null) {
 				return;
 			}
@@ -264,9 +264,9 @@ namespace Sharp.Data {
 				} else if (parameter is InOut) {
 					par = GetInOutParameter((InOut)parameter);
 				} else if (parameter is In) {
-					par = GetInParameter((In)parameter, cmd);
+					par = GetInParameter((In)parameter, cmd, isBulk);
 				} else {
-                    par = GetInParameter(new In { Value = parameter }, cmd);
+                    par = GetInParameter(new In { Value = parameter }, cmd, isBulk);
 				}
 				//this is for when you have the cursor parameter, ignored by sql server
 				if (par != null) {
@@ -275,8 +275,8 @@ namespace Sharp.Data {
 			}
 		}
 
-        private IDbDataParameter GetInParameter(In p, IDbCommand cmd) {
-            IDbDataParameter par = Provider.GetParameter(p);
+        private IDbDataParameter GetInParameter(In p, IDbCommand cmd, bool isBulk) {
+            IDbDataParameter par = Provider.GetParameter(p, isBulk);
             par.Direction = ParameterDirection.Input;
             par.Value = p.Value ?? DBNull.Value;
             par.ParameterName = p.Name;
@@ -313,7 +313,7 @@ namespace Sharp.Data {
 		}
 
 		private IDbDataParameter GetReturnParameter(DbType type) {
-			IDbDataParameter par = Provider.GetParameter(null);
+			IDbDataParameter par = Provider.GetParameter(null, false);
 			par.Direction = ParameterDirection.ReturnValue;
 		    par.Size = 4000;
 			par.DbType = type;
