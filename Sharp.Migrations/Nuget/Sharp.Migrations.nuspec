@@ -2,7 +2,7 @@
 <package>
   <metadata>
       <id>SharpMigrations</id>
-      <version>1.4.9-alpha</version>
+      <version>1.5</version>
       <title>Sharp Migrations</title>
       <authors>André Carlucci</authors>
       <summary>Database Migration Framework for C#</summary>
@@ -14,7 +14,7 @@
          <frameworkAssembly assemblyName="System" targetFramework=".NETFramework4.0" />
       </frameworkAssemblies>
      <dependencies>
-       <dependency id="SharpData" version="1.4.1" />
+       <dependency id="SharpData" version="1.5" />
      </dependencies>
    </metadata>
   <files>

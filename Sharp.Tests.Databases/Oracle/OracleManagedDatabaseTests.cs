@@ -95,8 +95,7 @@ namespace Sharp.Tests.Databases.Oracle {
 
         public override void TearDown() {
             base.TearDown();
-            typeof(OracleOdpProvider).GetField("_propOracleDbType", ReflectionHelper.NoRestrictions).SetValue(null, null);
-            typeof(OracleOdpProvider).GetField("_oracleDbCommandType", ReflectionHelper.NoRestrictions).SetValue(null, null);
+            typeof(OracleManagedProvider).GetField("_reflectionCache", ReflectionHelper.NoRestrictions).SetValue(null, new OracleReflectionCache());
         }
     }
 }

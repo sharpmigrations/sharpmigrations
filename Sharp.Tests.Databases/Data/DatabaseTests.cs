@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using NUnit.Framework;
 using Sharp.Data;
+using Sharp.Data.Databases;
 using Sharp.Data.Schema;
 
 namespace Sharp.Tests.Databases.Data {
@@ -120,6 +122,38 @@ namespace Sharp.Tests.Databases.Data {
             var bs2 = (byte[])res[0][1];
             CollectionAssert.AreEqual(bytes, bs1);
             CollectionAssert.AreEqual(bytes, bs2);
+        }
+
+        [Test]
+        public void Can_insert_big_blob() {
+            _dataClient.AddTable(TableFoo, Column.Binary("colBin"));
+            var bytes = new byte[1024 * 1024];
+            for (int i = 0; i < bytes.Length; i++) {
+                bytes[i] = 66;
+            }
+            _database.ExecuteSql("insert into " + TableFoo + " (colBin) values (:v1)", In.Named("v1", bytes));
+            var res = _dataClient.Select.AllColumns().From(TableFoo).AllRows();
+            var bs = (byte[])res[0][0];
+            CollectionAssert.AreEqual(bytes, bs);
+        }
+
+        [Test]
+        public void Can_insert_two_big_blobs() {
+            _dataClient.AddTable(TableFoo, Column.Binary("colBin"), Column.Binary("colBin2"), Column.Date("colDate"));
+            var bin = new byte[1024*64];
+            for (int i = 0; i < bin.Length; i++) {
+                bin[i] = 66;
+            }
+            _database.ExecuteSql("insert into " + TableFoo + " (colBin,colBin2,colDate) values (:v1,:v2,:v3)", 
+                In.Named("v1", bin),
+                In.Named("v2", bin),
+                In.Named("v3", DateTime.Now)
+            );
+            var res = _dataClient.Select.AllColumns().From(TableFoo).AllRows();
+            var bs1 = (byte[])res[0][0];
+            var bs2 = (byte[])res[0][1];
+            CollectionAssert.AreEqual(bin, bs1);
+            CollectionAssert.AreEqual(bin, bs2);
         }
 
         [Test]
