@@ -192,3 +192,6 @@ Migrates to version 2
 You can make your own customized runner creating a console application and extending some Runner. There are many examples in the source code.
 
 
+##And don't forget that SharpMigrations is:
+<a href="http://www.jetbrains.com/resharper" rel="Resharper">![Foo](http://www.jetbrains.com/resharper/img/rs179x67.gif)</a>
+
