@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using Sharp.Data.Fluent;
 using Sharp.Data.Schema;
@@ -22,7 +23,12 @@ namespace Sharp.Migrations {
             get { return _schemaMigrationRename ?? (_schemaMigrationRename = new FluentRename(DataClient)); }
         }
 
+        [Obsolete("Was mispelled. Correct name is Modify")]
         public FluentModify Mofify {
+            get { return Modify; }
+        }
+
+        public FluentModify Modify {
             get { return _schemaMigrationModify ?? (_schemaMigrationModify = new FluentModify(DataClient)); }
         }
 
