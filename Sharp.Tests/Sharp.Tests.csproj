@@ -95,6 +95,7 @@
     <Compile Include="Data\Util\IntExtensionsTests.cs" />
     <Compile Include="Data\Util\StringHelperTests.cs" />
     <Compile Include="Data\WhereBuilderTests.cs" />
+    <Compile Include="Migrations\MigrationTests.cs" />
     <Compile Include="Migrations\MigrationFactoryTests.cs" />
     <Compile Include="Migrations\MigrationFinderTests.cs" />
     <Compile Include="Migrations\MigrationTestHelper.cs" />
