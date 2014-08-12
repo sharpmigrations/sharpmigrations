@@ -171,11 +171,20 @@ It doesn't matter for the framework which way you choose as long as the numbers 
 
 ### Use the SharpMigrator.exe
 Check the tools folder of your nuget package, the SharpMigrator.exe is there. You can use it to run the migrations in your CI server.
-Ex:  
 
-    SharpMigrations -a MyAssembly.dll -c "connectionString" -m auto -v 10 
+#### Migrating to specific version:
 
-Migrates to version 10
+    SharpMigrations -a MyAssembly.dll -c "connectionString" -p "Oracle.ManagedDataAccess.Client" -m auto -v 10 
+
+*Migrates to version 10*
+
+#### Migrating to the latest version using Oracle
+
+    SharpMigrations -a MyAssembly.dll -c "connectionString" -p "Oracle.ManagedDataAccess.Client" -m auto 
+
+#### Generating scripts for running them later by some DBA
+
+    SharpMigrations -a MyAssembly.dll -c "connectionString" -p "Oracle.ManagedDataAccess.Client" -m script -f myScript.txt 
 
 ### Inside Visual Studio
 You can use nuget powershell commands to run the migrations. Just open the Package Manager Console, point (dropdown) to the project with the migrations and type:
@@ -192,6 +201,6 @@ Migrates to version 2
 You can make your own customized runner creating a console application and extending some Runner. There are many examples in the source code.
 
 
-##And don't forget that SharpMigrations is:
-<a href="http://www.jetbrains.com/resharper" rel="Resharper">![Foo](http://www.jetbrains.com/resharper/img/rs179x67.gif)</a>
+##And don't forget that SharpMigrations is powered by:
+<a href="http://www.jetbrains.com/resharper" rel="Resharper">![Foo](http://blog.jetbrains.com/wp-content/uploads/2014/04/logo_resharper.gif)</a>
 

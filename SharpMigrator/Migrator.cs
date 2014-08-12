@@ -151,7 +151,7 @@ namespace Sharp.Migrator {
         }
 
         private static ConnectionStringSettings GetConnectionStringSettings(ConnectionStringSettingsCollection section) {
-            Console.WriteLine("No connection string was informed, pick one from app.config:");
+            Console.WriteLine("You have to provide a connectionstring and a database provider. I couldn't detect them, so pick one from app.config:");
             Console.WriteLine("");
             for (var i = 0; i < section.Count; i++) {
                 Console.WriteLine("{0} - {1}", i, section[i].Name);

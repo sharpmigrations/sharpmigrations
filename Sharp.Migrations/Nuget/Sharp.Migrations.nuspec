@@ -2,7 +2,7 @@
 <package>
   <metadata>
       <id>SharpMigrations</id>
-      <version>1.5.1</version>
+      <version>1.5.2</version>
       <title>Sharp Migrations</title>
       <authors>André Carlucci</authors>
       <summary>Database Migration Framework for C#</summary>
