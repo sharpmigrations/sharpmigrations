@@ -163,6 +163,12 @@ namespace Sharp.Tests.Databases.Data {
         public abstract void Can_bulk_insert_stored_procedure_with_nullable();
 
         [Test]
+        public virtual void Can_bulk_insert_stored_procedure_with_first_item_null() { }
+
+        [Test]
+        public abstract void Can_bulk_insert_stored_procedure_with_all_items_null();
+
+        [Test]
         public abstract void Can_bulk_insert_stored_procedure_with_nullable_and_dates();
 
         [Test]

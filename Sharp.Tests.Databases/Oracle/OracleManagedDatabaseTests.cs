@@ -60,6 +60,45 @@ namespace Sharp.Tests.Databases.Oracle {
 
             Assert.AreEqual(5, res.Count);
         }
+        [Test]
+        public override void Can_bulk_insert_stored_procedure_with_first_item_null() {
+            _dataClient.AddTable(TableFoo, Column.Decimal("colDecimal"));
+            try {
+                _database.ExecuteSql("drop procedure pr_bulk");
+            }
+            catch { }
+            _database.ExecuteSql("create or replace procedure pr_bulk(v_value in float) is begin insert into foo (colDecimal) values (v_value); end pr_bulk;");
+
+            var v1s = new decimal?[] { null, 2, null, 4, null };
+
+            _database.ExecuteBulkStoredProcedure("pr_bulk", In.Named("v_value", v1s));
+            ResultSet res = _dataClient.Select
+                .AllColumns()
+                .From(TableFoo)
+                .AllRows();
+
+            Assert.AreEqual(5, res.Count);
+        }
+
+        [Test]
+        public override void Can_bulk_insert_stored_procedure_with_all_items_null() {
+            _dataClient.AddTable(TableFoo, Column.Decimal("colDecimal"));
+            try {
+                _database.ExecuteSql("drop procedure pr_bulk");
+            }
+            catch { }
+            _database.ExecuteSql("create or replace procedure pr_bulk(v_value in float) is begin insert into foo (colDecimal) values (v_value); end pr_bulk;");
+
+            var v1s = new decimal?[] { null, null, null, null, null };
+
+            _database.ExecuteBulkStoredProcedure("pr_bulk", In.Named("v_value", v1s));
+            ResultSet res = _dataClient.Select
+                .AllColumns()
+                .From(TableFoo)
+                .AllRows();
+
+            Assert.AreEqual(5, res.Count);
+        }
 
         public override void Can_bulk_insert_stored_procedure_with_nullable_and_dates() {
             _dataClient.AddTable(TableFoo, Column.Decimal("colDecimal"), Column.Date("colDate"));

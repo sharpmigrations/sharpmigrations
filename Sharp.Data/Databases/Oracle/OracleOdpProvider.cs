@@ -91,7 +91,15 @@ namespace Sharp.Data.Databases.Oracle {
             if (isBulk) {
                 var collParam = value as ICollection;
                 if (collParam != null && collParam.Count != 0) {
-                    value = collParam.Cast<object>().First();
+                    var enumerator = collParam.GetEnumerator();
+                    while (enumerator.MoveNext()) {
+                        if ((value = enumerator.Current) != null) {
+                            break;
+                        }
+                    }
+                    if (value == null) {
+                        value = "";
+                    } 
                 }
             }
             par.DbType = GenericDbTypeMap.GetDbType(value.GetType());
