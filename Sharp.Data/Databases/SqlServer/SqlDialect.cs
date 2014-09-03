@@ -180,19 +180,15 @@ namespace Sharp.Data.Databases.SqlServer {
                 case DbType.Single: return "FLOAT";
                 case DbType.StringFixedLength:
                     if (precision <= 0) return "CHAR(255)";
-                    if (precision.Between(1, 255)) return String.Format("CHAR({0})", precision);
-                    if (precision.Between(256, 65535)) return "TEXT";
-                    if (precision.Between(65536, 16777215)) return "MEDIUMTEXT";
-                    break;
+                    if (precision.Between(1, 8000)) return String.Format("CHAR({0})", precision);
+                    return "TEXT";
                 case DbType.String:
                     if (precision <= 0) return "VARCHAR(255)";
-                    if (precision.Between(1, 255)) return String.Format("VARCHAR({0})", precision);
-                    if (precision.Between(256, 65535)) return "TEXT";
-                    if (precision.Between(65536, 16777215)) return "MEDIUMTEXT";
-                    break;
+                    if (precision.Between(1, 8000)) return String.Format("VARCHAR({0})", precision);
+                    return "TEXT";
                 case DbType.Time: return "TIME";
             }
-            throw new DataTypeNotAvailableException(String.Format("The type {0} is no available for sqlserver", type.ToString()));
+            throw new DataTypeNotAvailableException(String.Format("The type {0} is no available for sqlserver", type));
         }
 
         public override string GetColumnValueToSql(object value) {
