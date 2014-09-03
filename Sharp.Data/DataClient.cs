@@ -200,6 +200,9 @@ namespace Sharp.Data {
         }
 
         public virtual int UpdateSql(string table, string[] columns, object[] values, Filter filter) {
+            if (values == null) {
+                values = new object[columns.Length];
+            }
             string sql = Dialect.GetUpdateSql(table, columns, values);
 
             In[] parameters = Dialect.ConvertToNamedParameters(values);

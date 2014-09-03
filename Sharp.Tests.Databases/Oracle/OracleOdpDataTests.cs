@@ -9,7 +9,7 @@ namespace Sharp.Tests.Databases.Oracle {
 	[TestFixture]
 	public class OracleOdpDataTests : DataClientDataTests {
         [SetUp]
-        public void SetUp() {
+        public virtual void SetUp() {
             _dataClient = DBBuilder.GetDataClient(DataProviderNames.OracleOdp);
         }
 
@@ -21,13 +21,9 @@ namespace Sharp.Tests.Databases.Oracle {
 
 
 			DateTime now = DateTime.Now;
-
 			_dataClient.Insert.Into("footable").Columns("colDate", "colBool").Values(now, true);
-
 			ResultSet res = _dataClient.Select.Columns("colDate", "colBool").From("footable").AllRows();
-
 			Assert.AreEqual(now.ToString(), res[0][0].ToString());
-
 			Assert.AreEqual(1, res[0][1]);
 		}
     }

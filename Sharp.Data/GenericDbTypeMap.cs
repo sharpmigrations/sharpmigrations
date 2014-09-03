@@ -45,6 +45,7 @@ namespace Sharp.Data {
             _typeMap[typeof(Guid?)] = DbType.Guid;
             _typeMap[typeof(DateTime?)] = DbType.DateTime;
             _typeMap[typeof(DateTimeOffset?)] = DbType.DateTimeOffset;
+            _typeMap[typeof(DBNull)] = DbType.String;
         }
 
         public static DbType GetDbType(Type type) {

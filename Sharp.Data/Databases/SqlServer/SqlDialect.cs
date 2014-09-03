@@ -171,7 +171,7 @@ namespace Sharp.Data.Databases.SqlServer {
                 case DbType.DateTime: return "DATETIME";
                 case DbType.Decimal:
                     if (precision <= 0) return "NUMERIC(19,5)";
-                    else return String.Format("NUMERIC(19,{0})", precision);
+                    return String.Format("NUMERIC(19,{0})", precision);
                 case DbType.Double: return "FLOAT";
                 case DbType.Guid: return "VARCHAR(40)";
                 case DbType.Int16: return "SMALLINT";

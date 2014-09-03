@@ -97,11 +97,11 @@ namespace Sharp.Data.Databases.Oracle {
                             break;
                         }
                     }
-                    if (value == null) {
-                        value = "";
-                    } 
                 }
             }
+            if (value == null) {
+                value = "";
+            } 
             par.DbType = GenericDbTypeMap.GetDbType(value.GetType());
             if (par.DbType == DbType.Binary) {
                 ReflectionCache.PropParameterDbType.SetValue(par, ReflectionCache.DbTypeBlob, null);                

@@ -119,6 +119,9 @@ namespace Sharp.Data {
                                                            string returningColumnName, string returningParameterName);
 
         public virtual string GetUpdateSql(string table, string[] columns, object[] values) {
+            if (values == null) {
+                values = new object[columns.Length];
+            }
             if (columns.Length != values.Length) {
                 throw new ArgumentException("Columns and values length must be the same!");
             }

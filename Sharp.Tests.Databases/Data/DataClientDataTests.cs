@@ -65,9 +65,7 @@ namespace Sharp.Tests.Databases.Data {
 			);
 
 			_dataClient.Insert.Into("footable").Columns("name").Values(null);
-
 			ResultSet res = _dataClient.Select.Columns("name").From("footable").AllRows();
-
 			Assert.IsNull(res[0][0]);
 		}
 
@@ -274,6 +272,20 @@ namespace Sharp.Tests.Databases.Data {
             Assert.AreEqual("v2", res[1][0]);
             Assert.AreEqual("v3", res[2][0]);
             Assert.AreEqual("vvv", res[3][0]);
+        }
+
+	    [Test]
+	    public void Can_update_all_rows_to_null() {
+            CreateTableFoo();
+            _dataClient.Update.Table(tableFoo).SetColumns("name").ToValues(null).AllRows();
+	        
+	    }
+
+        [Test]
+        public void Can_update_all_rows_to_DBNull() {
+            CreateTableFoo();
+            _dataClient.Update.Table(tableFoo).SetColumns("name").ToValues(DBNull.Value).AllRows();
+
         }
 
 		[Test]
