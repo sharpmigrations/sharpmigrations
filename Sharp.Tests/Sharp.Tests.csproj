@@ -103,6 +103,7 @@
     <Compile Include="Migrations\SeedRunnerTests.cs" />
     <Compile Include="Migrations\SeedForTest.cs" />
     <Compile Include="Migrations\SqlToFileDatabaseTests.cs" />
+    <Compile Include="MigratorProgram\ConfigurationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -113,6 +114,10 @@
     <ProjectReference Include="..\Sharp.Migrations\Sharp.Migrations.csproj">
       <Project>{703517B1-515E-4833-A1E0-B3CD9CF7E5E2}</Project>
       <Name>Sharp.Migrations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpMigrator\Sharp.Migrator.csproj">
+      <Project>{e1d482b5-8ce6-4a8c-8244-a03405d16920}</Project>
+      <Name>Sharp.Migrator</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -25,16 +25,29 @@ namespace Sharp.Migrator {
             Console.WriteLine("Sharp Migrator v" + Assembly.GetExecutingAssembly().GetName().Version);
             Console.WriteLine("--------------------------------");
             PrintPlataform();
-
-            _options = new Options();
-            if (_args.Length == 0 || !Parser.Default.ParseArguments(_args, _options)) {
+            try {
+                ParseConfig();
+            }
+            catch (ArgumentException ex) {
+                Console.WriteLine("Error: " + ex.Message);
                 Console.WriteLine(_options.GetUsage());
                 Exit();
             }
             PrintMigrationGroup();
-            SetSharpConfig();
             PrintDataSource(SharpFactory.Default.ConnectionString);
             Run();
+        }
+
+        public void ParseConfig() {
+            _options = new Options();
+            if (ParseArgs()) {
+                throw new ArgumentException("Could not parse args");
+            }
+            SetSharpConfig();
+        }
+
+        public bool ParseArgs() {
+            return _args.Length == 0 || !Parser.Default.ParseArguments(_args, _options);
         }
 
         private void PrintMigrationGroup() {
@@ -52,11 +65,39 @@ namespace Sharp.Migrator {
         }
 
         private static void SetSharpConfig() {
-            if (SetConnectionString() || SetConnectionStringViaConnectionName() || SetConnectionStringViaAppConfig()) {
+            if (TrySetConnectionStringFromArgs() || TrySetConnectionStringFromConfigFile()) {
                 SetSharpConfigFromOptions();
                 return;
             }
-            Exit("Please, set a connectionstring");                        
+            throw new ArgumentException("Please, set a connectionstring");                        
+        }
+
+        private static bool TrySetConnectionStringFromArgs() {
+            return !String.IsNullOrEmpty(_options.ConnectionString) && !String.IsNullOrEmpty(_options.DatabaseProvider);
+        }
+
+        private static bool TrySetConnectionStringFromConfigFile() {
+            if (String.IsNullOrEmpty(_options.AssemblyWithMigrations)) {
+                return false;
+            }
+            var appConfig = ConfigurationManager.OpenExeConfiguration(_options.AssemblyWithMigrations);
+            return SetConnectionStringViaConnectionName(appConfig) || SetConnectionStringViaAppConfig(appConfig);
+        }
+
+        private static bool SetConnectionStringViaConnectionName(Configuration appConfig) {
+            if (String.IsNullOrEmpty(_options.ConnectionStringName)) {
+                return false;
+            }
+            _options.ConnectionString = appConfig.ConnectionStrings.ConnectionStrings[_options.ConnectionStringName].ConnectionString;
+            _options.DatabaseProvider = appConfig.ConnectionStrings.ConnectionStrings[_options.ConnectionStringName].ProviderName;
+            return true;
+        }
+
+        private static bool SetConnectionStringViaAppConfig(Configuration appConfig) {
+            var cs = GetConnectionStringSettings(appConfig.ConnectionStrings.ConnectionStrings);
+            _options.ConnectionString = cs.ConnectionString;
+            _options.DatabaseProvider = cs.ProviderName;
+            return true;
         }
 
         private static void SetSharpConfigFromOptions() {
@@ -68,29 +109,6 @@ namespace Sharp.Migrator {
             }
             SharpFactory.Default.ConnectionString = _options.ConnectionString;
             SharpFactory.Default.DataProviderName = _options.DatabaseProvider;
-        }
-
-        private static bool SetConnectionString() {
-            return !String.IsNullOrEmpty(_options.ConnectionString) && !String.IsNullOrEmpty(_options.DatabaseProvider);
-        }
-
-        private static bool SetConnectionStringViaConnectionName() {
-            if (String.IsNullOrEmpty(_options.ConnectionStringName)) {
-                return false;
-            }
-            _options.ConnectionString = ConfigurationManager.ConnectionStrings[_options.ConnectionStringName].ConnectionString;
-            _options.DatabaseProvider = ConfigurationManager.ConnectionStrings[_options.ConnectionStringName].ProviderName;
-            return true;
-        }
-        private static bool SetConnectionStringViaAppConfig() {
-            if (String.IsNullOrEmpty(_options.AssemblyWithMigrations)) {
-                return false;
-            }
-            var appConfig = ConfigurationManager.OpenExeConfiguration(_options.AssemblyWithMigrations);
-            var cs = GetConnectionStringSettings(appConfig.ConnectionStrings.ConnectionStrings);
-            _options.ConnectionString = cs.ConnectionString;
-            _options.DatabaseProvider = cs.ProviderName;
-            return true;
         }
 
         private static void PrintPlataform() {
