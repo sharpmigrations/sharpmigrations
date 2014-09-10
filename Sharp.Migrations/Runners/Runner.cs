@@ -58,24 +58,9 @@ namespace Sharp.Migrations {
 		    List<MigrationInfo> migrationsFromAssembly = MigrationFinder.FindMigrations(_targetAssembly);
             VersionRepository.EnsureSchemaVersionTable(migrationsFromAssembly);
 		    List<long> migrationsFromDatabase = VersionRepository.GetAppliedMigrations();
-		    MigrationPlan migrationPlan = CreateMigrationPlan(migrationsFromDatabase, migrationsFromAssembly, targetVersion);
+		    var migrationPlan = new MigrationPlan(migrationsFromDatabase, migrationsFromAssembly, targetVersion);
             RunMigrations(migrationPlan);
 		}
-
-        private MigrationPlan CreateMigrationPlan(List<long> migrationsFromDatabase, List<MigrationInfo> migrationsFromAssembly, long targetVersion) {
-            long currentVersion = migrationsFromDatabase.Count == 0 ? 0 : migrationsFromDatabase.Last();
-            if (targetVersion < 0) {
-                targetVersion = migrationsFromAssembly.Last().Version;
-            }
-            if (targetVersion < currentVersion) { //down
-                return new MigrationPlan(currentVersion, targetVersion, migrationsFromAssembly
-                      .Where(m => m.Version > targetVersion && migrationsFromDatabase.Contains(m.Version))
-                      .Reverse().ToList());
-            }
-            return new MigrationPlan(currentVersion, targetVersion, migrationsFromAssembly
-                      .Where(m => !migrationsFromDatabase.Contains(m.Version) && m.Version <= targetVersion)
-                      .ToList());
-	    }
 
 	    protected virtual void GetCurrentVersion() {
 			_initialVersion = VersionRepository.GetCurrentVersion();
@@ -94,23 +79,10 @@ namespace Sharp.Migrations {
 	            migrationPlan.CurrentVersion,
 	            migrationPlan.TargetVersion));
 
-	        foreach (var migrationInfo in migrationPlan.OrderedMigrationsToRun) {
+	        foreach (var step in migrationPlan.OrderedSteps) {
+	            var migrationInfo = step.MigrationInfo;
 	            try {
-	                if (!migrationInfo.MigratesFor(_databaseKind)) {
-	                    Log.Info(String.Format(" -> [{0}] {1} {2}() NOT PERFORMED for database {3}", migrationInfo.Version,
-	                        migrationInfo.Name, migrationPlan.Direction, _databaseKind));
-	                    UpdateCurrentVersion(migrationInfo, migrationPlan.Direction);
-	                    return;
-	                }
-                    Log.Info(String.Format(" -> [{0}] {1} {2}()", migrationInfo.Version, migrationInfo.Name, migrationPlan.Direction));
-	                var migration = _migrationFactory.CreateMigration(migrationInfo.MigrationType);
-	                if (migrationPlan.IsUp) {
-	                    migration.Up();
-	                }
-	                else {
-	                    migration.Down();
-	                }
-	                UpdateCurrentVersion(migrationInfo, migrationPlan.Direction);
+	                RunMigration(step);
 	            }
 	            catch (NotSupportedByDialect nse) {
 	                HandleNotSupportedByDialectException(migrationInfo, nse);
@@ -125,17 +97,40 @@ namespace Sharp.Migrations {
             Log.Info("Done. Current version: " + migrationPlan.TargetVersion);
 	    }
 
-	    private void UpdateCurrentVersion(MigrationInfo migrationInfo, Direction direction) {
-	        if (direction == Direction.Up) {
-	            VersionRepository.InsertVersion(migrationInfo);
+        private void RunMigration(MigrationPlanStep step) {
+            var migrationInfo = step.MigrationInfo;
+            if (!migrationInfo.MigratesFor(_databaseKind)) {
+                Log.Info(String.Format(" -> [{0}] {1} {2}() NOT PERFORMED for database {3}", migrationInfo.Version,
+                    migrationInfo.Name, step.Direction, _databaseKind));
+                UpdateCurrentVersion(step);
+                return;
+            }
+            Log.Info(String.Format(" -> [{0}] {1} {2}()", migrationInfo.Version, migrationInfo.Name, step.Direction));
+            
+            var migration = _migrationFactory.CreateMigration(migrationInfo.MigrationType);
+            if (step.Direction == Direction.Up) {
+                migration.Up();
+            }
+            else {
+                migration.Down();
+            }
+            UpdateCurrentVersion(step);
+        }
+
+        private void UpdateCurrentVersion(MigrationPlanStep step) {
+            if (!step.ShouldUpdateVersion) {
+                return;
+            }
+            if (step.Direction == Direction.Up) {
+	            VersionRepository.InsertVersion(step.MigrationInfo);
 	        }
 	        else {
-	            VersionRepository.RemoveVersion(migrationInfo);
+                VersionRepository.RemoveVersion(step.MigrationInfo);
 	        }
 		}
 
 		private bool NoWorkToDo(MigrationPlan migrationPlan) {
-			return migrationPlan.OrderedMigrationsToRun.Count == 0;
+			return migrationPlan.OrderedSteps.Count == 0;
 		}
         
 		private void HandleNotSupportedByDialectException(MigrationInfo migrationInfo, NotSupportedByDialect nse) {

@@ -41,7 +41,6 @@ namespace Sharp.Tests.Migrations {
             _versionRepository.Setup(x => x.RemoveVersion(It.IsAny<MigrationInfo>()))
                 .Callback<MigrationInfo>(m => _versionsFromDatabase.Remove(m.Version));
 
-
 		    _runner = new Runner(_dataClient.Object, Assembly.GetExecutingAssembly());
 		    _runner.VersionRepository = _versionRepository.Object;
 		}
@@ -189,7 +188,7 @@ namespace Sharp.Tests.Migrations {
 	    }
 
 	    [Test]
-	    public void Should_run_old_migrations() {
+	    public void Should_run_old_migrations_going_up() {
             SetVersion(6);
             _versionsFromDatabase.RemoveAt(2);
             _runner.Run(6);
@@ -197,6 +196,18 @@ namespace Sharp.Tests.Migrations {
             Assert.IsTrue(MigrationTestHelper.ExecutedMigrationsUp.Any(x => x.Version == 2));
             MigrationTestHelper.Clear();
 	    }
+
+        [Test]
+        public void Should_run_old_migrations_going_down() {
+            SetVersion(7);
+            _versionsFromDatabase.RemoveAt(5);
+            _versionRepository.Setup(x => x.EnsureSchemaVersionTable(It.IsAny<List<MigrationInfo>>()))
+                              .Callback<List<MigrationInfo>>(list => list.RemoveRange(5,1));
+            _runner.Run(5);
+            Assert.AreEqual(1, MigrationTestHelper.ExecutedMigrationsUp.Count);
+            Assert.IsTrue(MigrationTestHelper.ExecutedMigrationsUp.Any(x => x.Version == 5));
+            MigrationTestHelper.Clear();
+        }
 
 	    private void SetVersion(int max) {
 	        for (int i = 1; i <= max; i++) {

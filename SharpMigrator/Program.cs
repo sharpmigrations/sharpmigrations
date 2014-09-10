@@ -15,6 +15,9 @@ namespace Sharp.Migrator {
             //args = @"-a|C:\dev\test\TestApp\TestApp\bin\Debug\TestApp.exe|-c|Data Source=//localhost:1521/XE; User Id=sharp; Password=sharp;|-m|auto".Split('|');
             //args = @"-a|C:\dev\test\TestApp\TestApp\bin\Debug\TestApp.exe|-c|Data Source=//localhost:1521/XE; User Id=sharp; Password=sharp;|-m|seed|-s|asdf".Split('|');
             //args = @"-a|C:\dev\test\TestApp\TestApp\bin\Debug\TestApp.exe|-p|Oracle.ManagedDataAccess.Client|-c|Data Source=//localhost:1521/XE; User Id=sharp; Password=sharp;".Split('|');
+
+            //args = @"-a|C:\dev\way2\pim\Way2Pim.Migrations\bin\Debug\Way2Pim.Migrations.exe|-n|Oracle".Split('|');
+            
             XmlConfigurator.Configure();
             var m = new Migrator(args);
             try {
