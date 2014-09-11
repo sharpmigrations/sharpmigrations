@@ -1,9 +1,13 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using log4net.Config;
 using Sharp.Data;
 
 namespace Sharp.Migrator {
     public class Program {
+        public static Migrator Migrator;
+
         public static void Main(string[] args) {
             //string[] files = Directory.GetFiles(Path.GetFullPath("."), "*.dll");
             //foreach(string file in files) { File.Delete(file); }
@@ -17,11 +21,13 @@ namespace Sharp.Migrator {
             //args = @"-a|C:\dev\test\TestApp\TestApp\bin\Debug\TestApp.exe|-p|Oracle.ManagedDataAccess.Client|-c|Data Source=//localhost:1521/XE; User Id=sharp; Password=sharp;".Split('|');
 
             //args = @"-a|C:\dev\way2\pim\Way2Pim.Migrations\bin\Debug\Way2Pim.Migrations.exe|-n|Oracle|-g|Way2Pim.Server".Split('|');
-            
+
+            AppDomain.CurrentDomain.AssemblyResolve += ResolveNotFoundAssembly;
+
             XmlConfigurator.Configure();
-            var m = new Migrator(args);
+            Migrator = new Migrator(args);
             try {
-                m.Start();
+                Migrator.Start();
             }
             catch (Exception ex) {
                 Console.WriteLine();
@@ -30,16 +36,28 @@ namespace Sharp.Migrator {
             }
         }
 
-        //private static void SetResolveAssembliesStrategy() {
-        //    AppDomain.CurrentDomain.AssemblyResolve += (sender, args) => {
-        //        String resourceName = "Sharp.Migrator.EmbeddedLibs." +
-        //                              new AssemblyName(args.Name).Name + ".dll";
-        //        using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName)) {
-        //            var assemblyData = new Byte[stream.Length];
-        //            stream.Read(assemblyData, 0, assemblyData.Length);
-        //            return Assembly.Load(assemblyData);
-        //        }
-        //    };
-        //}
+        public static Assembly ResolveNotFoundAssembly(object sender, ResolveEventArgs args) {
+            var migrationsAssemblyPath = Migrator.Options.AssemblyWithMigrations;
+            string applicationDirectory = Path.GetDirectoryName(migrationsAssemblyPath);
+
+            string[] fields = args.Name.Split(',');
+            string assemblyName = fields[0];
+            string assemblyCulture = fields[2].Substring(fields[2].IndexOf('=') + 1);
+
+            string assemblyFileName = assemblyName + ".dll";
+            string assemblyPath;
+            if (assemblyName.EndsWith(".resources")) {
+                string resourceDirectory = Path.Combine(applicationDirectory, assemblyCulture);
+                assemblyPath = Path.Combine(resourceDirectory, assemblyFileName);
+            }
+            else {
+                assemblyPath = Path.Combine(applicationDirectory, assemblyFileName);
+            }
+            if (File.Exists(assemblyPath)) {
+                Assembly loadingAssembly = Assembly.LoadFrom(assemblyPath);
+                return loadingAssembly;
+            }
+            return null;
+        }
     }
 }
