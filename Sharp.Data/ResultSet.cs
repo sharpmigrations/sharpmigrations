@@ -37,5 +37,9 @@ namespace Sharp.Data {
         public string[] GetColumnNames() {
             return _originalColumnNames.ToArray();
         }
+
+	    public bool IsEmpty {
+	        get { return Count == 0; }
+	    }
     }
 }
