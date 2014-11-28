@@ -28,6 +28,10 @@ namespace Sharp.Migrations {
         protected IFluentSelect Select { get { return new FluentSelect(DataClient); } }
         protected IFluentUpdate Update { get { return new FluentUpdate(DataClient); } }
 
+        public void ExecuteSql(string call, params object[] parameters) {
+            _dataClient.Database.ExecuteSql(call, parameters);
+        }
+
         public abstract void Up(string param = null);
     }
 }
