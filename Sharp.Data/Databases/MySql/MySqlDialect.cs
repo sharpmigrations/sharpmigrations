@@ -73,7 +73,7 @@ namespace Sharp.Data.Databases.MySql {
         }
 
     	public override string WrapSelectSqlWithPagination(string sql, int skipRows, int numberOfRows) {
-    		throw new NotImplementedException();
+    	    return sql + " limit " + skipRows + ", " + numberOfRows;
     	}
 
     	protected override string GetDbTypeString(DbType type, int precision) {
@@ -129,6 +129,24 @@ namespace Sharp.Data.Databases.MySql {
 
         public override string GetAddCommentToColumnSql(string tableName, string columnName, string comment) {
             throw new NotImplementedException();
+//            SELECT CONCAT(
+//      CAST(COLUMN_NAME AS CHAR),
+//      ' ',
+//      CAST(COLUMN_TYPE AS CHAR),
+//      IF(ISNULL(CHARACTER_SET_NAME),
+//         '',
+//         CONCAT(' CHARACTER SET ', CHARACTER_SET_NAME)),
+//      IF(ISNULL(COLLATION_NAME), '', CONCAT(' COLLATE ', COLLATION_NAME)),
+//      ' ',
+//      IF(IS_NULLABLE = 'NO', 'NOT NULL ', ''),
+//      IF(IS_NULLABLE = 'NO' AND ISNULL(COLUMN_DEFAULT),
+//         '',
+//         CONCAT('DEFAULT ', QUOTE(COLUMN_DEFAULT), ' ')),
+//      UPPER(extra))
+//      AS column_definition
+// FROM INFORMATION_SCHEMA.COLUMNS
+//WHERE  TABLE_NAME = 'issues'
+//   AND COLUMN_NAME = 'id';
         }
 
         public override string GetAddCommentToTableSql(string tableName, string comment) {

@@ -3,7 +3,7 @@
   <metadata>
     <!-- Required metadata -->
     <id>SharpData</id>
-    <version>1.5.8</version>
+    <version>1.5.9</version>
     <title>Sharp Data</title>
     <authors>Andre Carlucci</authors>
     <summary>Database Access Framework for the SharpMigrations</summary>

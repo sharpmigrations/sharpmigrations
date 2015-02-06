@@ -2,7 +2,7 @@
 <package>
   <metadata>
       <id>SharpMigrations</id>
-      <version>1.5.8</version>
+      <version>1.5.6</version>
       <title>Sharp Migrations</title>
       <authors>André Carlucci</authors>
       <summary>Database Migration Framework for C#</summary>
@@ -14,11 +14,10 @@
          <frameworkAssembly assemblyName="System" targetFramework=".NETFramework4.0" />
       </frameworkAssemblies>
      <dependencies>
-       <dependency id="SharpData" version="1.5.8" />
+       <dependency id="SharpData" version="1.5.9" />
      </dependencies>
    </metadata>
   <files>
-    <file src="nuget\readme.txt" target=""/>
     <file src="tools\**\*.*" target="tools" />
   </files>
 </package>

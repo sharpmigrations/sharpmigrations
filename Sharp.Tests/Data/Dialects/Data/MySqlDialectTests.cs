@@ -20,7 +20,7 @@ namespace Sharp.Tests.Databases.Mysql {
     	}
 
     	protected override string GetResultFor_Can_generate_select_sql_with_pagination(int skip, int to) {
-    		throw new NotImplementedException();
+            return "select * from mytable limit 10,20";
     	}
     }
 }
