@@ -7,8 +7,7 @@ using Sharp.Data.Schema;
 
 namespace Sharp.Data.Databases.PostgreSql {
     public class PostgreSqlDialect : Dialect {
-        public static string SequencePrefix = "SEQ_"; //TODO:
-        public static string TriggerPrefix = "TR_INC_"; //TODO:
+        public static string SequencePrefix = "SEQ_";
         public static string PrimaryKeyPrefix = "PK_";
 
         public override string ParameterPrefix {
@@ -22,33 +21,55 @@ namespace Sharp.Data.Databases.PostgreSql {
         public override string[] GetCreateTableSqls(Table table) {
             var sqls = new List<string>();
             var primaryKeyColumns = new List<string>();
+            var tableName = table.Name;
+            Column autoIncrementColumn = null;
 
+            //create table
             var sb = new StringBuilder();
-            sb.Append("create table ").Append(table.Name).AppendLine(" ( ");
+            sb.Append("create table ").Append(table.Name).AppendLine(" (");
 
             var size = table.Columns.Count;
             for (var i = 0; i < size; i++) {
-                sb.Append(GetColumnToSqlWhenCreate(table.Columns[i]));
+                var column = table.Columns[i];
+
+                sb.Append(GetColumnToSqlWhenCreate(column));
                 if (i != size - 1) {
                     sb.AppendLine(",");
                 }
-                //if (table.Columns[i].IsPrimaryKey) {
-                //    primaryKeyColumns.Add(table.Columns[i].ColumnName);
-                //}
+
+                if (column.IsAutoIncrement) {
+                    autoIncrementColumn = column;
+                }
+                if (column.IsPrimaryKey) {
+                    primaryKeyColumns.Add(column.ColumnName);
+                }
             }
-
-            ////primary keys
-            //if (primaryKeyColumns.Count > 0) {
-            //    sqls.Add(GetPrimaryKeySql(table.Name, String.Format("{0}{1}", PrimaryKeyPrefix, table.Name), primaryKeyColumns.ToArray()));
-            //}
-
             sb.AppendLine(")");
             sqls.Add(sb.ToString());
+
+            SetAutoIncrementColumn(autoIncrementColumn, tableName, sqls);
+            SetPrimaryKey(primaryKeyColumns, sqls, tableName);
+
             return sqls.ToArray();
         }
 
+        private void SetPrimaryKey(List<string> primaryKeyColumns, ICollection<string> sqls, string tableName) {
+            if (primaryKeyColumns.Count > 0) {
+                sqls.Add(GetPrimaryKeySql(tableName, String.Format("{0}{1}", PrimaryKeyPrefix, tableName), primaryKeyColumns.ToArray()));
+            }
+        }
+
+        private static void SetAutoIncrementColumn(Column autoIncrementColumn, string tableName, ICollection<string> sqls) {
+            if (autoIncrementColumn == null) {
+                return;
+            }
+            var sequenceName = SequencePrefix + tableName;
+            sqls.Add(String.Format("create sequence {0} increment 1 minvalue 1 maxvalue 9223372036854775807 start 1 cache 1", sequenceName));
+            sqls.Add(String.Format("alter table {0} alter column {1} set default nextval(\"{2}\"::regclass)", tableName, autoIncrementColumn.ColumnName, sequenceName));
+        }
+
         public override string[] GetDropTableSqls(string tableName) {
-            throw new NotImplementedException();
+            return new[] { String.Format("drop table {0} cascade", tableName) };
         }
 
         public override string GetForeignKeySql(string fkName, string table, string column, string referencingTable, string referencingColumn, OnDelete onDelete) {
