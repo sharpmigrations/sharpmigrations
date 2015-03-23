@@ -1,9 +1,8 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Sharp.Data.Databases.PostgreSql;
 
 namespace Sharp.Tests.Databases.PostgreSql {
-    class PostgreSqlDialectSchemaTests : DialectSchemaTests {
+    public class PostgreSqlDialectSchemaTests : DialectSchemaTests {
         [SetUp]
         public void SetUp() {
             _dialect = new PostgreSqlDialect();
@@ -21,31 +20,37 @@ namespace Sharp.Tests.Databases.PostgreSql {
         }
 
         protected override string GetResultFor_Can_convert_column_to_sql__with_not_null() {
-            throw new NotImplementedException();
+            return "col varchar(255) not null";
         }
 
         protected override string GetResultFor_Can_convert_column_to_sql__with_primary_key() {
-            throw new NotImplementedException();
+            return "col varchar(255) not null";
         }
 
         protected override string GetResultFor_Can_convert_column_to_sql__autoIncrement() {
-            throw new NotImplementedException();
+            return "col integer not null";
         }
 
         protected override string GetResultFor_Can_convert_column_to_sql__autoIncrement_and_primary_key() {
-            throw new NotImplementedException();
+            return "col integer not null";
         }
 
         protected override string GetResultFor_Can_convert_column_to_sql__default_value() {
-            throw new NotImplementedException();
+            return "col varchar(255) default 'some string' null";
         }
 
         protected override string[] GetResultFor_Can_convert_column_to_values() {
-            throw new NotImplementedException();
+            return new[] {
+				"'foo'",
+				"1",
+				"1",
+				"24.33",
+				"'2009-01-20T12:30:00'"
+			};
         }
 
         protected override string GetResultFor_Can_add_comment_to_column() {
-            throw new NotImplementedException();
+            return "COMMENT ON column myTable.col1 is 'this is a comment'";
         }
     }
 }

@@ -89,7 +89,7 @@ namespace Sharp.Data.Databases.PostgreSql {
         }
 
         public override string WrapSelectSqlWithPagination(string sql, int skipRows, int numberOfRows) {
-            throw new NotImplementedException();
+            return String.Format("SELECT * FROM ({0}) OFFSET {1} LIMIT {2}", sql, skipRows, numberOfRows);
         }
 
         protected override string GetDbTypeString(DbType type, int precision) {
@@ -137,7 +137,7 @@ namespace Sharp.Data.Databases.PostgreSql {
         public override string GetColumnToSqlWhenCreate(Column col) {
             var colType = GetDbTypeString(col.Type, col.Size);
             var colNullable = col.IsNullable ? WordNull : WordNotNull;
-            var colDefault = (col.DefaultValue != null) ? String.Format("default ({0})", GetColumnValueToSql(col.DefaultValue)) : "";
+            var colDefault = (col.DefaultValue != null) ? String.Format("default {0}", GetColumnValueToSql(col.DefaultValue)) : "";
 
             return String.Format("{0} {1} {2} {3}", col.ColumnName, colType, colDefault, colNullable);
         }
@@ -153,31 +153,32 @@ namespace Sharp.Data.Databases.PostgreSql {
 
             if (value is DateTime) {
                 var dt = (DateTime) value;
-                return String.Format("'{0}'", dt.ToString("s"));
+                return String.Format("'{0}'", dt.ToString("yyyy-MM-ddThh:mm:ss", CultureInfo.InvariantCulture));
             }
 
             return String.Format("'{0}'", value);
         }
 
         public override string GetTableExistsSql(string tableName) {
-            throw new NotImplementedException();
+            return String.Format("SELECT relname FROM pg_class WHERE relname = '{0}'", tableName);
         }
 
         public override string GetAddCommentToColumnSql(string tableName, string columnName, string comment) {
-            throw new NotImplementedException();
+            return String.Format("COMMENT ON COLUMN {0}.{1} IS '{2}'", tableName, columnName, comment);
         }
 
         public override string GetAddCommentToTableSql(string tableName, string comment) {
-            throw new NotImplementedException();
+            return String.Format("COMMENT ON TABLE {0} IS '{1}'", tableName, comment);
         }
 
         public override string GetRemoveCommentFromColumnSql(string tableName, string columnName) {
-            throw new NotImplementedException();
+            return String.Format("COMMENT ON COLUMN {0}.{1} IS ''", tableName, columnName);
         }
 
         public override string GetRemoveCommentFromTableSql(string tableName) {
-            throw new NotImplementedException();
+            return String.Format("COMMENT ON TABLE {0} IS ''", tableName);
         }
+
 
         public override string GetRenameTableSql(string tableName, string newTableName) {
             throw new NotImplementedException();
