@@ -4,6 +4,7 @@ using System.Data;
 using System.Globalization;
 using System.Text;
 using Sharp.Data.Schema;
+using Sharp.Util;
 
 namespace Sharp.Data.Databases.PostgreSql {
     public class PostgreSqlDialect : Dialect {
@@ -26,7 +27,7 @@ namespace Sharp.Data.Databases.PostgreSql {
 
             //create table
             var sb = new StringBuilder();
-            sb.Append("create table ").Append(table.Name).AppendLine(" (");
+            sb.Append("CREATE TABLE ").Append(table.Name).AppendLine(" (");
 
             var size = table.Columns.Count;
             for (var i = 0; i < size; i++) {
@@ -64,28 +65,39 @@ namespace Sharp.Data.Databases.PostgreSql {
                 return;
             }
             var sequenceName = SequencePrefix + tableName;
-            sqls.Add(String.Format("create sequence {0} increment 1 minvalue 1 maxvalue 9223372036854775807 start 1 cache 1", sequenceName));
-            sqls.Add(String.Format("alter table {0} alter column {1} set default nextval(\"{2}\"::regclass)", tableName, autoIncrementColumn.ColumnName, sequenceName));
+            sqls.Add(String.Format("CREATE SEQUENCE {0} INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1", sequenceName));
+            sqls.Add(String.Format("ALTER TABLE {0} ALTER COLUMN {1} SET DEFAULT NEXTVAL(\"{2}\"::REGCLASS)", tableName, autoIncrementColumn.ColumnName, sequenceName));
         }
 
         public override string[] GetDropTableSqls(string tableName) {
-            return new[] { String.Format("drop table {0} cascade", tableName) };
+            return new[] { String.Format("DROP TABLE {0} CASCADE", tableName) };
         }
 
         public override string GetForeignKeySql(string fkName, string table, string column, string referencingTable, string referencingColumn, OnDelete onDelete) {
-            throw new NotImplementedException();
+            switch (onDelete) {
+                case OnDelete.Cascade:
+                    return "ON DELETE CASCADE";
+                case OnDelete.SetNull:
+                    return "ON DELETE SET NULL";
+                default:
+                    return String.Empty;
+            }
         }
 
         public override string GetUniqueKeySql(string ukName, string table, params string[] columnNames) {
-            throw new NotImplementedException();
+            return String.Format("CREATE UNIQUE INDEX {0} ON {1} ({2})", ukName, table, StringHelper.Implode(columnNames, ","));
         }
 
         public override string GetDropUniqueKeySql(string uniqueKeyName, string tableName) {
-            throw new NotImplementedException();
+            return "DROP INDEX " + uniqueKeyName;
         }
 
         public override string GetInsertReturningColumnSql(string table, string[] columns, object[] values, string returningColumnName, string returningParameterName) {
-            throw new NotImplementedException();
+            return String.Format("{0} RETURNING {1} INTO {2}{3}",
+                             GetInsertSql(table, columns, values),
+                             returningColumnName,
+                             ParameterPrefix,
+                             returningParameterName);
         }
 
         public override string WrapSelectSqlWithPagination(string sql, int skipRows, int numberOfRows) {
@@ -137,7 +149,7 @@ namespace Sharp.Data.Databases.PostgreSql {
         public override string GetColumnToSqlWhenCreate(Column col) {
             var colType = GetDbTypeString(col.Type, col.Size);
             var colNullable = col.IsNullable ? WordNull : WordNotNull;
-            var colDefault = (col.DefaultValue != null) ? String.Format("default {0}", GetColumnValueToSql(col.DefaultValue)) : "";
+            var colDefault = (col.DefaultValue != null) ? String.Format("DEFAULT {0}", GetColumnValueToSql(col.DefaultValue)) : "";
 
             return String.Format("{0} {1} {2} {3}", col.ColumnName, colType, colDefault, colNullable);
         }
@@ -179,17 +191,16 @@ namespace Sharp.Data.Databases.PostgreSql {
             return String.Format("COMMENT ON TABLE {0} IS ''", tableName);
         }
 
-
         public override string GetRenameTableSql(string tableName, string newTableName) {
-            throw new NotImplementedException();
+            return String.Format("ALTER TABLE {0} RENAME TO {1}", tableName, newTableName);
         }
 
         public override string GetRenameColumnSql(string tableName, string columnName, string newColumnName) {
-            throw new NotImplementedException();
+            return String.Format("ALTER TABLE {0} RENAME COLUMN {1} TO {2}", tableName, columnName, newColumnName);
         }
 
         public override string GetModifyColumnSql(string tableName, string columnName, Column columnDefinition) {
-            throw new NotImplementedException();
+            return String.Format("ALTER TABLE {0} RENAME COLUMN {1} TO {2}", tableName, GetColumnToSqlWhenCreate(columnDefinition));
         }
     }
 }
