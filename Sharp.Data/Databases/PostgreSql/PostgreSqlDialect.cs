@@ -172,7 +172,7 @@ namespace Sharp.Data.Databases.PostgreSql {
         }
 
         public override string GetTableExistsSql(string tableName) {
-            return String.Format("SELECT relname FROM pg_class WHERE relname = '{0}'", tableName);
+            return String.Format("SELECT COUNT(relname) FROM pg_class WHERE relname = '{0}'", tableName);
         }
 
         public override string GetAddCommentToColumnSql(string tableName, string columnName, string comment) {
