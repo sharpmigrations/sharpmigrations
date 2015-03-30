@@ -10,7 +10,7 @@ namespace Sharp.Tests.Databases.PostgreSql {
         }
 
         protected override string GetResultFor_Can_create_check_if_table_exists_sql() {
-            return String.Format("SELECT relname FROM pg_class WHERE relname = '{0}'", TABLE_NAME);
+            return String.Format("SELECT COUNT(relname) FROM pg_class WHERE relname = '{0}'", TABLE_NAME);
         }
 
         protected override string GetResultFor_Can_generate_count_sql() {

@@ -74,14 +74,26 @@ namespace Sharp.Data.Databases.PostgreSql {
         }
 
         public override string GetForeignKeySql(string fkName, string table, string column, string referencingTable, string referencingColumn, OnDelete onDelete) {
+            string onDeleteSql;
             switch (onDelete) {
                 case OnDelete.Cascade:
-                    return "ON DELETE CASCADE";
+                    onDeleteSql = "ON DELETE CASCADE";
+                    break;
                 case OnDelete.SetNull:
-                    return "ON DELETE SET NULL";
+                    onDeleteSql = "ON DELETE SET NULL";
+                    break;
                 default:
-                    return String.Empty;
+                    onDeleteSql = "";
+                    break;
             }
+
+            return String.Format("ALTER TABLE {0} ADD CONSTRAINT {1} FOREIGN KEY ({2}) REFERENCES {3} ({4}) {5}",
+                             table,
+                             fkName,
+                             column,
+                             referencingTable,
+                             referencingColumn,
+                             onDeleteSql);
         }
 
         public override string GetUniqueKeySql(string ukName, string table, params string[] columnNames) {
@@ -90,6 +102,10 @@ namespace Sharp.Data.Databases.PostgreSql {
 
         public override string GetDropUniqueKeySql(string uniqueKeyName, string tableName) {
             return "DROP INDEX " + uniqueKeyName;
+        }
+
+        public override string GetDropIndexSql(string indexName, string table) {
+            return String.Format("DROP INDEX {0}", indexName);
         }
 
         public override string GetInsertReturningColumnSql(string table, string[] columns, object[] values, string returningColumnName, string returningParameterName) {
@@ -108,7 +124,9 @@ namespace Sharp.Data.Databases.PostgreSql {
             switch (type) {
                 case DbType.AnsiString:
                 case DbType.String:
-                    return precision <= 0 ? "VARCHAR(255)" : String.Format("VARCHAR({0})", precision);
+                    if (precision <= 0) return "VARCHAR(255)";
+                    if (precision < 10485760) return String.Format("VARCHAR({0})", precision);
+                    return "TEXT";
                 case DbType.Binary:
                     return "BYTEA";
                 case DbType.Boolean:
@@ -156,7 +174,7 @@ namespace Sharp.Data.Databases.PostgreSql {
 
         public override string GetColumnValueToSql(object value) {
             if (value is bool) {
-                return ((bool) value) ? "1" : "0";
+                return ((bool)value) ? "true" : "false";
             }
 
             if ((value is Int16) || (value is Int32) || (value is Int64) || (value is double) || (value is float) || (value is decimal)) {
@@ -164,7 +182,7 @@ namespace Sharp.Data.Databases.PostgreSql {
             }
 
             if (value is DateTime) {
-                var dt = (DateTime) value;
+                var dt = (DateTime)value;
                 return String.Format("'{0}'", dt.ToString("yyyy-MM-ddThh:mm:ss", CultureInfo.InvariantCulture));
             }
 
