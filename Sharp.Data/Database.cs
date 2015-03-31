@@ -2,16 +2,13 @@
 
 namespace Sharp.Data {
     public class Database : DefaultDatabase, IDatabase {
-        public Database(IDataProvider provider, string connectionString) : base(provider, connectionString) {
+        public Database(IDataProvider provider, string connectionString)
+            : base(provider, connectionString) {
             Timeout = -1;
         }
 
         public int ExecuteSql(string call, params object[] parameters) {
             return ExecuteCatchingErrors(() => TryExecuteSql(call, parameters), call);
-        }
-
-        public int ExecuteBulkSql(string call, params object[] parameters) {
-            return ExecuteCatchingErrors(() => TryExecuteSql(call, parameters, isBulk: true), call);
         }
 
         public int ExecuteSqlCommitAndDispose(string call, params object[] parameters) {
@@ -22,6 +19,10 @@ namespace Sharp.Data {
                 Commit();
                 Dispose();
             }
+        }
+
+        public int ExecuteBulkSql(string call, params object[] parameters) {
+            return ExecuteCatchingErrors(() => TryExecuteSql(call, parameters, isBulk: true), call);
         }
 
         public int ExecuteBulkSqlCommitAndDispose(string call, params object[] parameters) {
@@ -64,10 +65,6 @@ namespace Sharp.Data {
             ExecuteCatchingErrors(() => TryExecuteStoredProcedure(call, parameters), call);
         }
 
-        public void ExecuteBulkStoredProcedure(string call, params object[] parameters) {
-            ExecuteCatchingErrors(() => TryExecuteStoredProcedure(call, parameters, isBulk: true), call);
-        }
-
         public void ExecuteStoredProcedureAndDispose(string call, params object[] parameters) {
             try {
                 ExecuteStoredProcedure(call, parameters);
@@ -76,6 +73,10 @@ namespace Sharp.Data {
                 Commit();
                 Dispose();
             }
+        }
+
+        public void ExecuteBulkStoredProcedure(string call, params object[] parameters) {
+            ExecuteCatchingErrors(() => TryExecuteStoredProcedure(call, parameters, isBulk: true), call);
         }
 
         public void ExecuteBulkStoredProcedureAndDispose(string call, params object[] parameters) {
@@ -96,13 +97,8 @@ namespace Sharp.Data {
             return ExecuteCatchingErrors(() => TryCallStoredFunction(returnType, call, parameters), call);
         }
 
-        public void Close() {
-            CloseTransaction();
-            CloseConnection();
-        }
-
         public void Commit() {
-            if (_connection == null) {
+            if (Connection == null) {
                 return;
             }
 
@@ -115,7 +111,7 @@ namespace Sharp.Data {
         }
 
         public void RollBack() {
-            if (_connection == null) {
+            if (Connection == null) {
                 return;
             }
 
@@ -129,6 +125,11 @@ namespace Sharp.Data {
 
         public void Dispose() {
             Close();
+        }
+
+        public void Close() {
+            CloseTransaction();
+            CloseConnection();
         }
     }
 }

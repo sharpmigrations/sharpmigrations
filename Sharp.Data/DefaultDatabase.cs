@@ -11,8 +11,8 @@ namespace Sharp.Data {
         public string ConnectionString { get; protected set; }
         public int Timeout { get; set; }
         
-        protected IDbConnection _connection;
-        protected IDbTransaction _transaction;
+        protected IDbConnection Connection;
+        protected IDbTransaction Transaction;
 
         public DefaultDatabase(IDataProvider provider, string connectionString) {
             Provider = provider;
@@ -82,9 +82,9 @@ namespace Sharp.Data {
         }
 
         protected IDbCommand CreateIDbCommand(string call, object[] parameters) {
-            IDbCommand cmd = _connection.CreateCommand();
+            IDbCommand cmd = Connection.CreateCommand();
             cmd.CommandText = call;
-            cmd.Transaction = _transaction;
+            cmd.Transaction = Transaction;
             return cmd;
         }
 
@@ -175,44 +175,45 @@ namespace Sharp.Data {
         }
 
         protected void CloseTransaction() {
-            if (_transaction == null) {
+            if (Transaction == null) {
                 return;
             }
             try {
-                _transaction.Dispose();
+                Transaction.Dispose();
             }
             catch { }
-            _transaction = null;
+            Transaction = null;
         }
 
         protected void CloseConnection() {
-            if (_connection == null) {
+            if (Connection == null) {
                 return;
             }
             try {
-                _connection.Close();
-                _connection.Dispose();
+                Connection.Close();
+                Connection.Dispose();
                 Log.Debug("Connection closed");
             }
             catch { }
-            _connection = null;
+            Connection = null;
         }
 
         protected void CommitTransaction() {
-            if (_transaction == null) {
+            if (Transaction == null) {
                 return;
             }
-            _transaction.Commit();
+            Transaction.Commit();
             Log.Debug("Commit");
         }
 
         protected void RollBackTransaction() {
-            if (_transaction == null) {
+            if (Transaction == null) {
                 return;
             }
-            _transaction.Rollback();
+            Transaction.Rollback();
             Log.Debug("Rollback");
         }
+
         protected int TryExecuteSql(string call, object[] parameters, bool isBulk = false) {
             IDbCommand cmd = CreateCommand(call, parameters, isBulk);
             int modifiedRows = cmd.ExecuteNonQuery();
@@ -231,13 +232,13 @@ namespace Sharp.Data {
         }
 
         protected void OpenConnection() {
-            if (_connection != null) {
+            if (Connection != null) {
                 return;
             }
-            _connection = Provider.GetConnection();
-            _connection.ConnectionString = ConnectionString;
-            _connection.Open();
-            _transaction = _connection.BeginTransaction();
+            Connection = Provider.GetConnection();
+            Connection.ConnectionString = ConnectionString;
+            Connection.Open();
+            Transaction = Connection.BeginTransaction();
 
             Log.Debug("Connection open");
         }
