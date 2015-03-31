@@ -12,5 +12,7 @@ namespace Sharp.Data {
         IDbDataParameter GetParameter(In parameter, bool isBulk);
         IDbDataParameter GetParameterCursor();
         DatabaseException CreateSpecificException(Exception exception, string sql);
+        string ExecuteThisParameterlessSqlBeforeAnyOther();
+        string ExecuteThisParameterlessSqlAfterRaiseAnException();
     }
 }
