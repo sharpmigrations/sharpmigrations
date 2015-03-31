@@ -5,6 +5,8 @@ using Sharp.Data.Exceptions;
 
 namespace Sharp.Data.Databases.PostgreSql {
     public class PostgreSqlProvider : DataProvider {
+        private const string SavepointId = "PostgreSqlId";
+
         public PostgreSqlProvider(DbProviderFactory dbProviderFactory) : base(dbProviderFactory) { }
 
         public override string Name {
@@ -14,7 +16,7 @@ namespace Sharp.Data.Databases.PostgreSql {
         public override DatabaseKind DatabaseKind {
             get { return DatabaseKind.PostgreSql; }
         }
-        
+
         public override DatabaseException CreateSpecificException(Exception exception, string sql) {
             if (exception.Message.Contains("42P01")) {
                 return new TableNotFoundException(exception.Message, exception, sql);
@@ -25,12 +27,12 @@ namespace Sharp.Data.Databases.PostgreSql {
             return base.CreateSpecificException(exception, sql);
         }
 
-        public override string ExecuteThisParameterlessSqlBeforeAnyOther() {
-            return "SAVEPOINT my_savepoint";
+        public override string CommandToBeExecutedBeforeEachOther() {
+            return String.Format("SAVEPOINT {0}", SavepointId);
         }
 
-        public override string ExecuteThisParameterlessSqlAfterRaiseAnException() {
-            return "ROLLBACK TO my_savepoint";
+        public override string CommandToBeExecutedAfterAnExceptionIsRaised() {
+            return String.Format("ROLLBACK TO {0}", SavepointId);
         }
     }
 }

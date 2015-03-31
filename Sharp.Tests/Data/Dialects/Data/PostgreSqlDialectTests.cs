@@ -19,7 +19,7 @@ namespace Sharp.Tests.Databases.PostgreSql {
 
         protected override string GetResultFor_Can_generate_select_sql_with_pagination(int skip, int to) {
             var sql = GetSelectAllSql();
-            return String.Format("SELECT * FROM ({0}) OFFSET {1} LIMIT {2}", sql, skip, to);
+            return String.Format("SELECT * FROM ({0}) AS TEMP OFFSET {1} LIMIT {2}", sql, skip, to);
         }
     }
 }

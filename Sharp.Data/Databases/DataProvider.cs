@@ -34,11 +34,11 @@ namespace Sharp.Data.Databases {
             return new DatabaseException(exception.Message, exception, sql);
         }
 
-        public virtual string ExecuteThisParameterlessSqlBeforeAnyOther() {
+        public virtual string CommandToBeExecutedBeforeEachOther() {
             return null;
         }
 
-        public virtual string ExecuteThisParameterlessSqlAfterRaiseAnException() {
+        public virtual string CommandToBeExecutedAfterAnExceptionIsRaised() {
             return null;
         }
     }

@@ -11,7 +11,7 @@ namespace Sharp.Tests.Databases.PostgreSql {
         protected override string[] GetResultFor_Can_create_table_sql() {
             return new[] { "create table myTable (id integer not null, name varchar(255) not null)",
 				"create sequence seq_mytable increment 1 minvalue 1 maxvalue 9223372036854775807 start 1 cache 1",
-				"alter table myTable alter column id set default nextval(\"seq_mytable\"::regclass)",
+				"alter table myTable alter column id set default nextval(\'seq_mytable\'::regclass)",
 				"alter table mytable add constraint pk_mytable primary key (id)"};
         }
 
