@@ -78,6 +78,7 @@
     <Compile Include="Databases\PostgreSql\PostgreSqlDataClient.cs" />
     <Compile Include="Databases\PostgreSql\PostgreSqlDialect.cs" />
     <Compile Include="Databases\PostgreSql\PostgreSqlProvider.cs" />
+    <Compile Include="Databases\PostgreSql\SqlColumnStructure.cs" />
     <Compile Include="DbFactory.cs" />
     <Compile Include="ExceptionHelper.cs" />
     <Compile Include="Exceptions\DatabaseException.cs" />

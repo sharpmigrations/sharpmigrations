@@ -66,7 +66,7 @@ namespace Sharp.Data.Databases.PostgreSql {
             }
             var sequenceName = SequencePrefix + tableName;
             sqls.Add(String.Format("CREATE SEQUENCE {0} INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1", sequenceName));
-            sqls.Add(String.Format("ALTER TABLE {0} ALTER COLUMN {1} SET DEFAULT NEXTVAL(\"{2}\"::REGCLASS)", tableName, autoIncrementColumn.ColumnName, sequenceName));
+            sqls.Add(String.Format("ALTER TABLE {0} ALTER COLUMN {1} SET DEFAULT NEXTVAL(\'{2}\'::REGCLASS)", tableName, autoIncrementColumn.ColumnName, sequenceName));
         }
 
         public override string[] GetDropTableSqls(string tableName) {
@@ -109,23 +109,23 @@ namespace Sharp.Data.Databases.PostgreSql {
         }
 
         public override string GetInsertReturningColumnSql(string table, string[] columns, object[] values, string returningColumnName, string returningParameterName) {
-            return String.Format("{0} RETURNING {1} INTO {2}{3}",
+            return String.Format("{0} RETURNING {1}",
                              GetInsertSql(table, columns, values),
-                             returningColumnName,
-                             ParameterPrefix,
-                             returningParameterName);
+                             returningColumnName);
         }
 
         public override string WrapSelectSqlWithPagination(string sql, int skipRows, int numberOfRows) {
-            return String.Format("SELECT * FROM ({0}) OFFSET {1} LIMIT {2}", sql, skipRows, numberOfRows);
+            return String.Format("SELECT * FROM ({0}) AS temp OFFSET {1} LIMIT {2}", sql, skipRows, numberOfRows);
         }
 
         protected override string GetDbTypeString(DbType type, int precision) {
             switch (type) {
                 case DbType.AnsiString:
                 case DbType.String:
-                    if (precision <= 0) return "VARCHAR(255)";
-                    if (precision < 10485760) return String.Format("VARCHAR({0})", precision);
+                    if (precision <= 0)
+                        return "VARCHAR(255)";
+                    if (precision < 10485760)
+                        return String.Format("VARCHAR({0})", precision);
                     return "TEXT";
                 case DbType.Binary:
                     return "BYTEA";
@@ -165,11 +165,8 @@ namespace Sharp.Data.Databases.PostgreSql {
         }
 
         public override string GetColumnToSqlWhenCreate(Column col) {
-            var colType = GetDbTypeString(col.Type, col.Size);
-            var colNullable = col.IsNullable ? WordNull : WordNotNull;
-            var colDefault = (col.DefaultValue != null) ? String.Format("DEFAULT {0}", GetColumnValueToSql(col.DefaultValue)) : "";
-
-            return String.Format("{0} {1} {2} {3}", col.ColumnName, colType, colDefault, colNullable);
+            var colStructure = GetSqlColumnStructure(col);
+            return String.Format("{0} {1} {2} {3}", col.ColumnName, colStructure.Type, colStructure.Default, colStructure.Nullable);
         }
 
         public override string GetColumnValueToSql(object value) {
@@ -218,7 +215,39 @@ namespace Sharp.Data.Databases.PostgreSql {
         }
 
         public override string GetModifyColumnSql(string tableName, string columnName, Column columnDefinition) {
-            return String.Format("ALTER TABLE {0} RENAME COLUMN {1} TO {2}", tableName, GetColumnToSqlWhenCreate(columnDefinition));
+            var colStructure = GetSqlColumnStructure(columnDefinition);
+            var builder = new StringBuilder();
+            const string alterColumn = "ALTER COLUMN";
+
+            builder.AppendFormat("ALTER TABLE {0} ", tableName);
+
+            var colType = colStructure.Type;
+            if (!String.IsNullOrEmpty(colType)) {
+                builder.AppendFormat("{0} {1} TYPE {2} USING {1}::{2},", alterColumn, columnName, colType);
+            }
+
+            var colNullable = colStructure.Nullable;
+            if (!String.IsNullOrEmpty(colNullable)) {
+                var action = colNullable == WordNotNull ? "SET" : "DROP";
+                builder.AppendFormat("{0} {1} {2} {3},", alterColumn, columnName, action, WordNotNull);
+            }
+
+            var colDefault = colStructure.Default;
+            if (!String.IsNullOrEmpty(colDefault)) {
+                builder.AppendFormat("{0} {1} SET {2},", alterColumn, columnName, colDefault);
+            }
+
+            builder.Remove(builder.Length - 1, 1);
+
+            return builder.ToString();
+        }
+
+        private SqlColumnStructure GetSqlColumnStructure(Column col) {
+            return new SqlColumnStructure {
+                Type = GetDbTypeString(col.Type, col.Size),
+                Nullable = col.IsNullable ? WordNull : WordNotNull,
+                Default = (col.DefaultValue != null) ? String.Format("DEFAULT {0}", GetColumnValueToSql(col.DefaultValue)) : ""
+            };
         }
     }
 }
