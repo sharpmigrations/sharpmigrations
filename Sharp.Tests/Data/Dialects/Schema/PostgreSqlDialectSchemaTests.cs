@@ -16,7 +16,7 @@ namespace Sharp.Tests.Databases.PostgreSql {
         }
 
         protected override string[] GetResultFor_Can_drop_table() {
-            return new[] { "drop table mytable cascade" };
+            return new[] { "drop table mytable cascade", "drop sequence if exists seq_mytable cascade" };
         }
 
         protected override string GetResultFor_Can_convert_column_to_sql__with_not_null() {
