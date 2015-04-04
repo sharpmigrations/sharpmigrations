@@ -70,7 +70,10 @@ namespace Sharp.Data.Databases.PostgreSql {
         }
 
         public override string[] GetDropTableSqls(string tableName) {
-            return new[] { String.Format("DROP TABLE {0} CASCADE", tableName) };
+            return new[] {
+                String.Format("DROP TABLE {0} CASCADE", tableName), 
+                String.Format("DROP SEQUENCE IF EXISTS {0}{1} CASCADE", SequencePrefix, tableName)
+            };
         }
 
         public override string GetForeignKeySql(string fkName, string table, string column, string referencingTable, string referencingColumn, OnDelete onDelete) {
@@ -97,15 +100,11 @@ namespace Sharp.Data.Databases.PostgreSql {
         }
 
         public override string GetUniqueKeySql(string ukName, string table, params string[] columnNames) {
-            return String.Format("CREATE UNIQUE INDEX {0} ON {1} ({2})", ukName, table, StringHelper.Implode(columnNames, ","));
+            return String.Format("ALTER TABLE {0} ADD CONSTRAINT {1} UNIQUE ({2})", table, ukName, StringHelper.Implode(columnNames, ","));
         }
 
         public override string GetDropUniqueKeySql(string uniqueKeyName, string tableName) {
-            return "DROP INDEX " + uniqueKeyName;
-        }
-
-        public override string GetDropIndexSql(string indexName, string table) {
-            return String.Format("DROP INDEX {0}", indexName);
+            return String.Format("ALTER TABLE {0} DROP CONSTRAINT {1}", tableName, uniqueKeyName);
         }
 
         public override string GetInsertReturningColumnSql(string table, string[] columns, object[] values, string returningColumnName, string returningParameterName) {
@@ -116,6 +115,10 @@ namespace Sharp.Data.Databases.PostgreSql {
 
         public override string WrapSelectSqlWithPagination(string sql, int skipRows, int numberOfRows) {
             return String.Format("SELECT * FROM ({0}) AS temp OFFSET {1} LIMIT {2}", sql, skipRows, numberOfRows);
+        }
+
+        public override string GetDropIndexSql(string indexName, string table) {
+            return String.Format("DROP INDEX {0}", indexName);
         }
 
         protected override string GetDbTypeString(DbType type, int precision) {
