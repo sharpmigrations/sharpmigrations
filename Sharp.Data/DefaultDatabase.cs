@@ -246,12 +246,12 @@ namespace Sharp.Data {
         protected ResultSet ExecuteCatchingErrors(Func<IDataReader> getReader, string call) {
             IDataReader reader = null;
             try {
-                VerifyIfExistisACommandToBeExecutedBeforeAndExecuteIt();
+                BeforeActionVerifyIfExistisACommandToBeExecuted();
                 reader = getReader();
                 return DataReaderToResultSetMapper.Map(reader);
             }
             catch (Exception ex) {
-                VerifyIfExistisACommandToBeExecutedOnErrorAndExecuteIt();
+                OnErrorVerifyIfExistisACommandToBeExecuted();
                 throw Provider.CreateSpecificException(ex, call);
             }
             finally {
@@ -263,33 +263,33 @@ namespace Sharp.Data {
 
         protected T ExecuteCatchingErrors<T>(Func<T> action, string call) {
             try {
-                VerifyIfExistisACommandToBeExecutedBeforeAndExecuteIt();
+                BeforeActionVerifyIfExistisACommandToBeExecuted();
                 return action();
             }
             catch (Exception ex) {
-                VerifyIfExistisACommandToBeExecutedOnErrorAndExecuteIt();
+                OnErrorVerifyIfExistisACommandToBeExecuted();
                 throw Provider.CreateSpecificException(ex, call);
             }
         }
 
         protected void ExecuteCatchingErrors(Action action, string call) {
             try {
-                VerifyIfExistisACommandToBeExecutedBeforeAndExecuteIt();
+                BeforeActionVerifyIfExistisACommandToBeExecuted();
                 action();
             }
             catch (Exception ex) {
-                VerifyIfExistisACommandToBeExecutedOnErrorAndExecuteIt();
+                OnErrorVerifyIfExistisACommandToBeExecuted();
                 throw Provider.CreateSpecificException(ex, call);
             }
         }
 
-        protected void VerifyIfExistisACommandToBeExecutedOnErrorAndExecuteIt() {
+        protected void OnErrorVerifyIfExistisACommandToBeExecuted() {
             if (!String.IsNullOrEmpty(Provider.CommandToBeExecutedAfterAnExceptionIsRaised())) {
                 TryExecuteSql(Provider.CommandToBeExecutedAfterAnExceptionIsRaised(), new object[] { });
             }
         }
 
-        protected void VerifyIfExistisACommandToBeExecutedBeforeAndExecuteIt() {
+        protected void BeforeActionVerifyIfExistisACommandToBeExecuted() {
             if (!String.IsNullOrEmpty(Provider.CommandToBeExecutedBeforeEachOther())) {
                 TryExecuteSql(Provider.CommandToBeExecutedBeforeEachOther(), new object[] { });
             }
