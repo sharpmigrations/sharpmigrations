@@ -19,7 +19,7 @@ namespace Sharp.Tests.Databases.Migrations {
 
         [SetUp]
         public void SetUp() {
-            _client = DBBuilder.GetDataClient(DataProviderNames.PostgreSql);
+            _client = DBBuilder.GetDataClient(DataProviderNames.OracleManaged);
             _versionRepository = new VersionRepository(_client);
             if (_client.TableExists(VersionRepository.VERSION_TABLE_NAME)) {
                 _client.RemoveTable(VersionRepository.VERSION_TABLE_NAME);

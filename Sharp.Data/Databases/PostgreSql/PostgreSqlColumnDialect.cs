@@ -49,25 +49,35 @@ namespace Sharp.Data.Databases.PostgreSql {
 
             builder.AppendFormat("ALTER TABLE {0} ", tableName);
 
-            var colType = colStructure.Type;
-            if (!String.IsNullOrEmpty(colType)) {
-                builder.AppendFormat("{0} {1} TYPE {2} USING {1}::{2},", alterColumn, columnName, colType);
-            }
+            GetTypeSqlToRenameColumnCommand(columnName, colStructure, builder, alterColumn);
+            GetNullableSqlToRenameColumnCommand(columnName, colStructure, builder, alterColumn);
+            GetDefaultValueSqlToRenameColumnCommand(columnName, colStructure, builder, alterColumn);
 
+            builder.Remove(builder.Length - 1, 1);
+
+            return builder.ToString();
+        }
+
+        private static void GetDefaultValueSqlToRenameColumnCommand(string columnName, SqlColumnStructure colStructure, StringBuilder builder, string alterColumn) {
+            var colDefault = colStructure.Default;
+            if (!String.IsNullOrEmpty(colDefault)) {
+                builder.AppendFormat("{0} {1} SET {2},", alterColumn, columnName, colDefault);
+            }
+        }
+
+        private void GetNullableSqlToRenameColumnCommand(string columnName, SqlColumnStructure colStructure, StringBuilder builder, string alterColumn) {
             var colNullable = colStructure.Nullable;
             if (!String.IsNullOrEmpty(colNullable)) {
                 var action = colNullable == _wordNotNull ? "SET" : "DROP";
                 builder.AppendFormat("{0} {1} {2} {3},", alterColumn, columnName, action, _wordNotNull);
             }
+        }
 
-            var colDefault = colStructure.Default;
-            if (!String.IsNullOrEmpty(colDefault)) {
-                builder.AppendFormat("{0} {1} SET {2},", alterColumn, columnName, colDefault);
+        private static void GetTypeSqlToRenameColumnCommand(string columnName, SqlColumnStructure colStructure, StringBuilder builder, string alterColumn) {
+            var colType = colStructure.Type;
+            if (!String.IsNullOrEmpty(colType)) {
+                builder.AppendFormat("{0} {1} TYPE {2} USING {1}::{2},", alterColumn, columnName, colType);
             }
-
-            builder.Remove(builder.Length - 1, 1);
-
-            return builder.ToString();
         }
 
         public string GetAddCommentToColumnSql(string tableName, string columnName, string comment) {
