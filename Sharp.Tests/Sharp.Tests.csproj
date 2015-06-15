@@ -40,9 +40,15 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Mono.Security">
+      <HintPath>..\packages\Npgsql.2.2.5\lib\net40\Mono.Security.dll</HintPath>
+    </Reference>
     <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Moq.4.0.10827\lib\NET35\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>..\packages\Npgsql.2.2.5\lib\net40\Npgsql.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -74,9 +80,11 @@
   <ItemGroup>
     <Compile Include="AssertSql.cs" />
     <Compile Include="Data\DataReaderToResultSetMapperTests.cs" />
+    <Compile Include="Data\Dialects\Data\PostgreSqlDialectTests.cs" />
     <Compile Include="Data\Dialects\Schema\DialectSchemaTests.cs" />
     <Compile Include="Data\Dialects\Schema\MySqlDialectSchemaTests.cs" />
     <Compile Include="Data\Dialects\Schema\OracleDialectSchemaTests.cs" />
+    <Compile Include="Data\Dialects\Schema\PostgreSqlDialectSchemaTests.cs" />
     <Compile Include="Data\Dialects\Schema\SqLiteDialectSchemaTests.cs" />
     <Compile Include="Data\Dialects\Schema\SqlServerDialectSchemaTests.cs" />
     <Compile Include="Data\Dialects\Data\DialectDataTests.cs" />

@@ -16,7 +16,7 @@ namespace Sharp.Data.Databases {
             return DbProviderFactory.CreateConnection();
         }
 
-        public virtual void ConfigCommand(IDbCommand command, object[] parameters, bool isBulk) {}
+        public virtual void ConfigCommand(IDbCommand command, object[] parameters, bool isBulk) { }
 
         public IDbDataParameter GetParameter() {
             return DbProviderFactory.CreateParameter();
@@ -32,6 +32,14 @@ namespace Sharp.Data.Databases {
 
         public virtual DatabaseException CreateSpecificException(Exception exception, string sql) {
             return new DatabaseException(exception.Message, exception, sql);
+        }
+
+        public virtual string CommandToBeExecutedBeforeEachOther() {
+            return null;
+        }
+
+        public virtual string CommandToBeExecutedAfterAnExceptionIsRaised() {
+            return null;
         }
     }
 }

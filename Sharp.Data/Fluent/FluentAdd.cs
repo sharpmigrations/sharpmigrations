@@ -35,6 +35,7 @@ namespace Sharp.Data.Fluent {
 
 		public DataClientAddIndexKey IndexKey(string indexKeyName) {
 			var action = new AddIndexKey(_dataClient) { IndexKeyName = indexKeyName };
+            FireOnAction(action);
 			return new DataClientAddIndexKey(action);
 		}
 

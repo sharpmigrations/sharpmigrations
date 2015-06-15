@@ -8,6 +8,7 @@ namespace Sharp.Data.Databases {
         public static string SqlServer = "System.Data.SqlClient";
         public static string SqLite = "System.Data.SQLite";
         public static string OleDb = "System.Data.OleDb";
+        public static string PostgreSql = "Npgsql";
 
         public static List<string> All = new List<string> {
             OracleManaged,
@@ -15,7 +16,8 @@ namespace Sharp.Data.Databases {
             MySql,
             SqlServer,
             SqLite,
-            OleDb
+            OleDb,
+            PostgreSql
         };
     }
 }

@@ -4,6 +4,7 @@ using System.Configuration;
 using Sharp.Data.Databases;
 using Sharp.Data.Databases.MySql;
 using Sharp.Data.Databases.Oracle;
+using Sharp.Data.Databases.PostgreSql;
 using Sharp.Data.Databases.SqLite;
 using Sharp.Data.Databases.SqlServer;
 
@@ -23,6 +24,7 @@ namespace Sharp.Data {
             _dbFactoryTypes.Add(DataProviderNames.OleDb, typeof(OleDbDbFactory));
             _dbFactoryTypes.Add(DataProviderNames.SqLite, typeof(SqLiteDbFactory));
             _dbFactoryTypes.Add(DataProviderNames.SqlServer, typeof(SqlServerDbFactory));
+            _dbFactoryTypes.Add(DataProviderNames.PostgreSql, typeof(PostgreDbFactory));
 
             if (ConfigurationManager.ConnectionStrings.Count <= 0) return;
             ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings[0];

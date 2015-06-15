@@ -4,6 +4,7 @@
         SqlServer,
         MySql,
         SqLite,
-        OleDb
+        OleDb,
+        PostgreSql
     }
 }
