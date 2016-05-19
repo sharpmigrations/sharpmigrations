@@ -20,6 +20,12 @@ namespace Sharp.Migrations {
 
         public IVersionRepository VersionRepository { private get; set; }
 
+        public event EventHandler<MigrationErrorArgs> OnMigrationError;
+
+        private void FireOnMigrationError(MigrationErrorArgs args) {
+            OnMigrationError?.Invoke(this, args);
+        }
+
 	    public string MigrationGroup {
 	        get { return VersionRepository.MigrationGroup; }
             set { VersionRepository.MigrationGroup = value; }
@@ -88,10 +94,14 @@ namespace Sharp.Migrations {
 	                HandleNotSupportedByDialectException(migrationInfo, nse);
 	            }
 	            catch (Exception ex) {
-	                string errorMsg = String.Format("Error running migration {0}: {1}", migrationInfo.Name, ex);
-	                Log.Error(errorMsg);
+	                var errorMsg = String.Format("Error running migration {0}: {1}", migrationInfo.Name, ex);
+                    Log.Error(errorMsg);
 	                _dataClient.RollBack();
-	                throw new MigrationException(errorMsg, ex);
+                    var args = new MigrationErrorArgs(migrationInfo.Name, ex);
+                    FireOnMigrationError(args);
+                    if (!args.Handled) {
+                        throw new MigrationException(errorMsg, ex);
+                    }
 	            }
 	        }
             Log.Info("Done. Current version: " + migrationPlan.TargetVersion);
@@ -144,4 +154,15 @@ namespace Sharp.Migrations {
 			throw nse;
 		}
 	}
+
+    public class MigrationErrorArgs : EventArgs {
+        public string MigrationName {get;}
+        public Exception Exception { get; }
+        public bool Handled { get; set; }
+
+        public MigrationErrorArgs(string migrationName, Exception ex) {
+            MigrationName = migrationName;
+            Exception = ex;
+        }
+    }
 }
