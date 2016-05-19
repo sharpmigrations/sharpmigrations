@@ -182,7 +182,10 @@ namespace Sharp.Data {
             for (int i = 0; i < values.Length; i++) {
                 pars[i] = values[i] as In;
                 if (pars[i] == null) {
-                    pars[i] = new In {Name = GetParameterName(i + indexToStart), Value = values[i]};
+                    pars[i] = new In { Name = GetParameterName(i + indexToStart), Value = values[i] };
+                }
+                else if(String.IsNullOrEmpty(pars[i].Name)) {
+                    pars[i].Name = GetParameterName(i + indexToStart);
                 }
             }
             return pars;
@@ -245,4 +248,5 @@ namespace Sharp.Data {
         public abstract string GetRenameColumnSql(string tableName, string columnName, string newColumnName);
         public abstract string GetModifyColumnSql(string tableName, string columnName, Column columnDefinition);
     }
+
 }

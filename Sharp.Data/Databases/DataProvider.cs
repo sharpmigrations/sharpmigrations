@@ -7,6 +7,11 @@ namespace Sharp.Data.Databases {
         protected DbProviderFactory DbProviderFactory { get; private set; }
         public abstract string Name { get; }
         public abstract DatabaseKind DatabaseKind { get; }
+        public virtual IDbTypeMapper DbTypeMapper {
+            get {
+                return new SqlDbTypeMapper();
+            }
+        }
 
         protected DataProvider(DbProviderFactory dbProviderFactory) {
             DbProviderFactory = dbProviderFactory;

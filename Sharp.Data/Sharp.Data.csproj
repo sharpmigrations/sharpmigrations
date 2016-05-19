@@ -73,7 +73,9 @@
     </Compile>
     <Compile Include="Database.cs" />
     <Compile Include="Databases\DatabaseKind.cs" />
+    <Compile Include="Databases\IDbTypeMapper.cs" />
     <Compile Include="Databases\Oracle\OracleReflectionCache.cs" />
+    <Compile Include="Databases\Oracle\OracleDbTypeMapper.cs" />
     <Compile Include="Databases\PostgreSql\PostgreDbFactory.cs" />
     <Compile Include="Databases\PostgreSql\PostgreSqlColumnDialect.cs" />
     <Compile Include="Databases\PostgreSql\PostgreSqlConstraintsDialect.cs" />
@@ -83,6 +85,7 @@
     <Compile Include="Databases\PostgreSql\PostgreSqlProvider.cs" />
     <Compile Include="Databases\PostgreSql\PostgreSqlTableDialect.cs" />
     <Compile Include="Databases\PostgreSql\SqlColumnStructure.cs" />
+    <Compile Include="Databases\SqlDbTypeMapper.cs" />
     <Compile Include="DbFactory.cs" />
     <Compile Include="DefaultDatabase.cs" />
     <Compile Include="ExceptionHelper.cs" />
