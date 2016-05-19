@@ -23,17 +23,25 @@ namespace Sharp.Migrator {
             Console.WriteLine("Sharp Migrator v" + Assembly.GetExecutingAssembly().GetName().Version);
             Console.WriteLine("--------------------------------");
             PrintPlataform();
+
             try {
                 ParseConfig();
             }
             catch (ArgumentException ex) {
-                Console.WriteLine("Error: " + ex.Message);
-                Console.WriteLine(Options.GetUsage());
-                Exit();
+                if (_args.Length > 0) {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+                PrintHelpAndExit();
             }
             PrintMigrationGroup();
+            PrintMode();
             PrintDataSource(SharpFactory.Default.ConnectionString);
             Run();
+        }
+
+        public void PrintHelpAndExit() {
+            Console.WriteLine(Options.GetUsage());
+            Exit();
         }
 
         public void ParseConfig() {
@@ -100,6 +108,11 @@ namespace Sharp.Migrator {
         private void PrintMigrationGroup() {
             string migrationGroup = String.IsNullOrEmpty(Options.MigrationGroup) ? "not set" : Options.MigrationGroup;
             Console.WriteLine("MigrationGroup: " + migrationGroup);
+            Console.WriteLine("--------------------------------");
+        }
+
+        private void PrintMode() {
+            Console.WriteLine("Mode: " + Options.Mode);
             Console.WriteLine("--------------------------------");
         }
 

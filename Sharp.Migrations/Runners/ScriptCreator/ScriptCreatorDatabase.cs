@@ -41,15 +41,15 @@ namespace Sharp.Migrations.Runners.ScriptCreator {
         }
 
         public int ExecuteBulkSql(string call, params object[] parameters) {
-            throw new NotImplementedException();
+            return ExecuteSql(call, parameters);
         }
 
         public int ExecuteSqlCommitAndDispose(string call, params object[] parameters) {
-            throw new NotImplementedException();
+            return ExecuteSql(call, parameters);
         }
 
         public int ExecuteBulkSqlCommitAndDispose(string call, params object[] parameters) {
-            throw new NotImplementedException();
+            return ExecuteSql(call, parameters);
         }
 
         public void ExecuteStoredProcedure(string call, params object[] parameters) {
@@ -73,7 +73,7 @@ namespace Sharp.Migrations.Runners.ScriptCreator {
         }
 
         public ResultSet QueryAndDispose(string call, params object[] parameters) {
-            throw new NotImplementedException();
+            return Query(call, parameters);
         }
 
         public object QueryScalar(string call, params object[] parameters) {
@@ -81,7 +81,7 @@ namespace Sharp.Migrations.Runners.ScriptCreator {
         }
 
         public object QueryScalarAndDispose(string call, params object[] parameters) {
-            throw new NotImplementedException();
+            return QueryScalar(call, parameters);
         }
 
         public void Commit() {
