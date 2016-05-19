@@ -136,7 +136,7 @@ namespace Sharp.Migrator {
         }
 
         private void Run() {
-            int version = Options.TargetVersion ?? -1;
+            long version = Options.TargetVersion ?? -1;
             string mode = (Options.Mode ?? "manual").ToLower();
             if (mode == "script") {
                 RunScript(version);
@@ -170,7 +170,7 @@ namespace Sharp.Migrator {
             return Assembly.LoadFile(Path.GetFullPath(Options.AssemblyWithMigrations));
         }
 
-        private void RunScript(int version) {
+        private void RunScript(long version) {
             if (String.IsNullOrEmpty(Options.Filename)) {
                 Exit();
             }

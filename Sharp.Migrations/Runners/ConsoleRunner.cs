@@ -13,7 +13,7 @@ namespace Sharp.Migrations.Runners {
 		public const string PRESS_KEY_TO_EXIT = "Press any key to exit";
 		public const string DATABASE_ERROR = "Database error:";
 
-		protected int _targetVersion;
+		protected long _targetVersion;
 		protected Assembly _assemblyWithMigrations;
 
 	    private Runner _runner;
@@ -73,7 +73,7 @@ namespace Sharp.Migrations.Runners {
 	    protected void GetTargetVersion() {
 	        Runner runner = GetRunner();
 	        ShowCurrentVersion(runner.CurrentVersionNumber);
-			_targetVersion = GetIntFromConsole(string.Format(ASK_FOR_VERSION, runner.LastVersionNumber));
+			_targetVersion = GetLongFromConsole(string.Format(ASK_FOR_VERSION, runner.LastVersionNumber));
 		}
 
         protected void ShowCurrentVersion(long version) {
@@ -89,7 +89,16 @@ namespace Sharp.Migrations.Runners {
 			return version;
 		}
 
-	    protected virtual void ShowError(DatabaseException dex) {
+        protected long GetLongFromConsole(string message) {
+            long version;
+            Console.WriteLine(message);
+            while (!Int64.TryParse(Console.ReadLine(), out version)) {
+                Console.WriteLine(INVALID_NUMBER);
+            }
+            return version;
+        }
+
+        protected virtual void ShowError(DatabaseException dex) {
 			Console.WriteLine(DATABASE_ERROR + dex.Message);
 			if (dex.SQL.Length > 0) {
 				Console.WriteLine("------------------------------");

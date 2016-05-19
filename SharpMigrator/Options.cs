@@ -16,7 +16,7 @@ namespace Sharp.Migrator {
         public string DatabaseProvider { get; set; }
 
         [Option('v', "version", HelpText = "Target version to migrate automatically to. Specifying -1 will migrate to the latest version")]
-        public int? TargetVersion { get; set; }
+        public long? TargetVersion { get; set; }
 
         [Option('m', "mode", HelpText = "manual: prompt user for version. auto: run migrations without prompting the user (see parameter -v for version). script: generate scritps to the file specified on -f parameter. seed: runs a database seed")]
         public string Mode { get; set; }
