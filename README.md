@@ -1,4 +1,4 @@
-#Sharp Migrations
+# Sharp Migrations
 
 Sharp migrations is a framework to help you deal with database changes and versioning over time. The idea comes from the excellent Ruby on Rail's migrations and it is the best way to alter your database in a structured and organised manner.
 
