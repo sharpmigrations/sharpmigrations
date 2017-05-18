@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using CommandLine.Text;
 
-namespace Sharp.Migrator {
+namespace SharpMigrator {
     public class Options {
         [Option('a', "assembly", HelpText = "Assembly with migrations")]
         public string AssemblyWithMigrations { get; set; }

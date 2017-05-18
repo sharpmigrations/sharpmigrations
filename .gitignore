@@ -11,3 +11,13 @@ Sharp.Tests/obj/
 SharpMigrator/obj/
 Sharp.Tests.Nlog/obj/
 Sharp.Tests.Databases/bin/
+Sharp.Tests/bin/Debug/SharpMigrator.exe.config
+Sharp.Tests.Chinook/bin/
+Sharp.Tests.Northwind/bin/
+Sharp.Tests.ReversableMigrations/bin/
+SharpMigrator.Tests/obj/
+SharpMigrations/obj/
+SharpMigrations.Tests/obj/
+SharpMigrations.Tests/bin/
+SharpMigrator.Tests/bin/
+SharpMigrations/bin/

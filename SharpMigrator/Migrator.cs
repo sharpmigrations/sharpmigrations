@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using CommandLine;
-using Sharp.Data;
-using Sharp.Migrations;
-using Sharp.Migrations.Runners;
-using Sharp.Migrations.Runners.ScriptCreator;
+using SharpData;
+using SharpData.Databases;
+using SharpMigrations;
+using SharpMigrations.Runners;
+using SharpMigrations.Runners.ScriptCreator;
 
-namespace Sharp.Migrator {
+namespace SharpMigrator {
     public class Migrator {
         private readonly string[] _args;
         public Options Options { get; set; }
@@ -101,8 +103,12 @@ namespace Sharp.Migrator {
             if (String.IsNullOrEmpty(Options.DatabaseProvider)) {
                 Exit("Please, set a database provider");
             }
-            SharpFactory.Default.ConnectionString = Options.ConnectionString;
-            SharpFactory.Default.DataProviderName = Options.DatabaseProvider;
+            SharpFactory.Default = DbFinder.GetSharpFactory(GetByName(Options.DatabaseProvider),Options.ConnectionString);
+        }
+
+        private DbProviderType GetByName(string name) {
+            return DbProviderTypeExtensions.GetAll()
+                                           .FirstOrDefault(p => String.Equals(p.ToString(), name, StringComparison.CurrentCultureIgnoreCase));
         }
 
         private void PrintMigrationGroup() {
@@ -131,20 +137,19 @@ namespace Sharp.Migrator {
         private static void PrintDataSource(string connectionString) {
             var start = connectionString.IndexOf("Data Source=") + "Data Source=".Length;
             var end = connectionString.IndexOf(@";", start);
-            var dataSource = string.Format("Data Source: {0}", connectionString.Substring(start, end - start));
+            var dataSource = $"Data Source: {connectionString.Substring(start, end - start)}";
             Console.WriteLine(dataSource);
         }
 
         private void Run() {
-            long version = Options.TargetVersion ?? -1;
-            string mode = (Options.Mode ?? "manual").ToLower();
+            var version = Options.TargetVersion ?? -1;
+            var mode = (Options.Mode ?? "manual").ToLower();
             if (mode == "script") {
                 RunScript(version);
                 return;
             }
             if (mode == "auto") {
-                var runner = new Runner(SharpFactory.Default.CreateDataClient(), GetAssemblyWithMigrations());
-                runner.MigrationGroup = Options.MigrationGroup;
+                var runner = new Runner(SharpFactory.Default.CreateDataClient(), GetAssemblyWithMigrations(), Options.MigrationGroup);
                 runner.Run(version);
                 return;
             }
@@ -157,9 +162,7 @@ namespace Sharp.Migrator {
                 seedRunner.Run(Options.SeedName, Options.SeedArgs, Options.MigrationGroup);
                 return;
             }
-            var crunner = new ConsoleRunner(SharpFactory.Default.ConnectionString, SharpFactory.Default.DataProviderName);
-            crunner.AssemblyWithMigrations = GetAssemblyWithMigrations();
-            crunner.MigrationGroup = Options.MigrationGroup;
+            var crunner = new ConsoleRunner(SharpFactory.Default.CreateDataClient(), GetAssemblyWithMigrations(), Options.MigrationGroup);
             crunner.Start();
         }
 
@@ -174,8 +177,7 @@ namespace Sharp.Migrator {
             if (String.IsNullOrEmpty(Options.Filename)) {
                 Exit();
             }
-            var runner = new ScriptCreatorRunner(SharpFactory.Default.CreateDataClient(), GetAssemblyWithMigrations());
-            runner.Run(version, Options.MigrationGroup);
+            var runner = new ScriptCreatorRunner(SharpFactory.Default.CreateDataClient(), GetAssemblyWithMigrations(), Options.MigrationGroup);
             File.WriteAllText(Options.Filename, runner.GetCreatedScript(), Encoding.UTF8);
             Console.WriteLine(" * Check {0} for the script dump. No migrations were performed on the database.",
                 Options.Filename);

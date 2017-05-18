@@ -1,6 +1,6 @@
 ﻿using Sharp.Migrations;
 
-namespace Sharp.Tests.ReversibleMigrations {
+namespace SharpMigrations.Tests.ReversibleMigrations {
     public class _001_Create_table_revfoo_with_comments : ReversibleSchemaMigration {
         public override void Up() {
             Add.Table("revfoo")

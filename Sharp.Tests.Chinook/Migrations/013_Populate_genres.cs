@@ -1,6 +1,6 @@
 using Sharp.Migrations;
 
-namespace Sharp.Tests.Chinook {
+namespace SharpMigrations.Tests.Chinook {
 
     public class _013_Populate_genres : DataMigration {
 

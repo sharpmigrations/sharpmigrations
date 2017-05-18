@@ -76,16 +76,6 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Sharp.Data\Sharp.Data.csproj">
-      <Project>{8c494818-90af-4133-94e1-0d1cbd961397}</Project>
-      <Name>Sharp.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sharp.Migrations\Sharp.Migrations.csproj">
-      <Project>{703517b1-515e-4833-a1e0-b3cd9cf7e5e2}</Project>
-      <Name>Sharp.Migrations</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

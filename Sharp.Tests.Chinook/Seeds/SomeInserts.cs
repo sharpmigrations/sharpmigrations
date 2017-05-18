@@ -2,7 +2,7 @@
 using log4net.Config;
 using Sharp.Migrations;
 
-namespace Sharp.Tests.Chinook.Seeds {
+namespace SharpMigrations.Tests.Chinook.Seeds {
     public class SomeInserts : SeedMigration {
         public override void Up(string param = null) {
             int num = 30;

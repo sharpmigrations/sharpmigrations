@@ -1,6 +1,6 @@
 using Sharp.Migrations.Runners;
 
-namespace Sharp.Tests.Chinook {
+namespace SharpMigrations.Tests.Chinook {
     public class ChinookMigrations : ChooseDbConsoleRunner {
         public ChinookMigrations()
             : base("", "", "Chinook") {

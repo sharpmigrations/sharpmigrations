@@ -1,6 +1,6 @@
 using Sharp.Migrations;
 
-namespace Sharp.Tests.Chinook {
+namespace SharpMigrations.Tests.Chinook {
     public class _012_Create_Foreign_Keys : SchemaMigration {
 
         public override void Up() {

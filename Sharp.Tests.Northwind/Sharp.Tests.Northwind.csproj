@@ -75,16 +75,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sharp.Data\Sharp.Data.csproj">
-      <Project>{8C494818-90AF-4133-94E1-0D1CBD961397}</Project>
-      <Name>Sharp.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sharp.Migrations\Sharp.Migrations.csproj">
-      <Project>{703517B1-515E-4833-A1E0-B3CD9CF7E5E2}</Project>
-      <Name>Sharp.Migrations</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>

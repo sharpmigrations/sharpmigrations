@@ -1,7 +1,7 @@
 ﻿using Sharp.Data.Log;
 using log4net.Config;
 
-namespace Sharp.Tests.ReversibleMigrations {
+namespace SharpMigrations.Tests.ReversibleMigrations {
     internal class Program {
         private static void Main(string[] args) {
             XmlConfigurator.Configure();

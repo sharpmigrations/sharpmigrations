@@ -1,6 +1,6 @@
 using Sharp.Migrations;
 
-namespace Sharp.Tests.Chinook {
+namespace SharpMigrations.Tests.Chinook {
     public class _014_Populate_media_types : DataMigration {
 
         public override void Up() {

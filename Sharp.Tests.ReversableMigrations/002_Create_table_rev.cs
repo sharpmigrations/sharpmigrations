@@ -1,6 +1,6 @@
 ﻿using Sharp.Migrations;
 
-namespace Sharp.Tests.ReversibleMigrations {
+namespace SharpMigrations.Tests.ReversibleMigrations {
     public class _002_Create_table_bar : ReversibleSchemaMigration {
         public override void Up() {
             Add.Table("rev")
