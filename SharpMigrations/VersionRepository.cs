@@ -18,8 +18,8 @@ namespace SharpMigrations {
 
         public VersionRepository(IDataClient dataClient, string migrationGroup = DEFAULT_MIGRATION_GROUP) {
             _dataClient = dataClient;
+            MigrationGroup = migrationGroup ?? DEFAULT_MIGRATION_GROUP;
             _migrationGroupFilter = Filter.Eq("migrationgroup", MigrationGroup);
-            MigrationGroup = migrationGroup;
             EnsureSchemaVersionTable();
         }
 

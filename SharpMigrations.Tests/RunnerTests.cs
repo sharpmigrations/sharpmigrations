@@ -183,7 +183,7 @@ namespace SharpMigrations.Tests {
 	    }
 
 	    private void SetVersion(int max) {
-	        for (int i = 1; i <= max; i++) {
+	        for (var i = 1; i <= max; i++) {
                 _versionsFromDatabase.Add(i);	            
 	        }
 	    }

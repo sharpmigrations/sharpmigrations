@@ -23,3 +23,5 @@ SharpMigrator.Tests/bin/
 SharpMigrations/bin/
 SharpMigrator/bin/Release/EntityFramework.xml
 SharpMigrator/bin/
+SharpMigrations.Tests.Northwind/obj/
+SharpMigrations.Tests.Northwind/bin/
