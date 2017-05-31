@@ -4,7 +4,7 @@ using System.Reflection;
 using SharpData;
 using SharpMigrations.Runners;
 
-namespace SharpMigrations.Tests.Northwind {
+namespace SharpMigrations.Tests.Chinnok {
     class Program {
         static void Main(string[] args) {
             var connectionString = ConfigurationManager.ConnectionStrings["System.Data.SqlClient"].ConnectionString;

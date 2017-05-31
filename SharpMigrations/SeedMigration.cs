@@ -1,12 +1,14 @@
 using System;
+using Microsoft.Extensions.Logging;
 using SharpData;
 using SharpData.Fluent;
 using SharpData.Log;
+using SharpMigrations.Runners;
 
 namespace SharpMigrations {
     public abstract class SeedMigration {
 
-        private static ISharpLogger _log = LogManager.GetLogger(typeof(SeedMigration).Name);
+        public static ILogger Logger { get; set; } = SharpMigrationsLogging.CreateLogger<SeedMigration>();
 
         private IDataClient _dataClient;
 
@@ -17,7 +19,7 @@ namespace SharpMigrations {
         }
 
         protected void Log(string msg, params object[] args) {
-            _log.Info(String.Format(msg, args));
+            Logger.LogInformation(String.Format(msg, args));
         }
 
         protected IFluentDelete Delete => new FluentDelete(DataClient);

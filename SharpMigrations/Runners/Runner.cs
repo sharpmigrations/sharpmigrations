@@ -1,12 +1,13 @@
 using System;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using SharpData;
 using SharpData.Databases;
-using SharpData.Log;
+using SharpData.Exceptions;
 
 namespace SharpMigrations.Runners {
     public class Runner : IRunner {
-        public static ISharpLogger Log = LogManager.GetLogger(typeof(Runner).Name);
+        public static ILogger Logger { get; set; } = SharpMigrationsLogging.CreateLogger<Runner>();
         public static bool IgnoreDialectNotSupportedActions { get; set; }
 
         private long _initialVersion;
@@ -60,13 +61,13 @@ namespace SharpMigrations.Runners {
 
 	    private void RunMigrations(MigrationPlan migrationPlan) {
 	        if (NoWorkToDo(migrationPlan)) {
-	            Log.Info("No migrations to perform");
+	            Log("No migrations to perform");
 	            return;
 	        }
-	        Log.Info("Starting migrations");
-	        Log.Info("Current version is " + migrationPlan.CurrentVersion);
-	        Log.Info("Target version is " + migrationPlan.TargetVersion);
-	        Log.Info(String.Format("Migrate action is: {0} from {1} to {2}",
+	        Log("Starting migrations");
+	        Log("Current version is " + migrationPlan.CurrentVersion);
+	        Log("Target version is " + migrationPlan.TargetVersion);
+            Log(String.Format("Migrate action is: {0} from {1} to {2}",
 	            (migrationPlan.IsUp ? "UP" : "DOWN"),
 	            migrationPlan.CurrentVersion,
 	            migrationPlan.TargetVersion));
@@ -76,12 +77,12 @@ namespace SharpMigrations.Runners {
 	            try {
 	                RunMigration(step);
 	            }
-	            catch (NotSupportedByDialect nse) {
+	            catch (NotSupportedByDialectException nse) {
 	                HandleNotSupportedByDialectException(migrationInfo, nse);
 	            }
 	            catch (Exception ex) {
 	                var errorMsg = String.Format("Error running migration {0}: {1}", migrationInfo.Name, ex);
-                    Log.Error(errorMsg);
+	                LogError(errorMsg);
 	                _dataClient.RollBack();
                     var args = new MigrationErrorArgs(migrationInfo.Name, ex);
                     FireOnMigrationError(args);
@@ -90,18 +91,17 @@ namespace SharpMigrations.Runners {
                     }
 	            }
 	        }
-            Log.Info("Done. Current version: " + migrationPlan.TargetVersion);
+	        Log("Done. Current version: " + migrationPlan.TargetVersion);
 	    }
 
         private void RunMigration(MigrationPlanStep step) {
             var migrationInfo = step.MigrationInfo;
             if (!migrationInfo.MigratesFor(_databaseKind)) {
-                Log.Info(
-                    $" -> [{migrationInfo.Version}] {migrationInfo.Name} {step.Direction}() NOT PERFORMED for database {_databaseKind}");
+                Log($" -> [{migrationInfo.Version}] {migrationInfo.Name} {step.Direction}() NOT PERFORMED for database {_databaseKind}");// $" -> [{migrationInfo.Version}] {migrationInfo.Name} {step.Direction}() NOT PERFORMED for database {_databaseKind}");
                 UpdateCurrentVersion(step);
                 return;
             }
-            Log.Info(String.Format(" -> [{0}] {1} {2}()", migrationInfo.Version, migrationInfo.Name, step.Direction));
+            Log(String.Format(" -> [{0}] {1} {2}()", migrationInfo.Version, migrationInfo.Name, step.Direction));
             
             var migration = _migrationFactory.CreateMigration(migrationInfo.MigrationType);
             if (step.Direction == Direction.Up) {
@@ -129,12 +129,22 @@ namespace SharpMigrations.Runners {
 			return migrationPlan.OrderedSteps.Count == 0;
 		}
         
-		private void HandleNotSupportedByDialectException(MigrationInfo migrationInfo, NotSupportedByDialect nse) {
+		private void HandleNotSupportedByDialectException(MigrationInfo migrationInfo, NotSupportedByDialectException nse) {
 		    if (!IgnoreDialectNotSupportedActions) {
 		        throw nse;
 		    }
-		    Log.Warn(
+		    Log(
 		        $"Migration[{migrationInfo.Name}] NotSupportedException not thrown due user config. Dialect: {nse.DialectName} Function: {nse.FunctionName} Msg: {nse.Message}");
 		}
-	}
+
+        protected virtual void Log(string message) {
+            Console.WriteLine(message);
+            Logger.LogInformation(message);
+        }
+
+        protected virtual void LogError(string message) {
+            Console.WriteLine("ERROR: " + message);
+            Logger.LogError(message);
+        }
+    }
 }

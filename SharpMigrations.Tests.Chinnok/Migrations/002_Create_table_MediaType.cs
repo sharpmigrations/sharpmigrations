@@ -1,7 +1,4 @@
-using Sharp.Data.Schema;
-using Sharp.Migrations;
-
-namespace SharpMigrations.Tests.Chinook {
+namespace SharpMigrations.Tests.Chinnok.Migrations {
     public class _002_Create_table_MediaType : SchemaMigration {
         public override void Up() {
             Add.Table("MediaType").WithColumns(

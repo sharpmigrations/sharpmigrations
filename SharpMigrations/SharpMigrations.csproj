@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>2.0.0-beta3</Version>
+    <Version>2.0.0-beta4</Version>
     <Description>Sharp migrations is a framework to help you deal with database changes and versioning over time. The idea comes from the excellent Ruby on Rails migrations and it is the best way to alter your database in a structured and organised manner.</Description>
     <Product>Database Migration Framework for C#</Product>
     <Authors>Andre Carlucci</Authors>
@@ -12,10 +12,12 @@
     <PackageTags>migration, migrations, c#, database, database-migrations</PackageTags>
     <PackageProjectUrl>https://github.com/sharpmigrations/sharpmigrations</PackageProjectUrl>
     <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageReleaseNotes>Added Microsoft.Extensions.Logging</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SharpData" Version="2.0.0-beta4" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.2" />
+    <PackageReference Include="SharpData" Version="2.0.0-beta5" />
   </ItemGroup>
 
   <ItemGroup>

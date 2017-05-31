@@ -1,7 +1,4 @@
-using Sharp.Data.Schema;
-using Sharp.Migrations;
-
-namespace SharpMigrations.Tests.Chinook {
+namespace SharpMigrations.Tests.Chinnok.Migrations {
     public class _003_Create_table_Artist : SchemaMigration {
         
         public override void Up() {

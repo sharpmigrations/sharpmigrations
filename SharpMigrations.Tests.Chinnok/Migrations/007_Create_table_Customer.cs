@@ -1,6 +1,4 @@
-using Sharp.Migrations;
-
-namespace SharpMigrations.Tests.Chinook {
+namespace SharpMigrations.Tests.Chinnok.Migrations {
     
     public class _007_Create_table_Customer : SchemaMigration {
 
