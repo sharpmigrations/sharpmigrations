@@ -201,6 +201,25 @@ Migrates to version 2
 You can make your own customized runner creating a console application and extending some Runner. There are many examples in the source code.
 
 
-##And don't forget that SharpMigrations is powered by:
+## Database Support
+
+Função          | Oracle | SqlServer | MySql | Postgre | Sqlite
+------------    | :--------:
+Create Table    |    x   |     x     |   x   |    x    |   x   
+Add Column      |    x   |     x     |   x   |    x    |   x   
+Add Primary Key |    x   |     x     |   x   |    x    |   x   
+Add Foreign Key |    x   |     x     |   x   |    x    |   x   
+Add Unique Key  |    x   |     x     |   x   |    x    |   x   
+Add Index Key   |    x   |     x     |   x   |    x    |   x   
+Add Comment     |    x   |     x     |   x   |    x    |   NS   
+Rename Table    |    x   |     x     |   x   |    x    |   x   
+Rename Column   |    x   |     x     |   x   |    x    |   x   
+
+* **x**: Suported
+* **NS**: Not supported by database
+* **PR**: Pull request welcome :)
+
+
+### And don't forget that SharpMigrations is powered by:
 <a href="http://www.jetbrains.com/resharper" rel="Resharper">![Foo](http://blog.jetbrains.com/wp-content/uploads/2014/04/logo_resharper.gif)</a>
 

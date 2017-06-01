@@ -27,3 +27,5 @@ SharpMigrations.Tests.Northwind/obj/
 SharpMigrations.Tests.Northwind/bin/
 SharpMigrations.Tests.Chinnok/bin/
 SharpMigrations.Tests.Chinnok/obj/
+SharpMigrations.Tests.ReversibleMigrations/bin/
+SharpMigrations.Tests.ReversibleMigrations/obj/
