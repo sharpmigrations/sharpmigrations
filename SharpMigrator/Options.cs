@@ -13,7 +13,7 @@ namespace SharpMigrator {
         [Option('c', "connectionstring", HelpText = "This is the connection string of the target database")]
         public string ConnectionString { get; set; }
 
-        [Option('p', "provider", HelpText = "This is the database provider")]
+        [Option('p', "provider", HelpText = "Database provider. Options are: OracleManaged, MySql, SqlServer, SqLite, OleDb and PostgreSql")]
         public string DatabaseProvider { get; set; }
 
         [Usage(ApplicationAlias = "SharpMigrator")]
@@ -25,16 +25,6 @@ namespace SharpMigrator {
                 yield return new Example("Apply seed to database", new SeedOptions { AssemblyWithMigrations = "MyAssemblyWithMigrations.dll", SeedName = "SomeInserts"});
             }
         }
-
-        //public string GetUsage() {
-        //    var help = new HelpText("Usage:");
-        //    help.AddPreOptionsLine("Ex: SharpMigrator -a MyAssembly.dll -m auto -v 10 -> Migrates to version 10 (no prompt)");
-        //    help.AddPreOptionsLine("Ex: SharpMigrator -a MyAssembly.dll -m script -f script.sql -v 10 -> Generates scripts from current version to version 10 into script.sql file");
-        //    help.AddPreOptionsLine("Ex: SharpMigrator -a MyAssembly.dll -m script -v 10 -g superplugin -> Generates scripts from current version to version 10 using migration group 'superplugin'");
-        //    help.AddPreOptionsLine("Ex: SharpMigrator -a MyAssembly.dll -m seed -s myseed -> Run seed named myseed");
-        //    help.AddOptions(this);
-        //    return help.ToString();
-        //}
     }
 
     public class ExtraOptions : Options {

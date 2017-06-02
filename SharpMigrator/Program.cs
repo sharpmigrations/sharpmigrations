@@ -14,11 +14,12 @@ namespace SharpMigrator {
             //args = "migrate".Split('|');
             //args = "migrate|-v|10".Split('|');
             //args = @"migrate|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe".Split('|');
-            //args = @"migrate|-v|10|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe".Split('|');
+            //args = @"migrate|-v|0|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe".Split('|');
             //args = @"script|-v|10|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe".Split('|');
 
             //args = @"migrate|-v|10|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe|-c|Data Source=//localhost:1521/XE;User Id=sharp;Password=sharp;".Split('|');
             //args = @"migrate|-v|-1|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe|-c|Server=(localdb)\mssqllocaldb;Database=sharp;Trusted_Connection=True;MultipleActiveResultSets=true|-p|sqlserver".Split('|');
+            //args = @"migrate|-v|-1|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe|-c|User ID=sharp;Password=sharp;Host=localhost;Port=5432;Database=sharp;|-p|postgresql".Split('|');
             //args = @"seed|-s|SomeInserts|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe|-c|Server=(localdb)\mssqllocaldb;Database=sharp;Trusted_Connection=True;MultipleActiveResultSets=true|-p|sqlserver".Split('|');
 
 
