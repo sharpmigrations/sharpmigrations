@@ -188,48 +188,48 @@ You can make your own customized runner creating a console application and exten
 
 ## Database Support DDL
 
-Função           | Oracle | SqlServer | MySql | Postgre | Sqlite
-------------     | :--------:
-Table Create     |    x   |     x     |   x   |    x    |   PR   
-Table Drop       |    x   |     x     |   x   |    x    |   PR 
-Table Rename     |    x   |     x     |   x   |    x    |   PR  
-Table Exists?    |    x   |     x     |   x   |    x    |   x 
-Column Add       |    x   |     x     |   x   |    x    |   x   
-Column Drop      |    x   |     x     |   x   |    x    |   PR   
-Column Rename    |    x   |     x     |   x   |    x    |   PR   
-Column AutoIncrement |x   |     x     |   x   |    x    |   x   
-Column Modify    |    x   |     x     |   PR  |    x    |   x   
-Type bool        |    x   |     x     |   x   |    x    |   PR   
-Comment Column   |    x   |     x     |   PR  |    x    |   NS   
-Comment Table    |    x   |     x     |   PR  |    x    |   NS   
-Primary Key Add  |    x   |     x     |   x   |    x    |   NS   
-Primary Key Drop |    x   |     x     |   x   |    x    |   PR   
-Foreign Key Add  |    x   |     x     |   PR  |    x    |   PR   
-Foreign Key Drop |    x   |     x     |   PR  |    x    |   PR   
-Unique Key Add   |    x   |     x     |   PR  |    x    |   x   
-Unique Key Drop  |    x   |     x     |   PR  |    x    |   x   
-Index Key Add    |    x   |     x     |   x   |    x    |   x   
-Index Key Drop   |    x   |     x     |   x   |    x    |   PR   
-Index Key Multiple Columns | x |  x   |   x   |    x    |   PR   
+| Função           | Oracle | SqlServer | MySql | Postgre | Sqlite |
+| ------------     | :--------:                                    |
+| Table Create     |    x   |     x     |   x   |    x    |   PR   |
+| Table Drop       |    x   |     x     |   x   |    x    |   PR   |
+| Table Rename     |    x   |     x     |   x   |    x    |   PR   |
+| Table Exists?    |    x   |     x     |   x   |    x    |   x    |
+| Column Add       |    x   |     x     |   x   |    x    |   x    |
+| Column Drop      |    x   |     x     |   x   |    x    |   PR   |
+| Column Rename    |    x   |     x     |   x   |    x    |   PR   |
+| Column AutoIncrement |x   |     x     |   x   |    x    |   x    |
+| Column Modify    |    x   |     x     |   PR  |    x    |   x    |
+| Type bool        |    x   |     x     |   x   |    x    |   PR   |
+| Comment Column   |    x   |     x     |   PR  |    x    |   NS   |
+| Comment Table    |    x   |     x     |   PR  |    x    |   NS   |
+| Primary Key Add  |    x   |     x     |   x   |    x    |   NS   |
+| Primary Key Drop |    x   |     x     |   x   |    x    |   PR   |
+| Foreign Key Add  |    x   |     x     |   PR  |    x    |   PR   |
+| Foreign Key Drop |    x   |     x     |   PR  |    x    |   PR   |
+| Unique Key Add   |    x   |     x     |   PR  |    x    |   x    |
+| Unique Key Drop  |    x   |     x     |   PR  |    x    |   x    |
+| Index Key Add    |    x   |     x     |   x   |    x    |   x    |
+| Index Key Drop   |    x   |     x     |   x   |    x    |   PR   |
+| Index Key Multiple Columns | x |  x   |   x   |    x    |   PR   |
 
 ## Database Support DML
-Função           | Oracle | SqlServer | MySql | Postgre | Sqlite
-------------     | :--------:
-Select all         |    x   |     x     |   x   |    x    |   x   
-Select with filter |    x   |     x     |   x   |    x    |   x   
-Order by           |    x   |     x     |   x   |    x    |   x  
-Skip/Take          |    x   |     x     |   x   |    x    |   PR  
-Count              |    x   |     x     |   x   |    x    |   x   
-Count with filter  |    x   |     x     |   x   |    x    |   x  
-Update             |    x   |     x     |   x   |    x    |   x  
-Update with filter |    x   |     x     |   x   |    x    |   x  
-Delete All         |    x   |     x     |   x   |    x    |   x  
-Delete with filter |    x   |     x     |   x   |    x    |   x  
-Dates and Booleans |    x   |     x     |   x   |    x    |   x  
-Insert returning   |    x   |     x     |   PR  |    x    |   x  
-Insert null        |    x   |     x     |   x   |    x    |   x  
-Insert blob        |    x   |     x     |   x   |    x    |   x  
-Bulk Insert        |    x   |     x     |   x   |    x    |   x 
+| Função           | Oracle | SqlServer | MySql | Postgre | Sqlite |
+| ------------     | :--------:                                    |
+| Select all         |    x   |     x     |   x   |    x    |   x  | 
+| Select with filter |    x   |     x     |   x   |    x    |   x  | 
+| Order by           |    x   |     x     |   x   |    x    |   x  |
+| Skip/Take          |    x   |     x     |   x   |    x    |   PR | 
+| Count              |    x   |     x     |   x   |    x    |   x  | 
+| Count with filter  |    x   |     x     |   x   |    x    |   x  |
+| Update             |    x   |     x     |   x   |    x    |   x  |
+| Update with filter |    x   |     x     |   x   |    x    |   x  |
+| Delete All         |    x   |     x     |   x   |    x    |   x  |
+| Delete with filter |    x   |     x     |   x   |    x    |   x  |
+| Dates and Booleans |    x   |     x     |   x   |    x    |   x  |
+| Insert returning   |    x   |     x     |   PR  |    x    |   x  |
+| Insert null        |    x   |     x     |   x   |    x    |   x  |
+| Insert blob        |    x   |     x     |   x   |    x    |   x  |
+| Bulk Insert        |    x   |     x     |   x   |    x    |   x  |
 
 ## Database Support Friendly Exceptions
 Table not found    |    x   |     x     |   x   |    x    |   PR  
