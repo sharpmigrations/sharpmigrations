@@ -19,9 +19,10 @@ namespace SharpMigrator {
         [Usage(ApplicationAlias = "SharpMigrator")]
         public static IEnumerable<Example> Examples {
             get {
-                yield return new Example("Migrates to version 10 (no prompt)", new MigrateOptions { TargetVersion = 10, AssemblyWithMigrations = "MyAssemblyWithMigrations.dll"});
-                //yield return new Example("Logging warnings", UnParserSettings.WithGroupSwitchesOnly(), new Options { InputFile = "file.bin", LogWarning = true });
-                //yield return new Example("Logging errors", new[] { UnParserSettings.WithGroupSwitchesOnly(), UnParserSettings.WithUseEqualTokenOnly() }, new Options { InputFile = "file.bin", LogError = true });
+                yield return new Example("Migrates to the latest version (no prompt)", new MigrateOptions { TargetVersion = -1, AssemblyWithMigrations = "MyAssemblyWithMigrations.dll"});
+                yield return new Example("Migrates using Oracle", new MigrateOptions { TargetVersion = -1, AssemblyWithMigrations = "MyAssemblyWithMigrations.dll", DatabaseProvider = "Oracle", ConnectionString = "my connectionstring"});
+                yield return new Example("Generate scripts", new ScriptOptions { TargetVersion = 10, AssemblyWithMigrations = "MyAssemblyWithMigrations.dll", Filename = "mysql.txt"});
+                yield return new Example("Apply seed to database", new SeedOptions { AssemblyWithMigrations = "MyAssemblyWithMigrations.dll", SeedName = "SomeInserts"});
             }
         }
 

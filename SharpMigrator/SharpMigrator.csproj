@@ -180,7 +180,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChooseDbConsoleRunner.cs" />
     <Compile Include="DBBuilder.cs" />
     <Compile Include="Migrator.cs" />
     <Compile Include="Options.cs" />

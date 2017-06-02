@@ -19,7 +19,7 @@ namespace SharpMigrator {
 
             //args = @"migrate|-v|10|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe|-c|Data Source=//localhost:1521/XE;User Id=sharp;Password=sharp;".Split('|');
             //args = @"migrate|-v|-1|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe|-c|Server=(localdb)\mssqllocaldb;Database=sharp;Trusted_Connection=True;MultipleActiveResultSets=true|-p|sqlserver".Split('|');
-            args = @"seed|-s|SomeInserts|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe|-c|Server=(localdb)\mssqllocaldb;Database=sharp;Trusted_Connection=True;MultipleActiveResultSets=true|-p|sqlserver".Split('|');
+            //args = @"seed|-s|SomeInserts|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe|-c|Server=(localdb)\mssqllocaldb;Database=sharp;Trusted_Connection=True;MultipleActiveResultSets=true|-p|sqlserver".Split('|');
 
 
             //SomeInserts
@@ -48,7 +48,6 @@ namespace SharpMigrator {
                     .WithParsed<ScriptOptions>(options => Migrator.MigrateScript(options))
                     .WithParsed<SeedOptions>(options => Migrator.Seed(options))
                     .WithNotParsed(errors => {});
-                Console.WriteLine("Done");
             }
             catch (Exception ex) {
                 Console.WriteLine();
