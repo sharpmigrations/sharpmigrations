@@ -133,12 +133,7 @@ Ex:
     }
 ```
 
-In Package Manager Console, type:
-
-    Invoke-Seed DummyGenresForTesting -seedArgs 20
-
-And it will insert 20 new records.
-
+Invoke seeds using the SharpMigrator.exe or your custom runner.
 
 ## Versioning
 
