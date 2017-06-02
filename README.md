@@ -1,4 +1,4 @@
-#Sharp Migrations
+# Sharp Migrations
 
 Sharp migrations is a framework to help you deal with database changes and versioning over time. The idea comes from the excellent Ruby on Rail's migrations and it is the best way to alter your database in a structured and organised manner.
 
@@ -170,35 +170,25 @@ It doesn't matter for the framework which way you choose as long as the numbers 
 ## Running the migrations
 
 ### Use the SharpMigrator.exe
-Check the tools folder of your nuget package, the SharpMigrator.exe is there. You can use it to run the migrations in your CI server.
+You can use SharpMigrator.exe to run the migrations in your CI server.
 
 #### Migrating to specific version:
 
-    SharpMigrations -a MyAssembly.dll -c "connectionString" -p "Oracle.ManagedDataAccess.Client" -m auto -v 10 
+    SharpMigrations migrate -v 10 -a MyAssembly.dll -c "connectionString" -p "OracleManaged" 
 
 *Migrates to version 10*
 
 #### Migrating to the latest version using Oracle
 
-    SharpMigrations -a MyAssembly.dll -c "connectionString" -p "Oracle.ManagedDataAccess.Client" -m auto 
+    SharpMigrations migrate -v -1 -a MyAssembly.dll -c "connectionString" -p "SqlServer" 
 
 #### Generating scripts for running them later by some DBA
 
-    SharpMigrations -a MyAssembly.dll -c "connectionString" -p "Oracle.ManagedDataAccess.Client" -m script -f myScript.txt 
+    SharpMigrations script -f myScript.txt -v 15 -a MyAssembly.dll -c "connectionString" -p "postgresql"
 
-### Inside Visual Studio
-You can use nuget powershell commands to run the migrations. Just open the Package Manager Console, point (dropdown) to the project with the migrations and type:
-
-    Update-Database
-
-Migrates to the latest version
-
-    Update-Database -v 2
-
-Migrates to version 2
 
 ### Create a console app
-You can make your own customized runner creating a console application and extending some Runner. There are many examples in the source code.
+You can make your own customized runner creating a console application and extending the interface IRunner. There are many examples in the source code.
 
 
 ## Database Support DDL
