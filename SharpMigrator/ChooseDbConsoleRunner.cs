@@ -6,7 +6,7 @@ using SharpData.Databases;
 using SharpMigrations.Runners;
 
 namespace SharpMigrator {
-    public class ChooseDbConsoleRunner {
+    public class ChooseDbConsoleRunner111 {
         private readonly Assembly _assembly;
         private readonly string _migrationGroup;
         private string _connectionString;
@@ -14,7 +14,7 @@ namespace SharpMigrator {
 
         private DbProviderType _dbProviderType;
 
-        public ChooseDbConsoleRunner(Assembly assembly, string migrationGroup = null) {
+        public ChooseDbConsoleRunner111(Assembly assembly, string migrationGroup = null) {
             _assembly = assembly;
             _migrationGroup = migrationGroup;
         }

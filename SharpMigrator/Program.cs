@@ -1,17 +1,28 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using log4net.Config;
+using CommandLine;
 using SharpData;
 
-namespace Sharp.Migrator {
+namespace SharpMigrator {
     public class Program {
-        public static SharpMigrator.Migrator Migrator;
+        public static Migrator Migrator;
 
         public static void Main(string[] args) {
             //string[] files = Directory.GetFiles(Path.GetFullPath("."), "*.dll");
             //foreach(string file in files) { File.Delete(file); }
-            //args = @"-a|..\..\..\SharpMigrations.Tests.Chinook\bin\Debug\SharpMigrations.Tests.Chinook.exe".Split('|');
+            //args = "migrate".Split('|');
+            //args = "migrate|-v|10".Split('|');
+            //args = @"migrate|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe".Split('|');
+            //args = @"migrate|-v|10|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe".Split('|');
+            //args = @"script|-v|10|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe".Split('|');
+
+            //args = @"migrate|-v|10|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe|-c|Data Source=//localhost:1521/XE;User Id=sharp;Password=sharp;".Split('|');
+            //args = @"migrate|-v|-1|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe|-c|Server=(localdb)\mssqllocaldb;Database=sharp;Trusted_Connection=True;MultipleActiveResultSets=true|-p|sqlserver".Split('|');
+            args = @"seed|-s|SomeInserts|-a|..\..\..\SharpMigrations.Tests.Chinnok\bin\Debug\SharpMigrations.Tests.Chinnok.exe|-c|Server=(localdb)\mssqllocaldb;Database=sharp;Trusted_Connection=True;MultipleActiveResultSets=true|-p|sqlserver".Split('|');
+
+
+            //SomeInserts
             //args = @"-a|..\..\..\SharpMigrations.Tests.Chinook\bin\Debug\SharpMigrations.Tests.Chinook.exe|-m|manual|-f|sql.txt|-v|-1|-c|Data Source=//localhost:1521/XE;User Id=sharp2;Password=sharp2;|-p|Oracle.ManagedDataAccess.Client".Split('|');
             //args = @"-a|..\..\..\SharpMigrations.Tests.Chinook\bin\Debug\SharpMigrations.Tests.Chinook.exe|-c|Data Source=//localhost:1521/XE;User Id=sharp;Password=sharp;|-p|Oracle.ManagedDataAccess.Client|-g|plugin|-m|script|-f|script.sql".Split('|');
             //args = @"-a|c:\dev\opensource\sharpmigrations\SharpMigrations.Tests.Northwind\bin\Debug\SharpMigrations.Tests.Northwind.exe".Split('|');
@@ -25,17 +36,31 @@ namespace Sharp.Migrator {
             //args = @"-a|C:\dev\opensource\Hangfire\src\HangFire.Oracle\bin\Debug\Hangfire.Oracle.dll|-p|Oracle.ManagedDataAccess.Client|-c|Data Source=//localhost:1521/XE;User Id=hangfire;Password=hangfire".Split('|');
 
             AppDomain.CurrentDomain.AssemblyResolve += ResolveNotFoundAssembly;
+            Console.WriteLine("--------------------------------");
+            Console.WriteLine("Sharp Migrator v" + Assembly.GetExecutingAssembly().GetName().Version);
+            Console.WriteLine("--------------------------------");
+            PrintPlataform();
 
-            XmlConfigurator.Configure();
-            Migrator = new SharpMigrator.Migrator(args);
             try {
-                Migrator.Start();
+                Migrator = new Migrator();
+                Parser.Default.ParseArguments<MigrateOptions, ScriptOptions, SeedOptions>(args)
+                    .WithParsed<MigrateOptions>(options => Migrator.Migrate(options))
+                    .WithParsed<ScriptOptions>(options => Migrator.MigrateScript(options))
+                    .WithParsed<SeedOptions>(options => Migrator.Seed(options))
+                    .WithNotParsed(errors => {});
+                Console.WriteLine("Done");
             }
             catch (Exception ex) {
                 Console.WriteLine();
                 Console.WriteLine("Error running migrator: ");
                 Console.WriteLine(ExceptionHelper.GetAllErrors(ex));
             }
+        }
+
+        private static void PrintPlataform() {
+            var bits = IntPtr.Size == 4 ? 32 : 64;
+            Console.WriteLine("Running in    : " + bits + " bits");
+            Console.WriteLine("--------------------------------");
         }
 
         public static Assembly ResolveNotFoundAssembly(object sender, ResolveEventArgs args) {
@@ -48,14 +73,14 @@ namespace Sharp.Migrator {
             var assemblyFileName = assemblyName + ".dll";
             string assemblyPath;
             if (assemblyName.EndsWith(".resources")) {
-                string resourceDirectory = Path.Combine(applicationDirectory, assemblyCulture);
+                var resourceDirectory = Path.Combine(applicationDirectory, assemblyCulture);
                 assemblyPath = Path.Combine(resourceDirectory, assemblyFileName);
             }
             else {
                 assemblyPath = Path.Combine(applicationDirectory, assemblyFileName);
             }
             if (File.Exists(assemblyPath)) {
-                Assembly loadingAssembly = Assembly.LoadFrom(assemblyPath);
+                var loadingAssembly = Assembly.LoadFrom(assemblyPath);
                 return loadingAssembly;
             }
             return null;

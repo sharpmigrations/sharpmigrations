@@ -214,6 +214,7 @@ Add Index Key   |    x   |     x     |   x   |    x    |   x
 Add Comment     |    x   |     x     |   x   |    x    |   NS   
 Rename Table    |    x   |     x     |   x   |    x    |   x   
 Rename Column   |    x   |     x     |   x   |    x    |   x   
+Table Exists?   |    x   |     x     |   x   |    ?    |   ?  
 
 * **x**: Suported
 * **NS**: Not supported by database

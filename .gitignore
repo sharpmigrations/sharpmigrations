@@ -3,7 +3,6 @@ Sharp.Tests.Chinook/obj/*
 Sharp.Migrations.Template/obj/*
 Sharp.Tests.Databases/obj/
 Sharp.Tests.Northwind/obj/
-Sharp.Tests.ReversableMigrations/obj/Debug/Sharp.Tests.ReversableMigrations.csproj.FileListAbsolute.txt
 Sharp.Tests.ReversableMigrations/obj/
 packages/
 Sharp.Data/obj/
@@ -21,8 +20,8 @@ SharpMigrations.Tests/obj/
 SharpMigrations.Tests/bin/
 SharpMigrator.Tests/bin/
 SharpMigrations/bin/
-SharpMigrator/bin/Release/EntityFramework.xml
 SharpMigrator/bin/
+SharpMigrator/obj/
 SharpMigrations.Tests.Northwind/obj/
 SharpMigrations.Tests.Northwind/bin/
 SharpMigrations.Tests.Chinnok/bin/
