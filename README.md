@@ -188,8 +188,9 @@ You can make your own customized runner creating a console application and exten
 
 ## Database Support DDL
 
-| FunÁ„o           | Oracle | SqlServer | MySql | Postgre | Sqlite |
-| ------------     | :--------:                                    |
+
+| Fun√ß√£o           | Oracle | SqlServer | MySql | Postgre | Sqlite |
+| ------------     | :----: | :----:    |:----: |:----:   |:----:  |
 | Table Create     |    x   |     x     |   x   |    x    |   PR   |
 | Table Drop       |    x   |     x     |   x   |    x    |   PR   |
 | Table Rename     |    x   |     x     |   x   |    x    |   PR   |
@@ -213,8 +214,9 @@ You can make your own customized runner creating a console application and exten
 | Index Key Multiple Columns | x |  x   |   x   |    x    |   PR   |
 
 ## Database Support DML
-| FunÁ„o           | Oracle | SqlServer | MySql | Postgre | Sqlite |
-| ------------     | :--------:                                    |
+
+| Fun√ß√£o             | Oracle | SqlServer | MySql | Postgre | Sqlite |
+| ------------       | :----: | :----:    |:----: |:----:   |:----:  |
 | Select all         |    x   |     x     |   x   |    x    |   x  | 
 | Select with filter |    x   |     x     |   x   |    x    |   x  | 
 | Order by           |    x   |     x     |   x   |    x    |   x  |
@@ -232,8 +234,11 @@ You can make your own customized runner creating a console application and exten
 | Bulk Insert        |    x   |     x     |   x   |    x    |   x  |
 
 ## Database Support Friendly Exceptions
-Table not found    |    x   |     x     |   x   |    x    |   PR  
-Unique Constraint  |    x   |     x     |   x   |    x    |   PR  
+
+| Fun√ß√£o           | Oracle | SqlServer | MySql | Postgre | Sqlite |
+| ------------     | :----: | :----:    |:----: |:----:   |:----:  |
+Table not found    |    x   |     x     |   x   |    x    |   PR   |
+Unique Constraint  |    x   |     x     |   x   |    x    |   PR   |
 
 * **x**: Suported
 * **NS**: Not supported by database
