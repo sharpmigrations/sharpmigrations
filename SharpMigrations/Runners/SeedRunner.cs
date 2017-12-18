@@ -18,7 +18,11 @@ namespace SharpMigrations.Runners {
         public void Run(string seedName, string param = null) {
             var seedType = MigrationFinder.FindSeed(_targetAssembly, seedName);
             Log("Starting seed migration");
-            Log(String.Format("Applying Seed -> [{0}]", seedName));
+            var msg = String.Format("Applying Seed -> [{0}]", seedName);
+            if (param != null) {
+                msg += " Param: "+ param;
+            }
+            Log(msg);
 
             var migration = (SeedMigration) Activator.CreateInstance(seedType);
             migration.SetDataClient(_dataClient);

@@ -35,6 +35,7 @@ namespace SharpMigrator {
             //args = @"-a|C:\dev\way2\pim\Way2Pim.Migrations\bin\Debug\Way2Pim.Migrations.exe|-n|Oracle|-g|Way2Pim.Server|-m|script|-f|sql.txt".Split('|');
             //args = @"-a|C:\dev\way2\pim\Way2Pim.Migrations\bin\Debug\Way2Pim.Migrations.exe|-n|Oracle|-g|Way2Pim.Server|-v|201603300944".Split('|');
             //args = @"-a|C:\dev\opensource\Hangfire\src\HangFire.Oracle\bin\Debug\Hangfire.Oracle.dll|-p|Oracle.ManagedDataAccess.Client|-c|Data Source=//localhost:1521/XE;User Id=hangfire;Password=hangfire".Split('|');
+            //args = @"seed|--assembly|Way2Pim.Migrations.exe|--seed|Crie_Pontos_Ccee|-i|20000|-c|""Data Source =//localhost:1521/XE;User Id=W2E_PIM;Password=W2E_PIM;""|-p|OracleManaged".Split('|');
 
             AppDomain.CurrentDomain.AssemblyResolve += ResolveNotFoundAssembly;
             Console.WriteLine("--------------------------------");

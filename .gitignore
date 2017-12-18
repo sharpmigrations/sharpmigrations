@@ -28,3 +28,6 @@ SharpMigrations.Tests.Chinnok/bin/
 SharpMigrations.Tests.Chinnok/obj/
 SharpMigrations.Tests.ReversibleMigrations/bin/
 SharpMigrations.Tests.ReversibleMigrations/obj/
+.vs/
+Tests/SharpMigrations.Tests/obj/
+Tests/SharpMigrations.Tests/bin/
